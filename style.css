@@ -492,3 +492,12 @@ body p{
   max-height: 300px;
   object-fit: cover;
 }
+
+
+/* Course Page */
+.course-card {
+  margin-bottom: 20px;
+}
+.navbar {
+  margin-bottom: 30px;
+}

@@ -41,101 +41,71 @@
 
         <!-- Navigation links on the right -->
         <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item me-3">
-              <a class="nav-link" href="news.html">
-                <i class="bi bi-newspaper"></i> NEWS
-              </a>
-            </li>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+      <li class="nav-item me-3">
+        <a class="nav-link" href="#news.html">
+          <i class="bi bi-newspaper"></i> NEWS
+        </a>
+      </li>
 
-            <!-- ABOUT US Dropdown -->
-            <li class="nav-item dropdown me-3">
-              <a class="nav-link" href="about.html" id="aboutDropdown" role="button"  aria-expanded="false">
-                <i class="bi bi-info-circle"></i> ABOUT US
-              </a>
-            </li>
+      <!-- ABOUT US Dropdown -->
+      <li class="nav-item dropdown me-3">
+        <a class="nav-link" href="about.html" id="aboutDropdown" role="button"  aria-expanded="false">
+          <i class="bi bi-info-circle"></i> ABOUT US
+        </a>
+      </li>
 
-            <!-- SERVICES Dropdown -->
-            <li class="nav-item dropdown me-3">
-              <a class="nav-link" href="#" id="servicesDropdown" role="button" aria-expanded="false">
-                <i class="bi bi-briefcase"></i> SERVICES
-              </a>
-            </li>
+      <!-- SERVICES Dropdown -->
+      <li class="nav-item dropdown me-3">
+        <a class="nav-link" href="#" id="servicesDropdown" role="button" aria-expanded="false">
+          <i class="bi bi-briefcase"></i> SERVICES
+        </a>
+      </li>
 
-            <li class="nav-item me-3">
-              <a class="nav-link" href="portal.html">
-                <i class="bi bi-person-badge"></i> STUDENT PORTAL
-              </a>
-            </li>
+      <li class="nav-item me-3">
+        <a class="nav-link" href="#portal.html">
+          <i class="bi bi-person-badge"></i> STUDENT PORTAL
+        </a>
+      </li>
 
-            <li class="nav-item">
-              <a class="btn contact-btn" href="contact.html">
-                <i class="bi bi-envelope"></i> CONTACT US
-              </a>
-            </li>
-          </ul>
+      <li class="nav-item">
+        <a class="btn contact-btn" href="#contact.html">
+          <i class="bi bi-envelope"></i> CONTACT US
+        </a>
+      </li>
+    </ul>
+
         </div>
       </div>
     </nav>
-
-    <!-- Registration Form Section -->
-    <section id="registration-form" class="py-5 px-4 bg-white">
-      <div class="container">
-        <div class="text-center mb-4">
-          <h2 class="text-primary fw-bold">Registration Form</h2>
-          <p class="text-muted">Fill out the form below to begin your enrollment process.</p>
+   
+    <!-- section 1 -->
+     <section class="contact-us-section py-5 px-4 bg-light">
+       <div class="container">
+          <h2 class="mb-4 text-center">Contact Us</h2>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <h5>Our Office</h5>
+              <p><strong>Address:</strong> 8 Assembly close, Folagoro, Somolu, Lagos, Nigeria</p>
+              <p><strong>Email:</strong> info@hltsltd.com</p>
+              <p><strong>Phone:</strong> +2348107005789</p>
+              <p><strong>Hours:</strong> Monday - Friday, 8am - 5pm</p>
+            </div>
+            <div class="col-md-6">
+              <h5>Find Us on the Map</h5>
+              <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.9572092385833!2d3.37573667586253!3d6.5270888231198425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8d0074f29cff%3A0xbb486cf6bcfc9b1c!2sAssembly%20close%2C%20fola%20agoro!5e0!3m2!1sen!2sng!4v1757783462436!5m2!1sen!2sng" 
+                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <form action="https://formspree.io/f/mkgvybrp" method="POST">
-          <input type="hidden" name="_replyto" value="md@hltsltd.com" class="row g-3">
-          <!-- Full Name -->
-          <div class="col-md-6">
-            <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
-          </div>
-
-          <!-- Email -->
-          <div class="col-md-6">
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
-          </div>
-
-          <!-- Phone -->
-          <div class="col-md-6">
-            <label for="phone" class="form-label">Phone Number</label>
-            <input type="tel" class="form-control" id="phone" placeholder="+234..." required>
-          </div>
-
-          <!-- Program Selection -->
-          <div class="col-md-6">
-            <label for="program" class="form-label">Select Program</label>
-            <select id="program" class="form-select" required>
-              <option selected disabled>Choose...</option>
-              <option>Front-end Development</option>
-              <option>Back-end Development</option>
-              <option>Data Analysis</option>
-              <option>Desktop Publishing</option>
-              <option>Visual Based Programming</option>
-              <option>Graphic Design</option>
-              <option>Video Editing</option>
-            </select>
-          </div>
-
-          <!-- Message -->
-          <div class="col-12">
-            <label for="message" class="form-label">Additional Message</label>
-            <textarea class="form-control" id="message" rows="4" placeholder="Tell us more about your interest..."></textarea>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="col-12 text-center">
-            <button type="submit" class="btn btn-success px-5">Submit Registration</button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- footer -->
+     </section>
+    
+    <!-- Footer -->
      <footer class="footer bg-dark text-light pt-5 pb-3">
       <div class="container">
         <div class="row">
@@ -158,13 +128,13 @@
           <div class="col-md-4 mb-4">
             <h5 class="text-uppercase">Quick Links</h5>
             <ul class="list-unstyled">
-              <li><a href="index.html" class="text-light text-decoration-none">Home</a></li>
+              <li><a href="landing.html" class="text-light text-decoration-none">Home</a></li>
               <li><a href="about.html" class="text-light text-decoration-none">About Us</a></li>
-              <li><a href="services.html" class="text-light text-decoration-none">Services</a></li>
-              <li><a href="contact.html" class="text-light text-decoration-none">Contact</a></li>
-              <li><a href="faq.html" class="text-light text-decoration-none">FAQ</a></li>
-              <li><a href="terms.html" class="text-light text-decoration-none">Terms of Service</a></li>
-              <li><a href="blog.html" class="text-light text-decoration-none">Our Blog</a></li>
+              <li><a href="#services.html" class="text-light text-decoration-none">Services</a></li>
+              <li><a href="#contact.html" class="text-light text-decoration-none">Contact</a></li>
+              <li><a href="#faq.html" class="text-light text-decoration-none">FAQ</a></li>
+              <li><a href="#terms.html" class="text-light text-decoration-none">Terms of Service</a></li>
+              <li><a href="#blog.html" class="text-light text-decoration-none">Our Blog</a></li>
             </ul>
           </div>
 
@@ -176,7 +146,7 @@
               <a href="https://twitter.com/hltslimited" class="social-icon" title="Twitter"><i class="bi bi-twitter"></i></a>
               <a href="https://www.instagram.com/hltslimited/" class="social-icon" title="Instagram"><i class="bi bi-instagram"></i></a>
               <a href="https://www.linkedin.com/company/high-level-tech-services-limited" class="social-icon" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-              <a href="#" class="social-icon" title="GitHub"><i class="bi bi-github"></i></a>
+              <a href="https://github.com/hlts-limited" class="social-icon" title="GitHub"><i class="bi bi-github"></i></a>
             </div>
           </div>
         </div>
@@ -210,8 +180,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-    crossorigin="anonymous"></script> <script  src="script.js"></script>
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+      crossorigin="anonymous">
+    </script> 
+    <script  src="script.js"></script>
 
     <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
@@ -221,3 +193,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
+
