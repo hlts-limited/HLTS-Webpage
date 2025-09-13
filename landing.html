@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="HLTS Limited - Your Partner in Education">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <!-- aos -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <title>HLTS Limited</title>
+    <link rel="icon" href="./images/logoh.png" type="image/png" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous">
+
+  <!-- In <head> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-white fixed-top px-4">
+      <div class="container-fluid">
+        <!-- Logo on the left -->
+        <a class="navbar-brand" href="landing.html">
+          <img src="images/logoh.png" alt="Company Logo" height="70">
+        </a>
+
+        <!-- Toggle button for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation links on the right -->
+        <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+      <li class="nav-item me-3">
+        <a class="nav-link" href="#news.html">
+          <i class="bi bi-newspaper"></i> NEWS
+        </a>
+      </li>
+
+      <!-- ABOUT US Dropdown -->
+      <li class="nav-item dropdown me-3">
+        <a class="nav-link" href="about.html" id="aboutDropdown" role="button"  aria-expanded="false">
+          <i class="bi bi-info-circle"></i> ABOUT US
+        </a>
+      </li>
+
+      <!-- SERVICES Dropdown -->
+      <li class="nav-item dropdown me-3">
+        <a class="nav-link" href="#" id="servicesDropdown" role="button" aria-expanded="false">
+          <i class="bi bi-briefcase"></i> SERVICES
+        </a>
+      </li>
+
+      <li class="nav-item me-3">
+        <a class="nav-link" href="#portal.html">
+          <i class="bi bi-person-badge"></i> STUDENT PORTAL
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="btn contact-btn" href="contact.html">
+          <i class="bi bi-envelope"></i> CONTACT US
+        </a>
+      </li>
+    </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- section 2 -->
+    <section class="carousel-section mt-5 pt-4">
+      <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <!-- Slide 1 -->
+          <div class="carousel-item active">
+            <img src="images/slide1.jpg" class="d-block w-100" alt="Slide 1">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Welcome to HLTS</h5>
+              <p>...forward-thinking institution dedicated to transforming lives 
+                through education, technology, and sustainable...</p>
+              <a href="about.html" class="btn btn-primary mt-3">Read More</a>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="carousel-item">
+            <img src="images/slide2.jpg" class="d-block w-100" alt="Slide 2">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>HLTS@School</h5>
+              <p>Empowering students with smart learning tools.</p>
+              <a href="#" class="btn btn-primary mt-3">Learn More</a>
+              <a href="#" class="btn btn-primary mt-3">Sign Up</a>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="carousel-item">
+            <img src="images/slide3.jpg" class="d-block w-100" alt="Slide 3">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>HLTS Institution</h5>
+              <p>Transforming institutions with digital solutions.</p>
+              <a href="about.html" class="btn btn-primary mt-3">Learn More</a>
+              <a href="registration-form.html" class="btn btn-primary mt-3">Register Now</a>
+            </div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="carousel-item">
+            <img src="images/slide4.jpg" class="d-block w-100" alt="Slide 4">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Explore More</h5>
+              <p>Discover other services tailored to your needs.</p>
+              <a href="#" class="btn btn-primary mt-3">Our Services</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- section 3 -->
+    <section class="values-section py-5 px-4">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Left Column: 4 Feature Boxes -->
+          <div class="col-lg-6 mb-4">
+            <div class="row g-4">
+              <div class="col-6">
+                <a href="#" class="text-decoration-none">
+                  <div class="feature-box bg-light p-3 rounded shadow-sm">
+                    <h6>HLTS@School</h6>
+                    <p>We deliver cutting-edge solutions tailored to your needs.</p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-6">
+                <a href="#" class="text-decoration-none">
+                  <div class="feature-box bg-light p-3 rounded shadow-sm">
+                    <h6>Online Learning</h6>
+                    <p>We work hand-in-hand with clients to achieve excellence.</p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-6">
+                <a href="#" class="text-decoration-none">
+                  <div class="feature-box bg-light p-3 rounded shadow-sm">
+                    <h6>Othe Services</h6>
+                    <p>Clear communication and honest feedback at every step.</p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-6">
+                <a href="#" class="text-decoration-none">
+                  <div class="feature-box bg-light p-3 rounded shadow-sm">
+                    <h6>Consultation</h6>
+                    <p>We’re here for you—before, during, and after delivery.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Integrity Write-Up -->
+          <div class="col-lg-6">
+            <div class="integrity-box bg-white p-4 rounded shadow-sm">
+              <h4 class="text-primary mb-3">Our Integrity</h4>
+              <p>
+                At HLTS, integrity is the foundation of every service we provide. 
+                We believe in delivering value with honesty, accountability, and respect. 
+                Our clients trust us because we uphold the highest standards—ensuring that 
+                every solution is not only effective but ethically sound. Whether it's in 
+                education, technology, or consulting, we remain committed to doing what's 
+                right, even when no one is watching.
+              </p>
+              <a href="about.html" class="btn btn-primary mt-3">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- section 4 -->
+    <section class="lead-section py-5 px-4">
+      <div class="container-fluid">
+        <!-- Section Title -->
+        <div class="text-center mb-5">
+          <h2 class="text-primary fw-bold">WE Lead From Front.</h2>
+          <p class="text-muted">Delivering excellence through innovation, precision, and integrity.</p>
+        </div>
+
+        <div class="row align-items-center">
+          <!-- Left Column: Stats -->
+          <div class="col-lg-6 mb-4">
+            <div class="row g-4">
+              <div class="col-6">
+                <div class="stat-box bg-light p-4 rounded text-center shadow-sm">
+                  <h5>Happy Clients</h5>
+                  <span class="counter" data-target="1200">0</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="stat-box bg-light p-4 rounded text-center shadow-sm">
+                  <h5>Projects Completed</h5>
+                  <span class="counter" data-target="875">0</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="stat-box bg-light p-4 rounded text-center shadow-sm">
+                  <h5>Running Projects</h5>
+                  <span class="counter" data-target="35">0</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="stat-box bg-light p-4 rounded text-center shadow-sm">
+                  <h5>Awesome Designs</h5>
+                  <span class="counter" data-target="420">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Image -->
+          <div class="col-lg-6">
+            <img src="images/consult.jpeg" alt="Team Leading" class="img-fluid rounded shadow-sm">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- section 5 -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-5">Management Team</h2>
+        <div class="row g-4">
+          
+          <!-- Team Member 1 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="team-card bg-white">
+              <img src="images/Mr Chris.jpg" alt="Member 1" class="team-img">
+              <h5>Christopher Oyeh</h5>
+              <p class="text-muted">Founder/CEO</p>
+              <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Member 2 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="team-card bg-white">
+              <img src="images/Joseph amos.jpeg" alt="Member 2" class="team-img">
+              <h5>Joseph Amos</h5>
+              <p class="text-muted">Gen Supervisor</p>
+              <div class="social-icons">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Member 3 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="team-card bg-light">
+              <img src="images/OSI Emmanuel.jpg" alt="Member 3" class="team-img">
+              <h5>Nnamdi Osi</h5>
+              <p class="text-muted">Deputy Supervisor</p>
+              <div class="social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Team Member 4 -->
+          <div class="col-md-6 col-lg-3">
+            <div class="team-card bg-white">
+              <img src="images/Collins hlts.jpg" alt="Member 4" class="team-img">
+              <h5>Collin Duru</h5>
+              <p class="text-muted">Chief Engineer</p>
+              <div class="social-icons">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6 -->
+    <section id="blog-section" class="blog-section py-5 px-4 bg-light">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="text-center mb-5">
+          <h2 class="text-primary fw-bold">Latest from Our Blog</h2>
+          <p class="text-muted">Stay informed with insights, updates, and expert tips from HLTS.</p>
+        </div>
+
+        <!-- Blog Cards -->
+        <div class="row g-4">
+          <!-- Blog 1 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+              <img src="images/cbt.jpeg" class="card-img-top" alt="Vigor Herbicide">
+              <div class="card-body">
+                <h5 class="card-title">Vigor Herbicide: The Ultimate Weed Control</h5>
+                <p class="card-text">Weeds compete with crops for nutrients and sunlight. Discover how Vigor Herbicide helps Nigerian farmers boost yield and reduce losses.</p>
+                <a href="https://htsfarms.ng/blog-2/" class="btn btn-outline-primary btn-sm">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blog 2 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+              <img src="images/cbt.jpg" class="card-img-top" alt="GMO Foods in Nigeria">
+              <div class="card-body">
+                <h5 class="card-title">GMO Foods in Nigeria: Expert Insights</h5>
+                <p class="card-text">What are GMO foods? Are they safe? We interviewed Dr. Chinedu Obi to answer your top questions and clear up the myths.</p>
+                <a href="https://htsfarms.ng/blog-2/" class="btn btn-outline-primary btn-sm">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blog 3 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+              <img src="images/data.jpeg" class="card-img-top" alt="Late Urea Application">
+              <div class="card-body">
+                <h5 class="card-title">Late Urea Application: A Farmer’s Guide</h5>
+                <p class="card-text">Why do lush rice fields sometimes yield poorly? Learn how timing your fertilizer application can make or break your harvest.</p>
+                <a href="https://htsfarms.ng/blog-2/" class="btn btn-outline-primary btn-sm">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blog 4 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+              <img src="images/project1.jpeg" class="card-img-top" alt="Sustainable Farming">
+              <div class="card-body">
+                <h5 class="card-title">Sustainable Farming Practices in Nigeria</h5>
+                <p class="card-text">Explore eco-friendly techniques that improve soil health and reduce environmental impact while increasing productivity.</p>
+                <a href="https://htsfarms.ng/blog-2/" class="btn btn-outline-primary btn-sm">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blog 5 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+              <img src="images/project2.jpeg" class="card-img-top" alt="Agro-Tech Solutions">
+              <div class="card-body">
+                <h5 class="card-title">Agro-Tech: Transforming Nigerian Agriculture</h5>
+                <p class="card-text">From drones to data, discover how technology is revolutionizing farming and empowering rural communities.</p>
+                <a href="https://htsfarms.ng/blog-2/" class="btn btn-outline-primary btn-sm">Read More</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blog 6 -->
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+              <img src="images/project3.jpeg" class="card-img-top" alt="Soil Testing">
+              <div class="card-body">
+                <h5 class="card-title">Soil Testing: The First Step to Better Yields</h5>
+                <p class="card-text">Learn how proper soil analysis helps farmers choose the right crops and fertilizers for maximum output.</p>
+                <a href="https://htsfarms.ng/blog-2/" class="btn btn-outline-primary btn-sm">Read More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- Section 7 -->
+    <!-- Client Reviews Section -->
+    <section class="py-5 bg-white">
+      <div class="container">
+        <h2 class="text-center mb-5">What Our Clients Say</h2>
+        
+        <div id="clientCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+
+            <!-- Review 1 -->
+            <div class="carousel-item active">
+              <div class="card mx-auto" style="max-width: 600px;">
+                <div class="card-body text-center">
+                  <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="Client 1">
+                  <h5 class="card-title">Emily Johnson</h5>
+                  <p class="text-muted">CEO, BrightTech</p>
+                  <p class="card-text">"Working with this team was a game-changer. Their professionalism and creativity exceeded our expectations."</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="carousel-item">
+              <div class="card mx-auto" style="max-width: 600px;">
+                <div class="card-body text-center">
+                  <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="Client 2">
+                  <h5 class="card-title">David Lee</h5>
+                  <p class="text-muted">Founder, NovaWorks</p>
+                  <p class="card-text">"Their attention to detail and commitment to quality made our project a huge success."</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="carousel-item">
+              <div class="card mx-auto" style="max-width: 600px;">
+                <div class="card-body text-center">
+                  <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="Client 3">
+                  <h5 class="card-title">Aisha Bello</h5>
+                  <p class="text-muted">Marketing Director, Zenith Media</p>
+                  <p class="card-text">"I highly recommend them. They delivered on time and went above and beyond to meet our needs."</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Carousel Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#clientCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#clientCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- section 8 -->
+    <section class="enroll-section py-5 px-4 bg-light">
+      <div class="container text-center">
+        <div class="enroll-box bg-white p-5 rounded shadow-sm">
+          <h2 class="text-primary fw-bold mb-3">Enroll Into Our Institution</h2>
+          <p class="text-muted mb-4">
+            Ready to take the next step toward your future? Join HLTS and gain access to world-class training, expert mentorship, and a community that empowers your growth. Let’s get started!
+          </p>
+          <a href="registration-form.html" class="btn btn-primary btn-lg">Register Now</a>
+          <a href="course.html" class="btn btn-primary btn-lg">Tuition Fee</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer bg-dark text-light pt-5 pb-3">
+      <div class="container">
+        <div class="row">
+          <!-- Company Info -->
+          <!-- Company Info -->
+          <div class="col-md-4 mb-4">
+            <h5 class="text-uppercase">HLTS Limited</h5>
+            <p>8 Assembly close, Folagoro, Somolu, Lagos, Nigeria</p>
+            <p>
+              <i class="bi bi-telephone-fill"></i>
+              <a href="tel:+2348107005789" class="text-light text-decoration-none">+2348107005789</a>
+            </p>
+            <p>
+              <i class="bi bi-envelope-fill"></i>
+              <a href="mailto:info@hltsltd.com" class="text-light text-decoration-none">info@hltsltd.com</a>
+            </p>
+          </div>
+
+          <!-- Navigation Links -->
+          <div class="col-md-4 mb-4">
+            <h5 class="text-uppercase">Quick Links</h5>
+            <ul class="list-unstyled">
+              <li><a href="landing.html" class="text-light text-decoration-none">Home</a></li>
+              <li><a href="about.html" class="text-light text-decoration-none">About Us</a></li>
+              <li><a href="#services.html" class="text-light text-decoration-none">Services</a></li>
+              <li><a href="#contact.html" class="text-light text-decoration-none">Contact</a></li>
+              <li><a href="#faq.html" class="text-light text-decoration-none">FAQ</a></li>
+              <li><a href="#terms.html" class="text-light text-decoration-none">Terms of Service</a></li>
+              <li><a href="#blog.html" class="text-light text-decoration-none">Our Blog</a></li>
+            </ul>
+          </div>
+
+          <!-- Social Media -->
+          <div class="col-md-4 mb-4">
+            <h5 class="text-uppercase">Connect With Us</h5>
+            <div class="d-flex gap-3">
+              <a href="https://web.facebook.com/profile.php?id=61551105837140" class="social-icon" title="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://twitter.com/hltslimited" class="social-icon" title="Twitter"><i class="bi bi-twitter"></i></a>
+              <a href="https://www.instagram.com/hltslimited/" class="social-icon" title="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/high-level-tech-services-limited" class="social-icon" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a href="https://github.com/hlts-limited" class="social-icon" title="GitHub"><i class="bi bi-github"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="col-md-4 mb-4">
+          <h5 class="text-uppercase">Subscribe to Our Newsletter</h5>
+          <form action="#" method="post">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="Enter your email" required>
+              <button class="btn btn-primary" type="submit">Subscribe</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="text-center mt-4">
+          <small>&copy; 2025 HLTS Limited Nigeria. All rights reserved.</small>
+        </div>
+      </div>
+
+      <!-- WhatsApp Chat Widget -->
+      <a href="https://wa.me/2348107005789" class="whatsapp-chat" target="_blank">
+        <img src="images/whatsapp.jpg" alt="Chat with us on WhatsApp">
+      </a>
+
+      <button id="backToTop" class="btn btn-primary">
+       ↑ Top
+      </button>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+      crossorigin="anonymous">
+    </script> 
+    <script  src="script.js"></script>
+
+    <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js'></script>
+
+    <!-- Before </body> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
