@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="HLTS Online School Student Portal - Access Your Learning Resources">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="HLTS, student portal, online learning, education, e-learning">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <!-- AOS Animation -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="portal.css">
+  
+  <title>Student Portal - HLTS Online School</title>
+  <link rel="icon" href="./images/logoh.png" type="image/png" />
+</head>
+
+<body>
+  <!-- Modern Navigation -->
+  <nav class="navbar navbar-expand-lg bg-white fixed-top px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <img src="images/logoh.png" alt="HLTS Logo" height="60">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item me-3">
+            <a class="nav-link" href="index.html">
+              <i class="bi bi-house"></i> HOME
+            </a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link active" href="portal.html">
+              <i class="bi bi-person-badge"></i> STUDENT PORTAL
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="btn contact-btn" href="contact.html">
+              <i class="bi bi-envelope"></i> CONTACT US
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Portal Hero Section -->
+  <section class="portal-hero">
+    <div class="container-custom">
+      <div class="row align-items-center">
+        <div class="col-lg-6" data-aos="fade-right">
+          <h1 class="display-4 fw-bold">Welcome to HLTS Online School</h1>
+          <p class="lead">Access your personalized learning dashboard, track your progress, and connect with your courses.</p>
+          <div class="hero-stats mt-5">
+            <div class="row g-4">
+              <div class="col-4">
+                <div class="stat-card">
+                  <i class="bi bi-book"></i>
+                  <h3>500+</h3>
+                  <p>Courses</p>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-card">
+                  <i class="bi bi-people"></i>
+                  <h3>5,000+</h3>
+                  <p>Students</p>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-card">
+                  <i class="bi bi-award"></i>
+                  <h3>98%</h3>
+                  <p>Success Rate</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6" data-aos="fade-left">
+          <!-- Login Card -->
+          <div class="portal-login-card">
+            <div class="card-header">
+              <h3><i class="bi bi-shield-lock"></i> Student Login</h3>
+              <p>Sign in to access your learning dashboard</p>
+            </div>
+            <form id="studentLoginForm" class="portal-form">
+              <div class="form-group">
+                <label for="studentId"><i class="bi bi-person"></i> Student ID / Email</label>
+                <input type="text" id="studentId" class="form-control" placeholder="Enter your ID or email" required>
+              </div>
+              <div class="form-group">
+                <label for="password"><i class="bi bi-lock"></i> Password</label>
+                <div class="password-input">
+                  <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                  <button type="button" class="toggle-password" onclick="togglePassword()">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="form-options">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="rememberMe">
+                  <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+                <a href="#" class="forgot-link">Forgot Password?</a>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-box-arrow-in-right"></i> Sign In
+              </button>
+            </form>
+            <div class="portal-footer">
+              <p>Don't have an account? <a href="registration-form.html">Register Now</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portal Features Section -->
+  <section class="portal-features section-padding">
+    <div class="container-custom">
+      <div class="section-title" data-aos="fade-up">
+        <h2>What You Get with HLTS Portal</h2>
+        <p>Comprehensive tools and resources for your learning journey</p>
+      </div>
+      
+      <div class="row g-4 mt-5">
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-speedometer2"></i>
+            </div>
+            <h4>Personal Dashboard</h4>
+            <p>Track your progress, assignments, and grades in one centralized location.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-journal-text"></i>
+            </div>
+            <h4>Course Materials</h4>
+            <p>Access all your course content, videos, and resources anytime, anywhere.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+            <h4>Online Assessments</h4>
+            <p>Take quizzes and exams with instant feedback and detailed analytics.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-chat-dots"></i>
+            </div>
+            <h4>Live Communication</h4>
+            <p>Connect with instructors and peers through integrated messaging.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <h4>Smart Calendar</h4>
+            <p>Stay organized with automated reminders for classes and deadlines.</p>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-graph-up"></i>
+            </div>
+            <h4>Performance Analytics</h4>
+            <p>Visualize your learning progress with detailed reports and insights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portal CTA Section -->
+  <section class="portal-cta">
+    <div class="container-custom">
+      <div class="row align-items-center">
+        <div class="col-lg-8" data-aos="fade-right">
+          <h2>Ready to Start Your Learning Journey?</h2>
+          <p>Join thousands of students already succeeding with HLTS Online School</p>
+        </div>
+        <div class="col-lg-4 text-lg-end" data-aos="fade-left">
+          <a href="registration-form.html" class="btn btn-primary btn-lg">
+            <i class="bi bi-person-plus"></i> Register Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="modern-footer">
+    <div class="container-custom">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <img src="images/logoh.png" alt="HLTS Logo" height="60" class="mb-4">
+          <p>Transforming education through innovation and technology.</p>
+          <div class="social-links">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-4">
+          <h5>Quick Links</h5>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="course.html">Courses</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4">
+          <h5>Support</h5>
+          <ul class="footer-links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <h5>Contact Us</h5>
+          <ul class="footer-contact">
+            <li><i class="bi bi-geo-alt"></i> Lagos, Nigeria</li>
+            <li><i class="bi bi-envelope"></i> info@hltslimited.com</li>
+            <li><i class="bi bi-phone"></i> +234 xxx xxx xxxx</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 HLTS Limited. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- AOS Animation -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  
+  <!-- Security Module -->
+  <script src="security.js"></script>
+  
+  <!-- Custom JS -->
+  <script src="portal.js"></script>
+  
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+      offset: 100
+    });
+    
+    // Toggle Password Visibility
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const toggleBtn = document.querySelector('.toggle-password i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.classList.remove('bi-eye');
+        toggleBtn.classList.add('bi-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        toggleBtn.classList.remove('bi-eye-slash');
+        toggleBtn.classList.add('bi-eye');
+      }
+    }
+  </script>
+</body>
+</html>

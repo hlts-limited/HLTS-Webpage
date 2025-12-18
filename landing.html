@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="HLTS Limited - Your Partner in Education">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Campaign page directives -->
+    <meta name="robots" content="noindex, nofollow">
+    <!-- Prefer absolute URL in production (e.g., https://hltslimited.com/) -->
+    <link rel="canonical" href="index.html">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <!-- aos -->
@@ -27,6 +31,35 @@
   </head>
 
   <body>
+    
+    <script>
+      // Preserve UTM and query parameters on key CTAs for campaign attribution
+      (function preserveCampaignParams() {
+        try {
+          var params = window.location.search;
+          if (!params || params.length < 2) return;
+          var targets = [
+            'registration-form.html',
+            'portal.html',
+            'contact.html'
+          ];
+          document.querySelectorAll('a[href]').forEach(function(a){
+            try {
+              var url = new URL(a.getAttribute('href'), window.location.origin);
+              var file = url.pathname.split('/').pop();
+              if (targets.indexOf(file) !== -1) {
+                if (a.href.indexOf('?') === -1) {
+                  a.href = a.href + params;
+                } else {
+                  a.href = a.href + '&' + params.substring(1);
+                }
+              }
+            } catch(e) {}
+          });
+        } catch(e) {}
+      })();
+    </script>
+
     <nav class="navbar navbar-expand-lg bg-white fixed-top px-4">
       <div class="container-fluid">
         <!-- Logo on the left -->
