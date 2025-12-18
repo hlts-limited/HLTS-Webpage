@@ -292,6 +292,7 @@ Contributions are welcome! Please follow these steps:
 - **Christopher Oyeh** - Founder/CEO
 - **Joseph Amos** - General Supervisor
 - **Nnamdi Osi** - Deputy Supervisor
+  **Israel Akinola** - Lead Developer
 - **Collin Duru** - Chief Engineer
 
 ## 📞 Contact
