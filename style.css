@@ -773,10 +773,10 @@ img {
 
 /* section 7 */
 .card-body  {
-	background: linear-gradient(to bottom right,
-    rgb(255, 207, 145),
-    rgb(255, 111, 92)
-    );
+	background: #ffffff;
+	box-shadow: 0 2px 8px rgba(0, 32, 96, 0.1);
+	position: relative;
+	z-index: 10;
 }
 .card-body img {
   width: 80px;
@@ -785,15 +785,81 @@ img {
   border: 3px solid #007bff;
 }
 .card-body h5 {
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: bold;
 	color: #002060;
-	margin-top: 10px;
+	margin-top: 12px;
+	margin-bottom: 8px;
+}
+.card-body .text-muted {
+	color: #666 !important;
+	font-size: 14px;
+	margin-bottom: 12px;
+}
+.card-body .card-text {
+	color: #333;
+	font-size: 15px;
+	line-height: 1.6;
+	font-style: italic;
+	margin-bottom: 0;
 }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
 	background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Testimonial Carousel Section Styles */
+#clientCarousel {
+  padding: 20px 0;
+}
+
+#clientCarousel .carousel-item {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+#clientCarousel .card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 32, 96, 0.08);
+}
+
+#clientCarousel .card:hover {
+  box-shadow: 0 8px 20px rgba(0, 32, 96, 0.15);
+  transform: translateY(-5px);
+}
+
+#clientCarousel .card-body {
+  padding: 40px 30px;
+}
+
+#clientCarousel .carousel-control-prev,
+#clientCarousel .carousel-control-next {
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 32, 96, 0.2);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+#clientCarousel .carousel-control-prev:hover,
+#clientCarousel .carousel-control-next:hover {
+  background: rgba(0, 32, 96, 0.4);
+}
+
+#clientCarousel .carousel-control-prev {
+  left: 10px;
+}
+
+#clientCarousel .carousel-control-next {
+  right: 10px;
 }
 
 /* section 6 */
@@ -1311,6 +1377,23 @@ img {
   .team-img {
     width: 120px;
     height: 120px;
+  }
+
+  /* Responsive Testimonial Cards */
+  .card {
+    margin: 0 auto !important;
+  }
+
+  .card-body h5 {
+    font-size: 16px;
+  }
+
+  .card-body .card-text {
+    font-size: 14px;
+  }
+
+  #clientCarousel .card {
+    max-width: 100% !important;
   }
 }
 
