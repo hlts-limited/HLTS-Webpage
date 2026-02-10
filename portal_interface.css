@@ -645,6 +645,15 @@
   border-radius: 6px;
 }
 
+/* Tech Course Badges */
+.subject-badge.frontend { background: #ede9fe; color: #6366f1; }
+.subject-badge.data { background: #d1fae5; color: #059669; }
+.subject-badge.graphics { background: #fef3c7; color: #d97706; }
+.subject-badge.backend { background: #fee2e2; color: #dc2626; }
+.subject-badge.desktop { background: #e0e7ff; color: #4338ca; }
+.subject-badge.visual { background: #cffafe; color: #0891b2; }
+
+/* Legacy subject badges */
 .subject-badge.math { background: #ede9fe; color: #6366f1; }
 .subject-badge.english { background: #d1fae5; color: #059669; }
 .subject-badge.physics { background: #fef3c7; color: #d97706; }

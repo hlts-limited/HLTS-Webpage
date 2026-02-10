@@ -20,13 +20,35 @@ function handleLogin() {
   const password = document.getElementById('password').value;
   const rememberMe = document.getElementById('rememberMe').checked;
   
-  // Test credentials for demo
-  const testUsers = [
-    { id: 'student@hlts.com', password: 'demo123', name: 'John Doe' },
-    { id: 'HLTS001', password: 'demo123', name: 'John Doe' },
-    { id: 'admin', password: 'admin', name: 'Admin User' },
-    { id: 'test', password: 'test', name: 'Test Student' }
+  // Default admin credentials
+  const adminUsers = [
+    { id: 'admin', password: 'admin', name: 'Administrator', role: 'admin' },
+    { id: 'admin@hlts.com', password: 'admin123', name: 'Super Admin', role: 'admin' }
   ];
+  
+  // Get dynamically created learners from localStorage
+  const savedLearners = JSON.parse(localStorage.getItem('hlts_learners')) || [];
+  
+  // Convert saved learners to login format (default password: learner ID + first name lowercase)
+  const learnerUsers = savedLearners.map(l => ({
+    id: l.id,
+    password: l.id.toLowerCase(), // Default password is learner ID lowercase
+    name: `${l.firstName} ${l.lastName}`,
+    role: 'student',
+    email: l.email
+  }));
+  
+  // Also allow email login for saved learners
+  const learnerEmailUsers = savedLearners.map(l => ({
+    id: l.email,
+    password: l.id.toLowerCase(), // Default password is learner ID lowercase
+    name: `${l.firstName} ${l.lastName}`,
+    role: 'student',
+    email: l.email
+  }));
+  
+  // Combine all users
+  const allUsers = [...adminUsers, ...learnerUsers, ...learnerEmailUsers];
   
   // Show loading state
   const submitBtn = document.querySelector('.portal-form button[type="submit"]');
@@ -36,8 +58,8 @@ function handleLogin() {
   
   // Simulate API call
   setTimeout(() => {
-    // Check against test credentials
-    const user = testUsers.find(u => 
+    // Check against all credentials
+    const user = allUsers.find(u => 
       (u.id.toLowerCase() === studentId.toLowerCase()) && u.password === password
     );
     
@@ -51,12 +73,16 @@ function handleLogin() {
       // Show success message
       showNotification(`Welcome back, ${user.name}! Redirecting...`, 'success');
       
-      // Redirect to dashboard
+      // Redirect based on role - Admin goes to admin dashboard, Students go to student portal
       setTimeout(() => {
-        window.location.href = 'portal_interface.html';
+        if (user.role === 'admin') {
+          window.location.href = 'admin_dashboard.html';
+        } else {
+          window.location.href = 'portal_interface.html';
+        }
       }, 1500);
     } else {
-      showNotification('Invalid Student ID or Password. Try: test / test', 'error');
+      showNotification('Invalid credentials. Use admin/admin (Admin) or Learner ID as both username and password', 'error');
       submitBtn.innerHTML = originalText;
       submitBtn.disabled = false;
     }
