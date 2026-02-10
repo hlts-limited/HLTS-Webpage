@@ -406,12 +406,32 @@ img {
     min-height: 400px;
   }
   
+  .carousel-caption {
+    bottom: 15%;
+    left: 5%;
+    right: 5%;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+  }
+  
   .carousel-caption h5 {
-    font-size: var(--text-3xl);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
   }
   
   .carousel-caption p {
-    font-size: var(--text-base);
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .carousel-caption .btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
   }
   
   .carousel-control-prev,
