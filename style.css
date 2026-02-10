@@ -1269,6 +1269,113 @@ img {
   line-height: 1;
 }
 
+/* Management Team Section - Modern Style */
+.management-team-section {
+  background: linear-gradient(180deg, #f8f9fc 0%, #ffffff 100%);
+}
+
+.team-card-modern {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 32, 96, 0.08);
+  transition: all 0.4s ease;
+  border: 1px solid #e8ecf1;
+}
+
+.team-card-modern:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 32, 96, 0.15);
+}
+
+.team-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 280px;
+}
+
+.team-img-modern {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.team-card-modern:hover .team-img-modern {
+  transform: scale(1.08);
+}
+
+.team-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 32, 96, 0.9), transparent);
+  padding: 60px 20px 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.team-card-modern:hover .team-overlay {
+  opacity: 1;
+}
+
+.social-icons-modern {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.social-icons-modern a {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.social-icons-modern a:hover {
+  background: #fff;
+  color: #002060;
+  transform: translateY(-3px);
+}
+
+.team-info {
+  padding: 24px;
+  text-align: center;
+}
+
+.team-info h5 {
+  color: #002060;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.team-role {
+  display: inline-block;
+  background: linear-gradient(135deg, #002060, #0056d2);
+  color: #fff;
+  padding: 4px 16px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.team-bio {
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* Team Cards */
 .team-card {
   border-radius: var(--radius-xl);
