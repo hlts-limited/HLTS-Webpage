@@ -333,7 +333,7 @@
                 <span class="class-count" id="desktopCount">0</span>
               </div>
               <div class="class-bar">
-                <span class="class-name" style="width: 80px;">Visual Prog</span>
+                <span class="class-name" style="width: 80px;">Block Prog</span>
                 <div class="bar-track">
                   <div class="bar-fill" id="visualBar" style="width: 0%; background: #06b6d4;"></div>
                 </div>
@@ -413,7 +413,7 @@
             <option value="data">Data Analysis</option>
             <option value="graphics">Graphics Design</option>
             <option value="desktop">Desktop Publishing</option>
-            <option value="visual">Visual-Based Programming</option>
+            <option value="visual">Block-Based Programming</option>
           </select>
           <select class="form-select" id="statusFilter" onchange="filterStudents()">
             <option value="">All Status</option>
@@ -599,11 +599,11 @@
             </div>
           </div>
           
-          <!-- Visual Programming Schedule -->
+          <!-- Block Programming Schedule -->
           <div class="col-md-6">
             <div class="admin-card">
               <div class="card-header" style="border-bottom: 3px solid #06b6d4;">
-                <h3><i class="bi bi-window-stack" style="color: #06b6d4;"></i> Visual-Based Programming</h3>
+                <h3><i class="bi bi-puzzle" style="color: #06b6d4;"></i> Block-Based Programming</h3>
                 <button class="btn btn-sm btn-outline-primary" onclick="openScheduleModal('visual')">
                   <i class="bi bi-pencil"></i> Edit Schedule
                 </button>
@@ -721,7 +721,7 @@
                   <option value="data">Data Analysis - ₦240,000</option>
                   <option value="graphics">Graphics Design - ₦260,000</option>
                   <option value="desktop">Desktop Publishing - ₦140,000</option>
-                  <option value="visual">Visual-Based Programming - ₦180,000</option>
+                  <option value="visual">Block-Based Programming - ₦180,000</option>
                 </select>
               </div>
               <div class="col-md-6">
@@ -865,7 +865,7 @@
                   <option value="data">Data Analysis</option>
                   <option value="graphics">Graphics Design</option>
                   <option value="desktop">Desktop Publishing</option>
-                  <option value="visual">Visual-Based Programming</option>
+                  <option value="visual">Block-Based Programming</option>
                 </select>
               </div>
               <div class="col-md-6">
@@ -942,7 +942,7 @@
       data: 'Data Analysis',
       graphics: 'Graphics Design',
       desktop: 'Desktop Publishing',
-      visual: 'Visual-Based Programming'
+      visual: 'Block-Based Programming'
     };
 
     const programColors = {
@@ -1038,7 +1038,7 @@
       };
       const courseNames = {
         frontend: 'Front-end Dev', data: 'Data Analysis', graphics: 'Graphics Design',
-        backend: 'Back-end Dev', desktop: 'Desktop Publishing', visual: 'Visual Prog'
+        backend: 'Back-end Dev', desktop: 'Desktop Publishing', visual: 'Block Prog'
       };
 
       container.innerHTML = recentLearners.map(learner => `
@@ -1082,7 +1082,7 @@
       };
       const courseNames = {
         frontend: 'Front-end Dev', data: 'Data Analysis', graphics: 'Graphics Design',
-        backend: 'Back-end Dev', desktop: 'Desktop Publishing', visual: 'Visual Prog'
+        backend: 'Back-end Dev', desktop: 'Desktop Publishing', visual: 'Block Prog'
       };
 
       tbody.innerHTML = learners.map(learner => `
@@ -1155,7 +1155,7 @@
 
       const courseNames = {
         frontend: 'Front-end Web Development', data: 'Data Analysis', graphics: 'Graphics Design',
-        backend: 'Back-end Web Development', desktop: 'Desktop Publishing', visual: 'Visual-Based Programming'
+        backend: 'Back-end Web Development', desktop: 'Desktop Publishing', visual: 'Block-Based Programming'
       };
 
       const newLearner = {
@@ -1198,7 +1198,7 @@
         const modal = document.getElementById('studentDetailsModal');
         const courseNames = {
           frontend: 'Front-end Web Development', data: 'Data Analysis', graphics: 'Graphics Design',
-          backend: 'Back-end Web Development', desktop: 'Desktop Publishing', visual: 'Visual-Based Programming'
+          backend: 'Back-end Web Development', desktop: 'Desktop Publishing', visual: 'Block-Based Programming'
         };
         
         modal.querySelector('.profile-info h3').textContent = `${learner.firstName} ${learner.lastName}`;
