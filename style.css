@@ -1718,6 +1718,319 @@ select:focus {
   }
 }
 
+/* ============================================
+   SERVICES PAGE STYLES
+   ============================================ */
+
+/* Services Hero */
+.services-hero {
+  background: linear-gradient(135deg, #002060 0%, #0056d2 50%, #00875a 100%);
+  padding-top: 140px;
+  padding-bottom: 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.services-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.min-vh-75 {
+  min-height: 55vh;
+}
+
+/* Service Cards */
+.service-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px 28px;
+  border: 1px solid #e8ecf1;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #002060, #0056d2);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 32, 96, 0.12);
+}
+
+.service-card:hover::before {
+  transform: scaleX(1);
+}
+
+.service-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #002060, #0056d2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.service-icon i {
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.service-card h4 {
+  color: #002060;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.service-card > p {
+  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.service-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+.service-features li {
+  padding: 8px 0;
+  color: #4a5568;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.service-features li i {
+  color: #00875a;
+  font-size: 0.85rem;
+}
+
+/* Why Choose Us */
+.why-choose-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.why-choose-item:last-child {
+  border-bottom: none;
+}
+
+.why-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #002060, #0056d2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.why-icon i {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.why-choose-item h5 {
+  color: #002060;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.stat-box-service {
+  background: linear-gradient(135deg, #002060, #0056d2);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.stat-box-service:hover {
+  transform: scale(1.05);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Pricing Cards */
+.pricing-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px;
+  border: 2px solid #e8ecf1;
+  transition: all 0.3s ease;
+  position: relative;
+  text-align: center;
+}
+
+.pricing-card.featured {
+  border-color: #002060;
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 32, 96, 0.15);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #002060, #0056d2);
+  color: #fff;
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pricing-header h5 {
+  color: #002060;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.pricing-price {
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.pricing-price .currency {
+  font-size: 1.2rem;
+  color: #002060;
+  vertical-align: top;
+}
+
+.pricing-price .amount {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #002060;
+}
+
+.pricing-price .period {
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+  text-align: left;
+}
+
+.pricing-features li {
+  padding: 10px 0;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-features li.text-muted i {
+  color: #ccc;
+}
+
+/* Services CTA */
+.services-cta {
+  background: linear-gradient(135deg, #002060 0%, #0056d2 100%);
+  position: relative;
+}
+
+.services-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Services Page Responsive */
+@media (max-width: 992px) {
+  .pricing-card.featured {
+    transform: scale(1);
+  }
+  
+  .stats-grid {
+    gap: 15px;
+  }
+  
+  .stat-box-service {
+    padding: 20px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-hero {
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+  
+  .services-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .service-card {
+    padding: 24px 20px;
+  }
+  
+  .why-choose-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .why-icon {
+    margin: 0 auto;
+  }
+}
+
 /* Dark Mode Support (Optional) */
 @media (prefers-color-scheme: dark) {
   /* Add dark mode styles if needed */
