@@ -16,9 +16,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Handle Login
 function handleLogin() {
-  const studentId = document.getElementById('studentId').value;
+  const studentId = document.getElementById('studentId').value.trim();
   const password = document.getElementById('password').value;
   const rememberMe = document.getElementById('rememberMe').checked;
+  
+  // Test credentials for demo
+  const testUsers = [
+    { id: 'student@hlts.com', password: 'demo123', name: 'John Doe' },
+    { id: 'HLTS001', password: 'demo123', name: 'John Doe' },
+    { id: 'admin', password: 'admin', name: 'Admin User' },
+    { id: 'test', password: 'test', name: 'Test Student' }
+  ];
   
   // Show loading state
   const submitBtn = document.querySelector('.portal-form button[type="submit"]');
@@ -26,25 +34,29 @@ function handleLogin() {
   submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Signing In...';
   submitBtn.disabled = true;
   
-  // Simulate API call (replace with actual authentication)
+  // Simulate API call
   setTimeout(() => {
-    // For demo purposes - validate basic input
-    if (studentId && password) {
-      // Store session if remember me is checked
+    // Check against test credentials
+    const user = testUsers.find(u => 
+      (u.id.toLowerCase() === studentId.toLowerCase()) && u.password === password
+    );
+    
+    if (user) {
+      // Store session
       if (rememberMe) {
         localStorage.setItem('hlts_student_id', studentId);
       }
+      sessionStorage.setItem('hlts_user', JSON.stringify(user));
       
       // Show success message
-      showNotification('Login successful! Redirecting to dashboard...', 'success');
+      showNotification(`Welcome back, ${user.name}! Redirecting...`, 'success');
       
-      // Redirect to dashboard (to be implemented)
+      // Redirect to dashboard
       setTimeout(() => {
-        // window.location.href = 'dashboard.html';
-        console.log('Redirecting to dashboard...');
+        window.location.href = 'portal_interface.html';
       }, 1500);
     } else {
-      showNotification('Please enter valid credentials', 'error');
+      showNotification('Invalid Student ID or Password. Try: test / test', 'error');
       submitBtn.innerHTML = originalText;
       submitBtn.disabled = false;
     }
