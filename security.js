@@ -62,6 +62,7 @@ const HLTSSecurity = {
   setCSRFToken: function() {
     const token = this.generateCSRFToken();
     sessionStorage.setItem('csrf_token', token);
+    document.cookie = `hlts_csrf_token=${token}; path=/; SameSite=Strict`;
     return token;
   },
 
