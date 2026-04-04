@@ -1,4 +1,4 @@
-﻿// ============================================
+// ============================================
 // HLTS SECURITY MODULE
 // ============================================
 
@@ -348,8 +348,6 @@ const HLTSSecurity = {
    * Initialize security features on page load
    */
   init: function() {
-    console.log('%cðŸ”’ HLTS Security Module Loaded', 'color: #10B981; font-weight: bold;');
-
     // Generate CSRF token
     this.setCSRFToken();
 
@@ -444,12 +442,7 @@ const HLTSSecurity = {
    * Log security status
    */
   logSecurityStatus: function() {
-    console.log('%câœ… Security Features Active:', 'color: #10B981; font-weight: bold;');
-    console.log('- CSRF Protection: Enabled');
-    console.log('- XSS Prevention: Enabled');
-    console.log('- Rate Limiting: Enabled');
-    console.log('- Input Sanitization: Enabled');
-    console.log('- Secure Session: Enabled');
+    // Security features active - CSRF, XSS, Rate Limiting, Sanitization, Sessions
   }
 };
 
@@ -759,10 +752,8 @@ window.addEventListener('load', () => {
 });
 
 // ============================================
-// Console Welcome Message
+// HLTS Bundle Loaded
 // ============================================
-console.log('%cðŸš€ Welcome to HLTS Limited', 'color: #002060; font-size: 24px; font-weight: bold;');
-console.log('%cTransforming Education Through Innovation', 'color: #FF00FF; font-size: 14px;');
 
 // Add lightbox styles dynamically
 const lightboxStyles = document.createElement('style');
@@ -864,73 +855,36 @@ function handleLogin() {
   const studentId = document.getElementById('studentId').value.trim();
   const password = document.getElementById('password').value;
   const rememberMe = document.getElementById('rememberMe').checked;
-  
-  // Default admin credentials
-  const adminUsers = [
-    { id: 'admin', password: 'admin', name: 'Administrator', role: 'admin' },
-    { id: 'admin@hlts.com', password: 'admin123', name: 'Super Admin', role: 'admin' }
-  ];
-  
-  // Get dynamically created learners from localStorage
-  const savedLearners = JSON.parse(localStorage.getItem('hlts_learners')) || [];
-  
-  // Convert saved learners to login format (default password: learner ID + first name lowercase)
-  const learnerUsers = savedLearners.map(l => ({
-    id: l.id,
-    password: l.id.toLowerCase(), // Default password is learner ID lowercase
-    name: `${l.firstName} ${l.lastName}`,
-    role: 'student',
-    email: l.email
-  }));
-  
-  // Also allow email login for saved learners
-  const learnerEmailUsers = savedLearners.map(l => ({
-    id: l.email,
-    password: l.id.toLowerCase(), // Default password is learner ID lowercase
-    name: `${l.firstName} ${l.lastName}`,
-    role: 'student',
-    email: l.email
-  }));
-  
-  // Combine all users
-  const allUsers = [...adminUsers, ...learnerUsers, ...learnerEmailUsers];
-  
-  // Show loading state
+
+  if (!studentId || !password) {
+    showNotification('Enter your student ID and password to continue.', 'error');
+    return;
+  }
+
   const submitBtn = document.querySelector('.portal-form button[type="submit"]');
   const originalText = submitBtn.innerHTML;
   submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Signing In...';
   submitBtn.disabled = true;
   
-  // Simulate API call
   setTimeout(() => {
-    // Check against all credentials
-    const user = allUsers.find(u => 
-      (u.id.toLowerCase() === studentId.toLowerCase()) && u.password === password
-    );
-    
-    if (user) {
-      // Store session
-      if (rememberMe) {
-        localStorage.setItem('hlts_student_id', studentId);
-      }
-      sessionStorage.setItem('hlts_user', JSON.stringify(user));
-      
-      // Show success message
-      showNotification(`Welcome back, ${user.name}! Redirecting...`, 'success');
-      
-      // Redirect based on role - Admin goes to admin dashboard, Students go to student portal
-      setTimeout(() => {
-        if (user.role === 'admin') {
-          window.location.href = 'admin_dashboard.html';
-        } else {
-          window.location.href = 'portal_interface.html';
-        }
-      }, 1500);
+    const user = {
+      id: studentId,
+      name: studentId,
+      role: 'student'
+    };
+
+    if (rememberMe) {
+      localStorage.setItem('hlts_student_id', studentId);
     } else {
-      showNotification('Invalid credentials. Use admin/admin (Admin) or Learner ID as both username and password', 'error');
-      submitBtn.innerHTML = originalText;
-      submitBtn.disabled = false;
+      localStorage.removeItem('hlts_student_id');
     }
+
+    sessionStorage.setItem('hlts_user', JSON.stringify(user));
+    showNotification('Login successful. Opening your dashboard...', 'success');
+
+    setTimeout(() => {
+      window.location.href = 'portal_interface.html';
+    }, 1200);
   }, 1500);
 }
 
@@ -1042,6 +996,9 @@ function validateEmail(email) {
 function togglePassword() {
   const passwordInput = document.getElementById('password');
   const toggleBtn = document.querySelector('.toggle-password i');
+  if (!passwordInput || !toggleBtn) {
+    return;
+  }
   
   if (passwordInput.type === 'password') {
     passwordInput.type = 'text';
@@ -1060,7 +1017,12 @@ function togglePassword() {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
+    const href = this.getAttribute('href');
+    if (!href || href === '#') {
+      return;
+    }
+
+    const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({
         behavior: 'smooth',

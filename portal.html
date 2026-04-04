@@ -14,9 +14,6 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -124,7 +121,7 @@
                   <input class="form-check-input" type="checkbox" id="rememberMe">
                   <label class="form-check-label" for="rememberMe">Remember me</label>
                 </div>
-                <a href="#" class="forgot-link">Forgot Password?</a>
+                <a href="contact.html" class="forgot-link">Forgot Password?</a>
               </div>
               <button type="submit" class="btn btn-primary w-100">
                 <i class="bi bi-box-arrow-in-right"></i> Sign In
@@ -236,10 +233,10 @@
           <img src="images/logoh.png" alt="HLTS Logo" height="60" class="mb-4">
           <p>Transforming education through innovation and technology.</p>
           <div class="social-links">
-            <a href="#"><i class="bi bi-facebook"></i></a>
-            <a href="#"><i class="bi bi-twitter"></i></a>
-            <a href="#"><i class="bi bi-linkedin"></i></a>
-            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="https://web.facebook.com/profile.php?id=61551105837140"><i class="bi bi-facebook"></i></a>
+            <a href="https://twitter.com/hltslimited"><i class="bi bi-twitter"></i></a>
+            <a href="https://www.linkedin.com/company/high-level-tech-services-limited"><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.instagram.com/hltslimited/"><i class="bi bi-instagram"></i></a>
           </div>
         </div>
         <div class="col-lg-2 col-md-4">
@@ -254,10 +251,10 @@
         <div class="col-lg-2 col-md-4">
           <h5>Support</h5>
           <ul class="footer-links">
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
+            <li><a href="contact.html">Help Center</a></li>
+            <li><a href="contact.html">FAQs</a></li>
+            <li><a href="security-dashboard.html">Privacy Policy</a></li>
+            <li><a href="security-dashboard.html">Terms of Service</a></li>
           </ul>
         </div>
         <div class="col-lg-4 col-md-4">
@@ -270,7 +267,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 HLTS Limited. All rights reserved.</p>
+        <p>&copy; 2026 HLTS Limited. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -283,31 +280,5 @@
   
   <!-- Custom JS -->
   <script src="hlts-bundle.js"></script>
-  
-  <script>
-    // Initialize AOS
-    AOS.init({
-      duration: 800,
-      easing: 'ease-in-out',
-      once: true,
-      offset: 100
-    });
-    
-    // Toggle Password Visibility
-    function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const toggleBtn = document.querySelector('.toggle-password i');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleBtn.classList.remove('bi-eye');
-        toggleBtn.classList.add('bi-eye-slash');
-      } else {
-        passwordInput.type = 'password';
-        toggleBtn.classList.remove('bi-eye-slash');
-        toggleBtn.classList.add('bi-eye');
-      }
-    }
-  </script>
 </body>
 </html>
