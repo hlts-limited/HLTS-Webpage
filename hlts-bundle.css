@@ -2,13 +2,14 @@
 
 body {
   padding-top: 0px !important;
-  background: linear-gradient(120deg, #e0e7ff 0%, #f3e8ff 100%);
+  background: #000 !important;
+  color: #fff;
 }
 
 section:first-of-type,
 .section-padding:first-of-type,
 .carousel-section:first-of-type {
-  margin-top: 0px !important;
+  margin-top: 70px !important;
   padding-top: 1.5rem !important;
 }
 
@@ -120,8 +121,8 @@ html {
   font-size: var(--text-base);
   font-weight: 400;
   line-height: 1.6;
-  color: var(--gray-800);
-  background-color: var(--white);
+  color: #fff;
+  background-color: #000;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -165,10 +166,18 @@ img {
 }
 
 /* Container Utilities */
-.container-custom {
-  max-width: 1280px;
+.container, .container-fluid, .container-custom {
+  max-width: 1150px;
   margin: 0 auto;
+}
+
+.container-custom {
   padding: 0 var(--space-6);
+}
+
+section {
+  max-width: 1150px;
+  margin: 0 auto;
 }
 
 .section-padding {
@@ -187,7 +196,7 @@ img {
 /* --- NAVBAR: Unified and Cleaned --- */
 .navbar {
   position: fixed !important;
-  top: 15px;
+  top: 3px;
   left: 25%;
   width: 55vw;
   max-width: 450vw;
