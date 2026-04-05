@@ -1644,25 +1644,6 @@ img {
 }
 
 /* Product Features Section */
-.product-features .feature-card {
-  border: 1px solid #eee;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-features .feature-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 32, 96, 0.12) !important;
-}
-
-.product-features .feature-card ul li {
-  padding: 4px 0;
-  font-size: 0.92rem;
-  color: #555;
-}
-
-.product-features .feature-card ul li i {
-  margin-right: 6px;
-}
 
 /* For Schools / Students Section */
 .for-users {

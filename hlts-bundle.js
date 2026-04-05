@@ -1,4 +1,98 @@
 // ============================================
+// RANDOM GALLERY FOR INDEX PAGE
+// ============================================
+document.addEventListener('DOMContentLoaded', function () {
+  var galleryImages = [
+    {
+      src: 'images/2025meeting/team.jpg',
+      alt: 'HLTS Team Meeting - Main Session',
+      title: 'Strategic Planning Session',
+      desc: 'Our leadership team discussing future initiatives and growth strategies',
+      featured: true
+    },
+    {
+      src: 'images/2025meeting/team2.jpg',
+      alt: 'Team Collaboration',
+      title: 'Team Collaboration',
+      desc: 'Team members brainstorming and collaborating on projects',
+      featured: false
+    },
+    {
+      src: 'images/2025meeting/CEO.jpg',
+      alt: 'CEO Christopher Oyeh',
+      title: 'Leadership Vision',
+      desc: 'CEO Christopher Oyeh sharing the company\'s roadmap',
+      featured: false
+    },
+    {
+      src: 'images/2025meeting/Supervisor.jpeg',
+      alt: 'Gen Supervisor Joseph Amos',
+      title: 'Team Coordination',
+      desc: 'Gen Supervisor Joseph Amos presenting operational updates',
+      featured: false
+    },
+    {
+      src: 'images/2025meeting/DepSuper.jpg',
+      alt: 'Deputy Supervisor',
+      title: 'Deputy Supervisor',
+      desc: 'Deputy Supervisor engaging with the team',
+      featured: false
+    },
+    {
+      src: 'images/2025meeting/hlts.jpg',
+      alt: 'HLTS Group',
+      title: 'HLTS Group',
+      desc: 'Group photo of HLTS team members',
+      featured: false
+    }
+  ];
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  var shuffled = shuffle(galleryImages.slice());
+  var selected = shuffled.slice(0, 3);
+  // Always make the first image featured (bigger)
+  if (selected.length > 0) {
+    selected[0].featured = true;
+    if (selected[1]) selected[1].featured = false;
+    if (selected[2]) selected[2].featured = false;
+  }
+  var grid = document.getElementById('random-gallery-grid');
+  if (grid) {
+    grid.innerHTML = '';
+    selected.forEach(function(img, idx) {
+      var item = document.createElement('div');
+      item.className = 'gallery-item' + (idx === 0 ? ' featured' : '');
+      item.setAttribute('data-aos', 'zoom-in');
+      item.setAttribute('data-aos-delay', 100 + idx * 100);
+
+      var image = document.createElement('img');
+      image.src = img.src;
+      image.alt = img.alt;
+      image.loading = 'lazy';
+      item.appendChild(image);
+
+      var overlay = document.createElement('div');
+      overlay.className = 'gallery-overlay';
+      var h5 = document.createElement('h5');
+      h5.textContent = img.title;
+      var p = document.createElement('p');
+      p.textContent = img.desc;
+      overlay.appendChild(h5);
+      overlay.appendChild(p);
+      item.appendChild(overlay);
+
+      grid.appendChild(item);
+    });
+  }
+});
+// ============================================
 // HLTS SECURITY MODULE
 // ============================================
 
@@ -536,7 +630,7 @@ function initializeCounters() {
   const counters = document.querySelectorAll('.counter');
   if (counters.length === 0) return;
 
-  const speed = 200;
+  const speed = 100; // Lower is faster, higher is slower
   let hasAnimated = false;
 
   const animateCounters = () => {
@@ -547,11 +641,12 @@ function initializeCounters() {
       const updateCount = () => {
         const target = +counter.getAttribute('data-target');
         const count = +counter.innerText;
-        const increment = Math.ceil(target / speed);
+        // Increase increment for faster counting
+        const increment = Math.max(1, Math.ceil(target / speed));
 
         if (count < target) {
-          counter.innerText = count + increment;
-          setTimeout(updateCount, 20);
+          counter.innerText = Math.min(count + increment, target);
+          setTimeout(updateCount, 40); // Slower update interval for better performance
         } else {
           counter.innerText = target.toLocaleString();
         }
