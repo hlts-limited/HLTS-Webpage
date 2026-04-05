@@ -470,7 +470,49 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeGallery();
   initializeLazyLoading();
   initializeFormValidation();
+  initializeCarouselPreview();
 });
+
+// Carousel Preview Hover Effect
+function initializeCarouselPreview() {
+  const carousel = document.getElementById('mainCarousel');
+  if (!carousel) return;
+  const items = carousel.querySelectorAll('.carousel-item img');
+  const prevBtn = carousel.querySelector('.carousel-control-prev');
+  const nextBtn = carousel.querySelector('.carousel-control-next');
+  const prevPreview = prevBtn.querySelector('.carousel-preview');
+  const nextPreview = nextBtn.querySelector('.carousel-preview');
+
+  function getActiveIndex() {
+    const active = carousel.querySelector('.carousel-item.active');
+    return Array.from(carousel.querySelectorAll('.carousel-item')).indexOf(active);
+  }
+
+  function showPreview(previewEl, index) {
+    if (!items[index]) return;
+    previewEl.innerHTML = `<img src="${items[index].getAttribute('src')}" alt="Preview">`;
+  }
+
+  prevBtn.addEventListener('mouseenter', function() {
+    const total = items.length;
+    const activeIdx = getActiveIndex();
+    const prevIdx = (activeIdx - 1 + total) % total;
+    showPreview(prevPreview, prevIdx);
+  });
+  nextBtn.addEventListener('mouseenter', function() {
+    const total = items.length;
+    const activeIdx = getActiveIndex();
+    const nextIdx = (activeIdx + 1) % total;
+    showPreview(nextPreview, nextIdx);
+  });
+  // Optional: Clear preview on mouseleave
+  prevBtn.addEventListener('mouseleave', function() {
+    prevPreview.innerHTML = '';
+  });
+  nextBtn.addEventListener('mouseleave', function() {
+    nextPreview.innerHTML = '';
+  });
+}
 
 // ============================================
 // AOS Animation Initialization
