@@ -1,7 +1,7 @@
 // ============================================
 // RANDOM GALLERY FOR INDEX PAGE
 // ============================================
-document.addEventListener('DOMContentLoaded', function () {
+function initializeRandomGallery() {
   var galleryImages = [
     {
       src: 'images/2025meeting/team.jpg',
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
       grid.appendChild(item);
     });
   }
-});
+}
 // ============================================
 // HLTS SECURITY MODULE
 // ============================================
@@ -564,6 +564,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Initialize on DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
+  initializeRandomGallery();
   initializeAOS();
   initializeCounters();
   initializeBackToTop();
@@ -896,7 +897,7 @@ function initializeCounters() {
 
         if (count < target) {
           counter.innerText = Math.min(count + increment, target);
-          setTimeout(updateCount, 40); // Slower update interval for better performance
+          requestAnimationFrame(updateCount);
         } else {
           counter.innerText = target.toLocaleString();
         }
@@ -923,20 +924,23 @@ function initializeBackToTop() {
   const backToTopBtn = document.getElementById("backToTop");
   if (!backToTopBtn) return;
 
-  // Show/hide based on scroll position
+  // Throttled scroll handler using requestAnimationFrame
+  let ticking = false;
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 300) {
-      backToTopBtn.style.display = "block";
-      backToTopBtn.style.opacity = "1";
-    } else {
-      backToTopBtn.style.opacity = "0";
-      setTimeout(() => {
-        if (window.scrollY <= 300) {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        if (window.scrollY > 300) {
+          backToTopBtn.style.display = "block";
+          backToTopBtn.style.opacity = "1";
+        } else {
+          backToTopBtn.style.opacity = "0";
           backToTopBtn.style.display = "none";
         }
-      }, 300);
+        ticking = false;
+      });
+      ticking = true;
     }
-  });
+  }, { passive: true });
 
   // Smooth scroll to top
   backToTopBtn.addEventListener("click", (e) => {
@@ -959,28 +963,35 @@ function initializeNavbar() {
 
   const heroSection = document.querySelector('section[class*="hero"], section.carousel-section');
 
+  let navTicking = false;
   window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    const heroThreshold = heroSection
-      ? heroSection.offsetTop + heroSection.offsetHeight - navbar.offsetHeight
-      : 50;
+    if (!navTicking) {
+      requestAnimationFrame(() => {
+        const currentScroll = window.pageYOffset;
+        const heroThreshold = heroSection
+          ? heroSection.offsetTop + heroSection.offsetHeight - navbar.offsetHeight
+          : 50;
 
-    // Change navbar background after scrolling past the hero section
-    if (currentScroll >= heroThreshold) {
-      navbar.classList.add('navbar-scrolled');
-    } else {
-      navbar.classList.remove('navbar-scrolled');
+        // Change navbar background after scrolling past the hero section
+        if (currentScroll >= heroThreshold) {
+          navbar.classList.add('navbar-scrolled');
+        } else {
+          navbar.classList.remove('navbar-scrolled');
+        }
+
+        // Hide/show navbar on scroll
+        if (currentScroll > lastScroll && currentScroll > 500) {
+          navbar.style.transform = 'translateX(-50%) translateY(-100%)';
+        } else {
+          navbar.style.transform = 'translateX(-50%) translateY(0)';
+        }
+
+        lastScroll = currentScroll;
+        navTicking = false;
+      });
+      navTicking = true;
     }
-
-    // Hide/show navbar on scroll (optional)
-    if (currentScroll > lastScroll && currentScroll > 500) {
-      navbar.style.transform = 'translateX(-50%) translateY(-100%)';
-    } else {
-      navbar.style.transform = 'translateX(-50%) translateY(0)';
-    }
-
-    lastScroll = currentScroll;
-  });
+  }, { passive: true });
 
   // Active link highlighting
   const navLinks = document.querySelectorAll('.nav-link');

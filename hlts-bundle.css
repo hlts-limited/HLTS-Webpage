@@ -885,7 +885,7 @@ section {
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: var(--space-6);
   margin-top: var(--space-8);
 }
@@ -2094,6 +2094,19 @@ select:focus {
 /* Print Styles */
 
 /* ============================================
+   PAGE-SPECIFIC BACKGROUNDS
+   ============================================ */
+.about-hero-bg {
+  background: url('images/slide1.jpg') center/cover no-repeat fixed;
+}
+.about-whoweare-bg {
+  background: linear-gradient(rgba(0, 32, 96, 0.85), rgba(0, 32, 96, 0.85)), url('images/slide2.jpg') center/cover no-repeat fixed;
+}
+.services-hero-bg {
+  background: url('images/slide3.jpg') center/cover no-repeat fixed;
+}
+
+/* ============================================
    SERVICES PAGE STYLES
    ============================================ */
 
@@ -2369,15 +2382,20 @@ select:focus {
 /* Dark Mode Support (Optional) */
 
 /* Performance Optimization */
-* {
-  will-change: auto;
+.navbar {
+  will-change: transform;
 }
 
-.carousel-item,
+.carousel-item img {
+  will-change: transform;
+}
+
 .gallery-item,
 .feature-box,
-.team-card {
-  contain: layout style paint;
+.team-card,
+.stat-card,
+.service-card {
+  contain: layout style;
 }
 /* ============================================
    STUDENT PORTAL STYLES
@@ -5098,6 +5116,18 @@ select:focus {
   .admin-header .search-box {
     display: none;
   }
+
+  /* --- Background-attachment: fixed → scroll on tablets/mobile --- */
+  .about-hero-bg,
+  .about-whoweare-bg,
+  .services-hero-bg {
+    background-attachment: scroll !important;
+  }
+
+  /* --- Team overlay visible on touch devices --- */
+  .team-overlay {
+    opacity: 1;
+  }
 }
 
 /* Show admin search on large screens */
@@ -5270,11 +5300,14 @@ select:focus {
 
   /* --- Services page --- */
   .services-hero {
-    padding-top: 120px;
-    padding-bottom: 60px;
+    padding-top: 100px;
+    padding-bottom: 50px;
   }
   .services-hero h1 {
     font-size: 2rem;
+  }
+  .min-vh-75 {
+    min-height: 35vh;
   }
   .service-card {
     padding: 24px 20px;
@@ -5288,8 +5321,14 @@ select:focus {
   }
 
   /* --- Portal page --- */
+  .portal-hero {
+    padding: 80px 0 var(--space-8);
+  }
   .portal-hero h1 {
     font-size: var(--text-3xl);
+  }
+  .portal-hero .lead {
+    font-size: var(--text-lg);
   }
   .stat-card {
     padding: var(--space-4);

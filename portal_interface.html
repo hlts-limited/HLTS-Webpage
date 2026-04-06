@@ -9,6 +9,8 @@
   <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
   
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,7 +32,7 @@
   <!-- Sidebar Navigation -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <img src="images/logoh.png" alt="HLTS Logo" class="sidebar-logo">
+      <img loading="lazy" src="images/logoh.png" alt="HLTS Logo" class="sidebar-logo">
       <button class="sidebar-toggle d-lg-none" onclick="toggleSidebar()">
         <i class="bi bi-x-lg"></i>
       </button>
@@ -38,7 +40,7 @@
     
     <div class="sidebar-user">
       <div class="user-avatar">
-        <img src="https://ui-avatars.com/api/?name=John+Doe&background=002060&color=fff&size=80" alt="User Avatar">
+        <img loading="lazy" src="https://ui-avatars.com/api/?name=John+Doe&background=002060&color=fff&size=80" alt="User Avatar">
         <span class="status-indicator online"></span>
       </div>
       <h6 class="user-name">John Doe</h6>
@@ -156,7 +158,7 @@
         
         <div class="user-dropdown">
           <button class="dropdown-toggle" data-bs-toggle="dropdown">
-            <img src="https://ui-avatars.com/api/?name=John+Doe&background=002060&color=fff&size=40" alt="User">
+            <img loading="lazy" src="https://ui-avatars.com/api/?name=John+Doe&background=002060&color=fff&size=40" alt="User">
             <span class="d-none d-md-inline">John Doe</span>
             <i class="bi bi-chevron-down"></i>
           </button>
@@ -599,10 +601,10 @@
   </main>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
   
   <!-- Custom JavaScript -->
-  <script src="hlts-bundle.js"></script>
+  <script src="hlts-bundle.js" defer></script>
   
   <!-- Portal Interface JS -->
   <script>
