@@ -565,13 +565,14 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeLazyLoading();
   initializeFormValidation();
   initializeCarouselPreview();
+  initializeForUsersDetailModal();
 });
 
 // Carousel Preview Hover Effect
 function initializeCarouselPreview() {
   const carousel = document.getElementById('mainCarousel');
   if (!carousel) return;
-  const items = carousel.querySelectorAll('.carousel-item img');
+  const slides = Array.from(carousel.querySelectorAll('.carousel-item'));
   const prevBtn = carousel.querySelector('.carousel-control-prev');
   const nextBtn = carousel.querySelector('.carousel-control-next');
   const prevPreview = prevBtn.querySelector('.carousel-preview');
@@ -579,32 +580,141 @@ function initializeCarouselPreview() {
 
   function getActiveIndex() {
     const active = carousel.querySelector('.carousel-item.active');
-    return Array.from(carousel.querySelectorAll('.carousel-item')).indexOf(active);
+    return slides.indexOf(active);
+  }
+
+  function getSlidePreview(index) {
+    const slide = slides[index];
+    if (!slide) return null;
+    const caption = slide.querySelector('.carousel-caption');
+    const title = caption?.querySelector('h5')?.textContent.trim() || '';
+    const description = caption?.querySelector('p')?.textContent.trim() || '';
+    return { title, description };
   }
 
   function showPreview(previewEl, index) {
-    if (!items[index]) return;
-    previewEl.innerHTML = `<img src="${items[index].getAttribute('src')}" alt="Preview">`;
+    const preview = getSlidePreview(index);
+    if (!preview || (!preview.title && !preview.description)) {
+      previewEl.innerHTML = '';
+      return;
+    }
+
+    previewEl.innerHTML = `
+      <div class="carousel-preview-content">
+        <strong>${preview.title}</strong>
+        <p>${preview.description}</p>
+      </div>
+    `;
+  }
+
+  function updatePreview(previewEl, index) {
+    showPreview(previewEl, index);
   }
 
   prevBtn.addEventListener('mouseenter', function() {
-    const total = items.length;
+    const total = slides.length;
     const activeIdx = getActiveIndex();
     const prevIdx = (activeIdx - 1 + total) % total;
-    showPreview(prevPreview, prevIdx);
+    updatePreview(prevPreview, prevIdx);
   });
+
   nextBtn.addEventListener('mouseenter', function() {
-    const total = items.length;
+    const total = slides.length;
     const activeIdx = getActiveIndex();
     const nextIdx = (activeIdx + 1) % total;
-    showPreview(nextPreview, nextIdx);
+    updatePreview(nextPreview, nextIdx);
   });
-  // Optional: Clear preview on mouseleave
+
   prevBtn.addEventListener('mouseleave', function() {
     prevPreview.innerHTML = '';
   });
+
   nextBtn.addEventListener('mouseleave', function() {
     nextPreview.innerHTML = '';
+  });
+}
+
+function initializeForUsersDetailModal() {
+  const buttons = document.querySelectorAll('.btn-learn-more');
+  const modalEl = document.getElementById('forUsersDetailModal');
+  const titleEl = document.getElementById('forUsersDetailModalLabel');
+  const summaryEl = document.getElementById('forUsersDetailSummary');
+  const listEl = document.getElementById('forUsersDetailList');
+  if (!modalEl || !titleEl || !summaryEl || !listEl || !buttons.length) return;
+
+  const details = {
+    administrators: {
+      title: 'For School Administrators',
+      summary: 'HLTS provides school administrators with operational systems that boost efficiency, reduce manual work, and make decision-making data-driven across the whole institution.',
+      buttonLink: 'school-form.html',
+      items: [
+        { icon: 'bi-bar-chart-line-fill', text: 'Data-Driven Insight & Analytics: view real-time dashboards for attendance, exam results, staffing, and school performance so you can identify trends and act faster.' },
+        { icon: 'bi-globe2', text: 'Digital Learning Platforms: centralize lesson planning, student communications, assignment tracking, and resource sharing in one secure portal.' },
+        { icon: 'bi-gear-fill', text: 'Administrative Efficiency & Compliance: automate registration, billing, reporting, and regulatory documentation to reduce paperwork and improve accuracy.' },
+        { icon: 'bi-person-badge-fill', text: 'Scalable Professional Development & Support: deliver training resources, onboarding materials, and expert support so your staff can adopt technology smoothly and grow with demand.' }
+      ]
+    },
+    teachers: {
+      title: 'For Teachers & Educators',
+      summary: 'Teachers gain modern classroom tools to design engaging lessons, give faster feedback, and manage student progress with less administrative overhead.',
+      buttonLink: 'school-form.html',
+      items: [
+        { icon: 'bi-book-half', text: 'Curriculum Enhancement & Digital Resources: create and reuse interactive lesson plans, multimedia content, and assessments that support differentiated learning.' },
+        { icon: 'bi-pencil-square', text: 'Assessment & Feedback Tools: build quizzes, grade faster with automation, and provide meaningful feedback that guides student improvement.' },
+        { icon: 'bi-people-fill', text: 'Collaboration & Classroom Management: coordinate assignments, share resources, and communicate with students and parents from a single classroom dashboard.' },
+        { icon: 'bi-award-fill', text: 'Professional Development & Support: access training guides, best-practice materials, and support tools that help you grow your teaching skills and digital confidence.' }
+      ]
+    },
+    students: {
+      title: 'For Students',
+      summary: 'Students enjoy a personalized learning environment with instant access to lessons, assignments, support resources, and collaborative tools.',
+      buttonLink: 'portal.html',
+      items: [
+        { icon: 'bi-stars', text: 'Personalized Learning Experience: follow tailored pathways, receive content recommendations, and progress at a pace that matches your strengths and needs.' },
+        { icon: 'bi-journal-album', text: 'Access to Digital Tools & Resources: open learning materials, assignments, notes, and multimedia content from any device, anytime.' },
+        { icon: 'bi-people', text: 'Collaboration & Peer Interaction: work with classmates on projects, share ideas, and participate in group activities through built-in collaboration features.' },
+        { icon: 'bi-lightbulb-fill', text: 'Skill Development & Future Readiness: build digital literacy, communication, and problem-solving skills that prepare you for higher education and career success.' }
+      ]
+    },
+    parents: {
+      title: 'For Parents',
+      summary: 'Parents stay involved and informed with clear progress tracking, improved communication, and practical support for supporting learning at home.',
+      buttonLink: 'portal.html',
+      items: [
+        { icon: 'bi-eye-fill', text: 'Transparent Progress Tracking: monitor grades, attendance, assignments, and performance milestones in one easy-to-read view.' },
+        { icon: 'bi-chat-dots-fill', text: 'Improved Communication Channels: message teachers directly, receive timely updates, and stay connected with school announcements.' },
+        { icon: 'bi-house-door-fill', text: 'Support for At-Home Learning: get homework reminders, study resources, and progress summaries that help you support your child effectively.' },
+        { icon: 'bi-people-fill', text: 'Engagement & Community Building: participate in school events, receive community news, and stay engaged with other parents and educators.' }
+      ]
+    }
+  };
+
+  const getStartedBtn = document.getElementById('forUsersDetailGetStarted');
+  const bsModal = new bootstrap.Modal(modalEl);
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', function () {
+      const key = this.getAttribute('data-card');
+      const data = details[key];
+      if (!data) return;
+
+      titleEl.textContent = data.title;
+      summaryEl.textContent = data.summary;
+      listEl.innerHTML = data.items.map(item => {
+        const [label, description] = item.text.split(': ');
+        return `
+          <div class="list-group-item detail-list-item border-0 px-0 py-2">
+            <i class="bi ${item.icon} detail-item-icon"></i>
+            <span><strong>${label}:</strong> ${description || ''}</span>
+          </div>
+        `;
+      }).join('');
+      if (getStartedBtn && data.buttonLink) {
+        getStartedBtn.setAttribute('href', data.buttonLink);
+      }
+
+      bsModal.show();
+    });
   });
 }
 
