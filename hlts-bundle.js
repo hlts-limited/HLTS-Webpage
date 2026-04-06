@@ -446,7 +446,7 @@ const HLTSSecurity = {
     this.setCSRFToken();
 
     // Add CSRF tokens to all forms
-    document.addEventListener('DOMContentLoaded', () => {
+    const applyDOMSecurity = () => {
       const forms = document.querySelectorAll('form');
       forms.forEach(form => {
         this.addCSRFToForm(form);
@@ -458,7 +458,14 @@ const HLTSSecurity = {
 
       // Add security headers information
       this.logSecurityStatus();
-    });
+    };
+
+    // Apply immediately if DOM is ready, otherwise wait
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyDOMSecurity);
+    } else {
+      applyDOMSecurity();
+    }
 
     // Handle form submissions
     document.addEventListener('submit', (e) => {
@@ -566,6 +573,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeFormValidation();
   initializeCarouselPreview();
   initializeForUsersDetailModal();
+  initializeTestimonialFolder();
 });
 
 // Carousel Preview Hover Effect
@@ -599,12 +607,16 @@ function initializeCarouselPreview() {
       return;
     }
 
-    previewEl.innerHTML = `
-      <div class="carousel-preview-content">
-        <strong>${preview.title}</strong>
-        <p>${preview.description}</p>
-      </div>
-    `;
+    previewEl.innerHTML = '';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'carousel-preview-content';
+    const strong = document.createElement('strong');
+    strong.textContent = preview.title;
+    const p = document.createElement('p');
+    p.textContent = preview.description;
+    wrapper.appendChild(strong);
+    wrapper.appendChild(p);
+    previewEl.appendChild(wrapper);
   }
 
   function updatePreview(previewEl, index) {
@@ -720,6 +732,134 @@ function initializeForUsersDetailModal() {
 
 // ============================================
 // AOS Animation Initialization
+// ============================================
+// Desktop Folder with Single-Card View (shared)
+// ============================================
+function createDeskFolder(slotEl, tabLabel, theme, icon) {
+  var cardRow = slotEl.querySelector('.row.g-4');
+  if (!cardRow) return;
+
+  var folder = document.createElement('div');
+  folder.className = 'desk-folder desk-folder--' + theme;
+
+  // Tab
+  var tab = document.createElement('div');
+  tab.className = 'desk-folder-tab';
+  var tabSpan = document.createElement('span');
+  tabSpan.textContent = tabLabel;
+  tab.appendChild(tabSpan);
+
+  // Body
+  var body = document.createElement('div');
+  body.className = 'desk-folder-body';
+
+  // Front face
+  var front = document.createElement('div');
+  front.className = 'desk-folder-front';
+
+  var iconEl = document.createElement('i');
+  iconEl.className = 'bi bi-' + icon + ' folder-icon-display';
+  front.appendChild(iconEl);
+
+  var hint = document.createElement('span');
+  hint.className = 'folder-hint';
+  hint.textContent = 'Click to open';
+  front.appendChild(hint);
+
+  var cards = Array.from(cardRow.querySelectorAll(':scope > [class*="col-"]'));
+  var badge = document.createElement('span');
+  badge.className = 'folder-count';
+  badge.textContent = cards.length + ' items';
+  front.appendChild(badge);
+
+  // Navigation
+  var nav = document.createElement('div');
+  nav.className = 'folder-nav';
+
+  var prevBtn = document.createElement('button');
+  prevBtn.className = 'folder-nav-btn';
+  prevBtn.innerHTML = '<i class="bi bi-chevron-left"></i>';
+  prevBtn.setAttribute('aria-label', 'Previous');
+
+  var nextBtn = document.createElement('button');
+  nextBtn.className = 'folder-nav-btn';
+  nextBtn.innerHTML = '<i class="bi bi-chevron-right"></i>';
+  nextBtn.setAttribute('aria-label', 'Next');
+
+  var dotsWrap = document.createElement('div');
+  dotsWrap.className = 'folder-nav-dots';
+
+  var dots = [];
+  cards.forEach(function(_, i) {
+    var dot = document.createElement('button');
+    dot.className = 'folder-nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to item ' + (i + 1));
+    dot.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showCard(i);
+    });
+    dotsWrap.appendChild(dot);
+    dots.push(dot);
+  });
+
+  nav.appendChild(prevBtn);
+  nav.appendChild(dotsWrap);
+  nav.appendChild(nextBtn);
+
+  // Assemble DOM
+  slotEl.innerHTML = '';
+  slotEl.appendChild(folder);
+  folder.appendChild(tab);
+  folder.appendChild(body);
+  body.appendChild(cardRow);
+  body.appendChild(front);
+  body.appendChild(nav);
+
+  // State
+  var currentIndex = 0;
+  if (cards.length > 0) cards[0].classList.add('folder-card-active');
+
+  function showCard(idx) {
+    cards[currentIndex].classList.remove('folder-card-active');
+    dots[currentIndex].classList.remove('active');
+    currentIndex = idx;
+    cards[currentIndex].classList.add('folder-card-active');
+    dots[currentIndex].classList.add('active');
+  }
+
+  prevBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    showCard(currentIndex > 0 ? currentIndex - 1 : cards.length - 1);
+  });
+
+  nextBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    showCard(currentIndex < cards.length - 1 ? currentIndex + 1 : 0);
+  });
+
+  front.addEventListener('click', function() {
+    folder.classList.add('folder-open');
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!folder.contains(e.target)) {
+      folder.classList.remove('folder-open');
+    }
+  });
+}
+
+function initializeTestimonialFolder() {
+  var testimonialsSlot = document.getElementById('testimonials-folder-slot');
+  if (testimonialsSlot) {
+    createDeskFolder(testimonialsSlot, 'Reviews', 'amber', 'folder-fill');
+  }
+
+  var storiesSlot = document.getElementById('success-stories-folder-slot');
+  if (storiesSlot) {
+    createDeskFolder(storiesSlot, 'Stories', 'blue', 'folder2-open');
+  }
+}
+
 // ============================================
 function initializeAOS() {
   if (typeof AOS !== 'undefined') {
@@ -872,19 +1012,34 @@ function initializeGallery() {
 }
 
 function openLightbox(imgSrc, title, description) {
-  // Create lightbox modal
+  // Create lightbox modal using DOM methods to prevent XSS
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox-modal';
-  lightbox.innerHTML = `
-    <div class="lightbox-content">
-      <span class="lightbox-close">&times;</span>
-      <img src="${imgSrc}" alt="${title}">
-      <div class="lightbox-caption">
-        <h4>${title}</h4>
-        <p>${description}</p>
-      </div>
-    </div>
-  `;
+
+  const content = document.createElement('div');
+  content.className = 'lightbox-content';
+
+  const closeSpan = document.createElement('span');
+  closeSpan.className = 'lightbox-close';
+  closeSpan.innerHTML = '&times;';
+
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  img.alt = title;
+
+  const caption = document.createElement('div');
+  caption.className = 'lightbox-caption';
+  const h4 = document.createElement('h4');
+  h4.textContent = title;
+  const p = document.createElement('p');
+  p.textContent = description;
+  caption.appendChild(h4);
+  caption.appendChild(p);
+
+  content.appendChild(closeSpan);
+  content.appendChild(img);
+  content.appendChild(caption);
+  lightbox.appendChild(content);
 
   document.body.appendChild(lightbox);
   document.body.style.overflow = 'hidden';
@@ -1264,25 +1419,6 @@ function togglePassword() {
     passwordInput.style.animation = 'fadeIn 0.3s ease-out';
   }
 }
-
-// Smooth Scroll for Links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    const href = this.getAttribute('href');
-    if (!href || href === '#') {
-      return;
-    }
-
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  });
-});
 
 // Loading Screen
 window.addEventListener('load', function() {

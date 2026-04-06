@@ -137,6 +137,14 @@ $programLabels = [
     'video-editing' => 'Video Editing',
     'desktop-publishing' => 'Desktop Publishing',
     'visual-programming' => 'Visual Based Programming',
+    'cloud' => 'Cloud Storage Management',
+    'other' => 'Lab Management',
+    'dev' => 'Curriculum Development',
+    'web' => 'Web Development',
+    'result' => 'Result Integration/Setup',
+    'lab' => 'Lab Setup',
+    'cbt' => 'CBT Exam Setup',
+    'pay' => 'School Payment System Integration',
 ];
 
 $errors = [];

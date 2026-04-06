@@ -1174,6 +1174,361 @@ section {
   position: relative;
 }
 
+/* Side-by-side folders row */
+.folders-row {
+  align-items: flex-start;
+}
+
+/* ===== SHARED 3D DESKTOP FOLDER STYLES ===== */
+.desk-folder {
+  perspective: 1200px;
+  cursor: pointer;
+  position: relative;
+  max-width: 100%;
+  transform-style: preserve-3d;
+}
+
+/* 3D shadow underneath the folder */
+.desk-folder::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 10%;
+  right: 10%;
+  height: 16px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+
+.desk-folder.folder-open::after {
+  opacity: 0.06;
+}
+
+/* Folder Tab */
+.desk-folder-tab {
+  position: relative;
+  width: 120px;
+  height: 22px;
+  margin: 0 0 -2px 16px;
+  border-radius: 6px 6px 0 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: background 0.4s ease, transform 0.3s ease;
+  transform: translateZ(4px);
+}
+
+.desk-folder-tab span {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* Folder Body */
+.desk-folder-body {
+  position: relative;
+  border-radius: 0 10px 10px 10px;
+  padding: 20px 16px 16px;
+  min-height: 120px;
+  overflow: hidden;
+  z-index: 1;
+  transform: translateZ(0);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06),
+              0 1px 4px rgba(0,0,0,0.04);
+  transition: box-shadow 0.4s ease;
+}
+
+.desk-folder.folder-open .desk-folder-body {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1),
+              0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Folder Front Face (3D lid) */
+.desk-folder-front {
+  position: absolute;
+  top: -1px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 0 10px 10px 10px;
+  z-index: 5;
+  transform-origin: center top;
+  transform: rotateX(0deg) translateZ(6px);
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s ease 0.3s,
+              box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  backface-visibility: hidden;
+}
+
+/* Papers peeking out */
+.desk-folder-front::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20%;
+  right: 20%;
+  height: 8px;
+  background: linear-gradient(90deg, #f0f0f0, #ffffff, #f0f0f0);
+  border-radius: 3px 3px 0 0;
+  border: 1px solid #ddd;
+  border-bottom: none;
+}
+
+.desk-folder-front::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 28%;
+  right: 28%;
+  height: 5px;
+  background: #fafafa;
+  border-radius: 2px 2px 0 0;
+  border: 1px solid #e0e0e0;
+  border-bottom: none;
+}
+
+.desk-folder-front .folder-icon-display {
+  font-size: 2.8rem;
+}
+
+.desk-folder-front .folder-hint {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.desk-folder-front .folder-count {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* === OPEN STATE === */
+.desk-folder.folder-open .desk-folder-front {
+  transform: rotateX(-95deg) translateZ(6px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.desk-folder.folder-open .desk-folder-tab {
+  transform: translateZ(0);
+}
+
+/* Single-card carousel */
+.desk-folder-body .row.g-4 {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+}
+
+.desk-folder.folder-open .desk-folder-body .row.g-4 {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.desk-folder-body .row.g-4 > [class*="col-"] {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 0;
+  display: none;
+}
+
+.desk-folder-body .row.g-4 > [class*="col-"].folder-card-active {
+  display: block;
+  animation: folderCardFadeIn 0.35s ease;
+}
+
+@keyframes folderCardFadeIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Navigation controls */
+.folder-nav {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.desk-folder.folder-open .folder-nav {
+  display: flex;
+}
+
+.folder-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.folder-nav-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.folder-nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.folder-nav-dot.active {
+  transform: scale(1.4);
+}
+
+/* ===== CORAL THEME (Testimonials) ===== */
+.desk-folder--amber .desk-folder-tab {
+  background: linear-gradient(180deg, rgb(255, 207, 145), rgb(255, 140, 110));
+}
+.desk-folder--amber .desk-folder-tab span {
+  color: #6b2010;
+}
+.desk-folder--amber .desk-folder-body {
+  border: 2px solid rgb(220, 110, 80);
+  background: linear-gradient(180deg, #fff5f0 0%, #ffe8e0 100%);
+}
+.desk-folder--amber .desk-folder-front {
+  background: linear-gradient(175deg, rgb(255, 220, 185) 0%, rgb(255, 160, 120) 35%, rgb(255, 111, 92) 100%);
+  border: 2px solid rgb(220, 110, 80);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.45),
+              0 6px 20px rgba(200, 80, 50, 0.18);
+}
+.desk-folder--amber .desk-folder-front .folder-icon-display {
+  color: rgba(140, 50, 20, 0.22);
+}
+.desk-folder--amber .desk-folder-front .folder-hint {
+  color: rgba(140, 50, 20, 0.5);
+}
+.desk-folder--amber .desk-folder-front .folder-count {
+  background: rgba(140, 50, 20, 0.12);
+  color: rgba(140, 50, 20, 0.6);
+}
+.desk-folder--amber.folder-open .desk-folder-tab {
+  background: linear-gradient(180deg, rgb(255, 220, 170), rgb(255, 160, 130));
+}
+.desk-folder--amber .folder-nav-btn {
+  border-color: rgb(220, 110, 80);
+  background: #ffe8e0;
+  color: rgb(160, 60, 30);
+}
+.desk-folder--amber .folder-nav-btn:hover {
+  background: rgb(255, 180, 145);
+  color: #5c1500;
+}
+.desk-folder--amber .folder-nav-dot {
+  background: rgb(240, 190, 170);
+}
+.desk-folder--amber .folder-nav-dot.active {
+  background: rgb(220, 110, 80);
+}
+
+/* ===== TEAL THEME (Success Stories) ===== */
+.desk-folder--blue .desk-folder-tab {
+  background: linear-gradient(180deg, #2af598, #00c4a0);
+}
+.desk-folder--blue .desk-folder-tab span {
+  color: #004d3a;
+}
+.desk-folder--blue .desk-folder-body {
+  border: 2px solid #00a07a;
+  background: linear-gradient(180deg, #edfff8 0%, #d9fff0 100%);
+}
+.desk-folder--blue .desk-folder-front {
+  background: linear-gradient(175deg, #70ffcc 0%, #2af598 35%, #009efd 100%);
+  border: 2px solid #00a07a;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4),
+              0 6px 20px rgba(0, 120, 90, 0.18);
+}
+.desk-folder--blue .desk-folder-front .folder-icon-display {
+  color: rgba(0, 80, 60, 0.22);
+}
+.desk-folder--blue .desk-folder-front .folder-hint {
+  color: rgba(0, 80, 60, 0.5);
+}
+.desk-folder--blue .desk-folder-front .folder-count {
+  background: rgba(0, 80, 60, 0.12);
+  color: rgba(0, 80, 60, 0.6);
+}
+.desk-folder--blue.folder-open .desk-folder-tab {
+  background: linear-gradient(180deg, #50ffb0, #20dfa0);
+}
+.desk-folder--blue .folder-nav-btn {
+  border-color: #00a07a;
+  background: #d9fff0;
+  color: #006050;
+}
+.desk-folder--blue .folder-nav-btn:hover {
+  background: #2af598;
+  color: #003020;
+}
+.desk-folder--blue .folder-nav-dot {
+  background: #90e8c8;
+}
+.desk-folder--blue .folder-nav-dot.active {
+  background: #00a07a;
+}
+
+/* Mobile: show cards normally, hide folder chrome */
+@media (max-width: 768px) {
+  .desk-folder-front {
+    display: none;
+  }
+  .desk-folder-body .row.g-4 {
+    display: flex;
+    flex-wrap: wrap;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .desk-folder-body .row.g-4 > [class*="col-"] {
+    display: block;
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0 0 12px;
+  }
+  .folder-nav {
+    display: none !important;
+  }
+  .desk-folder-front::before,
+  .desk-folder-front::after {
+    display: none;
+  }
+  .desk-folder::after {
+    display: none;
+  }
+}
+
 .testimonial-card {
   background: #ffffff;
   border-radius: 16px;
