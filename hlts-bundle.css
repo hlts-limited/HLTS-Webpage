@@ -5002,3 +5002,113 @@ select:focus {
 .pulse {
   animation: pulse 1.6s infinite;
 }
+
+/* Responsive Enhancements */
+@media (max-width: 992px) {
+  .navbar {
+    left: 0;
+    width: 100%;
+    top: 0;
+    border-radius: 0 0 1rem 1rem;
+    padding: 0 1rem;
+  }
+
+  .navbar .container-fluid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.65rem 0.85rem;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 45px;
+    height: 45px;
+  }
+
+  .carousel-preview {
+    width: 200px;
+    top: -80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand img {
+    height: 34px;
+  }
+
+  .carousel-caption {
+    left: 8%;
+    right: 8%;
+    bottom: 1rem;
+    padding: 0.75rem;
+  }
+
+  .carousel-caption h5 {
+    font-size: 1.35rem;
+  }
+
+  .carousel-caption p {
+    font-size: 0.95rem;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-preview {
+    width: calc(100vw - 2rem);
+    left: 50%;
+    transform: translateX(-50%);
+    top: -90px;
+  }
+
+  #forUsersDetailModal .modal-dialog {
+    max-width: 92%;
+  }
+
+  .for-users .card,
+  .meeting-gallery-section .gallery-grid,
+  .blog-section .card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    border-radius: 0;
+  }
+
+  .carousel-caption h5 {
+    font-size: 1.2rem;
+  }
+
+  .carousel-caption p {
+    font-size: 0.9rem;
+  }
+
+  .carousel-preview {
+    width: calc(100vw - 1.5rem);
+    top: -95px;
+  }
+
+  .section-padding,
+  .py-5,
+  .py-4,
+  .px-4,
+  .px-5 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  #forUsersDetailModal .modal-content::before {
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+  }
+}
