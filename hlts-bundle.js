@@ -707,11 +707,16 @@ function initializeNavbar() {
 
   let lastScroll = 0;
 
+  const heroSection = document.querySelector('section[class*="hero"], section.carousel-section');
+
   window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
+    const heroThreshold = heroSection
+      ? heroSection.offsetTop + heroSection.offsetHeight - navbar.offsetHeight
+      : 50;
 
-    // Add shadow on scroll
-    if (currentScroll > 50) {
+    // Change navbar background after scrolling past the hero section
+    if (currentScroll >= heroThreshold) {
       navbar.classList.add('navbar-scrolled');
     } else {
       navbar.classList.remove('navbar-scrolled');
