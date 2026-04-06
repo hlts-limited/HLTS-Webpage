@@ -167,7 +167,8 @@ img {
 
 /* Container Utilities */
 .container, .container-fluid, .container-custom {
-  max-width: 1150px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -176,8 +177,7 @@ img {
 }
 
 section {
-  width: 95%;
-  /* max-width: 1200px; */
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -1512,7 +1512,7 @@ section {
 }
 
 .enroll-box {
-  max-width: 700px;
+  max-width: 100%;
   margin: auto;
 }
 
@@ -1678,7 +1678,7 @@ section {
 }
 
 .about-grid {
-  max-width: 1000px;
+  max-width: 100%;
 }
 
 .about-us-section h3, h4 {
@@ -4969,7 +4969,7 @@ select:focus {
 
   /* --- Navbar --- */
   .navbar {
-    width: 92%;
+    width: 75%;
     top: 6px;
     border-radius: 1rem;
     padding: 0.5rem 0.8rem;
@@ -5122,7 +5122,7 @@ select:focus {
 
   /* --- Navbar --- */
   .navbar {
-    width: 92%;
+    width: 80%;
   }
   .navbar-brand img {
     height: 32px;
@@ -5392,7 +5392,7 @@ select:focus {
 
   /* --- Navbar --- */
   .navbar {
-    width: 94%;
+    width: 85%;
     border-radius: 0.75rem;
     padding: 0.35rem 0.6rem;
     top: 4px;
