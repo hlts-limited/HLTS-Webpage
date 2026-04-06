@@ -25,6 +25,8 @@
 </head>
 
 <body class="admin-body">
+  <!-- Sidebar Overlay -->
+  <div class="admin-sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
   <!-- Sidebar Navigation -->
   <aside class="admin-sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -962,6 +964,7 @@
     // Toggle Sidebar
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('sidebarOverlay').classList.toggle('active');
     }
 
     // Show Section

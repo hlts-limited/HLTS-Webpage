@@ -4107,6 +4107,57 @@ select:focus {
   .user-dropdown span {
     display: none;
   }
+
+  .dashboard-content {
+    padding: 10px;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.2rem;
+  }
+
+  .welcome-date {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .schedule-item {
+    flex-wrap: wrap;
+  }
+
+  .actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Portal Interface — sidebar overlay & table scroll */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+.grades-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 992px) {
+  .search-box input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .top-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }
 /* =========================================
    HLTS Admin Dashboard Styles
@@ -5285,6 +5336,71 @@ select:focus {
   
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-profile span {
+    display: none;
+  }
+}
+
+/* Admin sidebar overlay */
+.admin-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+.admin-sidebar-overlay.active {
+  display: block;
+}
+
+@media (max-width: 575.98px) {
+  .admin-content {
+    padding: 0.75rem;
+  }
+
+  .admin-header {
+    padding: 0 0.75rem;
+    height: auto;
+    min-height: var(--admin-header-height);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+
+  .stat-details h3 {
+    font-size: 1.3rem;
+  }
+
+  .quick-action {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .admin-card .card-header {
+    padding: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .student-item {
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 }
 
