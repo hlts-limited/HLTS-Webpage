@@ -5041,10 +5041,14 @@ select:focus {
   }
 
   .carousel-caption {
-    left: 8%;
-    right: 8%;
+    left: 50%;
+    right: auto;
     bottom: 1rem;
     padding: 0.75rem;
+    max-width: 420px;
+    width: calc(100% - 2rem);
+    transform: translateX(-50%);
+    margin: 0 auto;
   }
 
   .carousel-caption h5 {
@@ -5077,11 +5081,25 @@ select:focus {
   .blog-section .card {
     width: 100%;
   }
+
+  section {
+    width: 90%;
+  }
 }
 
 @media (max-width: 576px) {
   .navbar {
     border-radius: 0;
+  }
+
+  .carousel-caption {
+    left: 50%;
+    right: auto;
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+    max-width: 340px;
+    transform: translateX(-50%);
+    margin: 0 auto;
   }
 
   .carousel-caption h5 {
@@ -5104,6 +5122,10 @@ select:focus {
   .px-5 {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+  }
+
+  section {
+    width: 95%;
   }
 
   #forUsersDetailModal .modal-content::before {
