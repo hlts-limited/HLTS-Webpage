@@ -5403,30 +5403,39 @@ select:focus {
 /* Responsive Enhancements */
 @media (max-width: 992px) {
   .navbar {
-    left: 0;
-    width: 100%;
-    top: 0;
-    border-radius: 0;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.95) !important;
-    backdrop-filter: blur(10px) !important;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    top: 4px;
+    border-radius: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0, 0, 0, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
   }
 
   .navbar .container-fluid {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .navbar-collapse {
     background: rgba(0, 0, 0, 0.95);
-    border-radius: 0 0 1rem 1rem;
-    padding: 0.5rem 1rem 1rem;
-    margin: 0.5rem -1rem 0;
+    border-radius: 0 0 0.75rem 0.75rem;
+    padding: 0.5rem 0.75rem 1rem;
+    margin: 0.4rem -0.5rem 0;
   }
 
   .navbar-nav .nav-link {
-    padding: 0.65rem 0.85rem;
-    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  body > section,
+  body > .container,
+  body > div > section {
+    max-width: 94%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .carousel-control-prev,
@@ -5442,8 +5451,17 @@ select:focus {
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    width: 90%;
+  }
+
   .navbar-brand img {
-    height: 34px;
+    height: 32px;
+  }
+
+  body > section,
+  body > div > section {
+    max-width: 92%;
   }
 
   .carousel-caption {
@@ -5495,7 +5513,18 @@ select:focus {
 
 @media (max-width: 576px) {
   .navbar {
-    border-radius: 0;
+    width: 88%;
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .navbar-brand img {
+    height: 28px;
+  }
+
+  body > section,
+  body > div > section {
+    max-width: 90%;
   }
 
   .carousel-caption {
@@ -5526,8 +5555,8 @@ select:focus {
   .py-4,
   .px-4,
   .px-5 {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
   }
 
   section {
