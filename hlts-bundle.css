@@ -176,7 +176,8 @@ img {
 }
 
 section {
-  max-width: 1150px;
+  width: 90%;
+  /* max-width: 1200px; */
   margin: 0 auto;
 }
 
