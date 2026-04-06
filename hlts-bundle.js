@@ -974,9 +974,9 @@ function initializeNavbar() {
 
     // Hide/show navbar on scroll (optional)
     if (currentScroll > lastScroll && currentScroll > 500) {
-      navbar.style.transform = 'translateY(-100%)';
+      navbar.style.transform = 'translateX(-50%) translateY(-100%)';
     } else {
-      navbar.style.transform = 'translateY(0)';
+      navbar.style.transform = 'translateX(-50%) translateY(0)';
     }
 
     lastScroll = currentScroll;
