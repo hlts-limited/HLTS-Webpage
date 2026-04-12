@@ -1,315 +1,162 @@
-# HLTS Limited - Modern Website Design
+# HLTS Limited Website
 
-## 🚀 Project Overview
+## Overview
 
-A comprehensive redesign and enhancement of the HLTS Limited website featuring modern UI/UX design, improved performance, and new functionality including a student portal and meeting gallery.
+This repository contains the HLTS Limited public website and supporting portal, dashboard, registration, and security pages. The project has been updated into a more complete education and service platform, with shared styling, bundled assets, and documentation for future maintenance.
 
-## ✨ Key Features Implemented
+## Current Project State
 
-### 1. Modern Design System
-- **CSS Custom Properties (Variables)** for consistent theming
-- Comprehensive color palette with primary, secondary, and semantic colors
-- Typography scale from xs to 6xl for consistent text sizing
-- Spacing system using rem units (4px to 96px)
-- Modern border radius and shadow utilities
-- Smooth transitions and animations
+The site now includes:
 
-### 2. Enhanced Homepage
-- **Hero Carousel** with gradient overlays and modern captions
-- Animated statistics section with intersection observer
-- Modern feature cards with hover effects
-- Responsive grid layouts
-- AOS (Animate on Scroll) integration
+- A modern public homepage in [index.html](index.html)
+- Company information pages in [about.html](about.html), [services.html](services.html), [course.html](course.html), and [contact.html](contact.html)
+- Education-specific pages in [cbt.html](cbt.html), [registration-form.html](registration-form.html), and [school-form.html](school-form.html)
+- Student and admin experiences in [portal.html](portal.html), [portal_interface.html](portal_interface.html), and [admin_dashboard.html](admin_dashboard.html)
+- Security monitoring in [security-dashboard.html](security-dashboard.html)
+- Server-side form handling in [send-registration.php](send-registration.php)
+- Shared front-end assets in [hlts-bundle.css](hlts-bundle.css) and [hlts-bundle.js](hlts-bundle.js)
+- Supporting documentation in [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md), [FEATURE_SUMMARY.md](FEATURE_SUMMARY.md), [SECURITY_GUIDE.md](SECURITY_GUIDE.md), [SECURITY_QUICK_REFERENCE.md](SECURITY_QUICK_REFERENCE.md), [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md), and [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
 
-### 3. Meeting Gallery Section
-- **Modern Grid Layout** with responsive design
-- Image overlay effects on hover
-- Featured item spanning multiple grid cells
-- Lightbox functionality for full-screen image viewing
-- Optimized for performance with lazy loading
+## Change Log For Future Reference
 
-### 4. Student Portal (New Feature)
-- **Complete login interface** with modern card design
-- Password visibility toggle
-- Remember me functionality
-- Statistics dashboard preview
-- Feature highlights section
-- Call-to-action section
-- Comprehensive portal pages ready for backend integration
+This section records the major changes already made to the project so future updates can stay consistent with the current structure.
 
-### 5. Responsive Design
-- Mobile-first approach
-- Breakpoints for desktop (1200px), tablet (768px), and mobile (576px)
-- Collapsible navigation for mobile devices
-- Flexible grid systems
-- Touch-friendly interactive elements
+### Website Redesign
 
-### 6. Performance Optimizations
-- Preconnect hints for external resources
-- Optimized font loading with Google Fonts
-- Lazy loading for images
-- Debounced scroll events
-- CSS containment for better paint performance
-- Minimal external dependencies
+- Refreshed the public site with a more modern layout and consistent branding
+- Added a shared design system using CSS variables, spacing consistency, shadows, and responsive layout rules
+- Improved navigation, section spacing, and visual hierarchy across the main pages
+- Added performance-oriented asset loading patterns such as preconnects and optimized external dependencies
 
-### 7. Accessibility Improvements
-- ARIA labels and roles
-- Keyboard navigation support
-- Focus states for interactive elements
-- Screen reader support with sr-only class
-- Semantic HTML structure
-- Color contrast compliance
+### Homepage And Public Pages
 
-### 8. SEO Enhancements
-- Comprehensive meta tags (Open Graph, Twitter Cards)
-- Semantic HTML5 structure
-- Optimized page titles and descriptions
-- Alt text for all images
-- Proper heading hierarchy
-- Fast page load times
+- Updated the homepage experience in [index.html](index.html) to use a more polished landing-page layout
+- Added or refined the supporting public pages: [about.html](about.html), [services.html](services.html), [course.html](course.html), and [contact.html](contact.html)
+- Added the CBT offering page in [cbt.html](cbt.html) to present exam platform services
+- Added reusable footer and navigation patterns across pages for a consistent user experience
 
-## 📁 File Structure
+### Portal And Dashboard Work
 
-```
-HLTS-Webpage/
-├── index.html              # Main homepage (redesigned)
-├── portal.html             # Student portal (new)
-├── about.html              # About page
-├── contact.html            # Contact page
-├── course.html             # Courses page
-├── landing.html            # Landing page
-├── registration-form.html  # Registration form
-├── style.css               # Main stylesheet (modernized)
-├── portal.css              # Portal-specific styles (new)
-├── script.js               # Main JavaScript (enhanced)
-├── portal.js               # Portal JavaScript (new)
-├── send-registration.php   # Form handler
-├── images/                 # Image assets
-└── bootstrap-5.3.8-dist/   # Bootstrap framework
-```
+- Added the student login experience in [portal.html](portal.html)
+- Added the student dashboard interface in [portal_interface.html](portal_interface.html)
+- Added the admin-facing dashboard in [admin_dashboard.html](admin_dashboard.html)
+- Included portal-oriented content for login, feature highlights, quick actions, schedules, grades, and announcements
+- Wired the portal flow so the student experience can connect to admin-managed schedule and course data
 
-## 🎨 Design System
+### Registration And Form Handling
 
-### Color Palette
-```css
-Primary: #002060 (Navy Blue)
-Secondary: #FF00FF (Magenta)
-Accent: #0710E9 (Electric Blue)
-Success: #10B981
-Warning: #F59E0B
-Error: #EF4444
-```
+- Added [registration-form.html](registration-form.html) for user enrollment
+- Added [school-form.html](school-form.html) for school-related submissions
+- Added [send-registration.php](send-registration.php) as the backend form handler
+- Documented the registration and verification flow so form submissions can be maintained safely
 
-### Typography
-- **Headings**: Poppins (400-800)
-- **Body**: Inter (300-800)
-- **Scale**: 12px to 60px with responsive adjustments
+### Security Work
 
-### Spacing Scale
-- Uses rem units based on 16px base
-- Consistent 4px increment system
-- Responsive adjustments for mobile
+- Added [security-dashboard.html](security-dashboard.html) for monitoring and review of security status
+- Added [SECURITY_GUIDE.md](SECURITY_GUIDE.md), [SECURITY_QUICK_REFERENCE.md](SECURITY_QUICK_REFERENCE.md), and [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md) to document the security layer
+- Added [.htaccess](.htaccess) rules for production hardening on Apache hosts
+- Documented input validation, CSRF handling, rate limiting, and other defensive measures used by the project
 
-## 🔧 Technologies Used
+### Shared Assets And Bundles
 
-- **HTML5** - Semantic markup
-- **CSS3** - Modern styling with custom properties
-- **JavaScript (ES6+)** - Interactive functionality
-- **Bootstrap 5.3.8** - Grid system and components
-- **AOS Library** - Scroll animations
-- **Font Awesome 6.6** - Icon library
-- **Bootstrap Icons** - Additional icons
-- **Google Fonts** - Inter & Poppins typefaces
+- Consolidated site styling into [hlts-bundle.css](hlts-bundle.css)
+- Consolidated site scripting into [hlts-bundle.js](hlts-bundle.js)
+- Kept the Bootstrap 5.3.8 distribution in [bootstrap-5.3.8-dist/](bootstrap-5.3.8-dist/)
+- Kept image assets in [images/](images/)
 
-## 📱 Browser Support
+## File Map
 
-- Chrome (last 2 versions)
-- Firefox (last 2 versions)
-- Safari (last 2 versions)
-- Edge (last 2 versions)
-- Mobile browsers (iOS Safari, Chrome Mobile)
+### Public Pages
 
-## 🚀 Getting Started
+- [index.html](index.html) - Main public homepage
+- [about.html](about.html) - Company overview
+- [services.html](services.html) - Services listing
+- [course.html](course.html) - Course offerings
+- [contact.html](contact.html) - Contact page
+- [cbt.html](cbt.html) - CBT platform page
 
-### Prerequisites
-- Modern web browser
-- Local web server (optional but recommended)
-- Text editor for customization
+### Portal And Internal Pages
 
-### Installation
+- [portal.html](portal.html) - Student portal login page
+- [portal_interface.html](portal_interface.html) - Student dashboard interface
+- [admin_dashboard.html](admin_dashboard.html) - Admin dashboard
+- [security-dashboard.html](security-dashboard.html) - Security dashboard
 
-1. Clone or download the repository
+### Forms And Server Logic
+
+- [registration-form.html](registration-form.html) - Registration form
+- [school-form.html](school-form.html) - School form
+- [send-registration.php](send-registration.php) - Registration processing script
+
+### Shared Resources
+
+- [hlts-bundle.css](hlts-bundle.css) - Consolidated stylesheet
+- [hlts-bundle.js](hlts-bundle.js) - Consolidated JavaScript
+- [bootstrap-5.3.8-dist/](bootstrap-5.3.8-dist/) - Bootstrap framework assets
+- [images/](images/) - Media assets
+
+### Documentation
+
+- [README.md](README.md) - Project overview and reference
+- [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md) - Development notes
+- [FEATURE_SUMMARY.md](FEATURE_SUMMARY.md) - Feature-level summary
+- [SECURITY_GUIDE.md](SECURITY_GUIDE.md) - Security implementation guide
+- [SECURITY_QUICK_REFERENCE.md](SECURITY_QUICK_REFERENCE.md) - Security checklist
+- [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md) - Security summary
+- [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md) - Testing checklist
+
+## Tech Stack
+
+- HTML5
+- CSS3
+- JavaScript
+- PHP
+- Bootstrap 5.3.8
+- Bootstrap Icons
+- AOS animations
+- Google Fonts
+
+## Local Preview
+
+Open the site in a browser directly, or run it through a local web server for a more accurate preview.
+
+### Example Local Servers
+
 ```bash
-git clone https://github.com/hlts-limited/HLTS-Webpage.git
-cd HLTS-Webpage
-```
-
-2. Open with a local server (recommended)
-```bash
-# Using Python 3
 python -m http.server 8000
+```
 
-# Using PHP
+```bash
 php -S localhost:8000
+```
 
-# Using Node.js (http-server)
+```bash
 npx http-server
 ```
 
-3. Open browser and navigate to `http://localhost:8000`
+Then visit `http://localhost:8000`.
 
-### Quick Start (No Server)
-Simply open `index.html` in your browser for basic functionality.
+## Maintenance Notes
 
-## 🎯 Key Components
+- Update this README whenever a new page, asset, workflow, or security change is added.
+- Keep the file map in sync with the root of the repository.
+- Add a new entry to the change log whenever the project structure changes in a meaningful way.
 
-### Navigation Bar
-- Fixed position with scroll effects
-- Responsive collapse menu for mobile
-- Active link highlighting
-- Modern hover animations
+## Team
 
-### Hero Carousel
-- Full-width responsive images
-- Gradient overlays
-- Animated captions
-- Custom navigation controls
+- Christopher Oyeh - Founder/CEO
+- Joseph Amos - General Supervisor
+- Nnamdi Osi - Deputy Supervisor
+- Israel Akinola - Lead Developer
+- Collin Duru - Chief Engineer
 
-### Feature Cards
-- Hover effects with transform
-- Icon integration
-- Responsive grid layout
-- Top border animation
+## Contact
 
-### Meeting Gallery
-- Masonry-style grid
-- Hover overlay effects
-- Lightbox modal viewer
-- Lazy loading support
+- Website: [www.hltslimited.com](https://www.hltslimited.com)
+- Email: info@hltsltd.com
+- Phone: +234 810 700 5789
+- Address: 8 Assembly Close, Folagoro, Somolu, Lagos, Nigeria
 
-### Student Portal
-- Modern login interface
-- Form validation
-- Password toggle
-- Session management (localStorage)
-- Dashboard preview
+## License
 
-## 📊 Performance Metrics
-
-Target performance goals:
-- First Contentful Paint: < 1.5s
-- Time to Interactive: < 3.0s
-- Largest Contentful Paint: < 2.5s
-- Cumulative Layout Shift: < 0.1
-
-## 🔐 Security Considerations
-
-- Form validation (client-side)
-- XSS protection ready
-- HTTPS recommended for production
-- Secure password handling ready
-- CORS configuration needed for API
-
-## 📈 Future Enhancements
-
-### Planned Features
-1. **Backend Integration**
-   - User authentication API
-   - Database connectivity
-   - Session management
-   - Course management system
-
-2. **Student Dashboard**
-   - Progress tracking
-   - Assignment submission
-   - Grade viewing
-   - Resource downloads
-
-3. **Live Chat Integration**
-   - Real-time support
-   - Student-teacher messaging
-   - Group discussions
-
-4. **Payment Integration**
-   - Online fee payment
-   - Receipt generation
-   - Payment history
-
-5. **Analytics Dashboard**
-   - User behavior tracking
-   - Performance metrics
-   - Engagement statistics
-
-## 🐛 Known Issues
-
-None at this time. Report issues via GitHub Issues.
-
-## 📝 Customization Guide
-
-### Changing Colors
-Edit CSS variables in `style.css`:
-```css
-:root {
-  --primary-color: #002060;
-  --secondary-color: #FF00FF;
-  /* Update other colors as needed */
-}
-```
-
-### Adding New Pages
-1. Copy structure from `index.html`
-2. Update navigation links
-3. Add page-specific content
-4. Include same CSS/JS files
-
-### Modifying Gallery
-Update gallery items in `index.html`:
-```html
-<div class="gallery-item" data-aos="zoom-in">
-  <img src="images/your-image.jpg" alt="Description">
-  <div class="gallery-overlay">
-    <h5>Title</h5>
-    <p>Description</p>
-  </div>
-</div>
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-© 2025 HLTS Limited. All rights reserved.
-
-## 👥 Team
-
-- **Christopher Oyeh** - Founder/CEO
-- **Joseph Amos** - General Supervisor
-- **Nnamdi Osi** - Deputy Supervisor
-- **Israel Akinola** - Lead Developer
-- **Collin Duru** - Chief Engineer
-
-## 📞 Contact
-
-- **Website**: [www.hltslimited.com](https://www.hltslimited.com)
-- **Email**: info@hltsltd.com
-- **Phone**: +234 810 700 5789
-- **Address**: 8 Assembly Close, Folagoro, Somolu, Lagos, Nigeria
-
-## 🙏 Acknowledgments
-
-- Bootstrap Team for the excellent framework
-- Font Awesome for comprehensive icon library
-- AOS Library for smooth animations
-- Google Fonts for beautiful typography
-- All contributors and testers
-
----
-
-**Built with ❤️ by HLTS Limited - Transforming Education Through Innovation**
+© 2026 HLTS Limited. All rights reserved.
