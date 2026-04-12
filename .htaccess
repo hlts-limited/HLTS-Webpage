@@ -137,12 +137,12 @@ Options -Indexes
 </IfModule>
 
 # ============================================
-# PREVENT HOTLINKING
+# PREVENT HOTLINKING (FIXED)
 # ============================================
 <IfModule mod_rewrite.c>
-    RewriteEngine on
+    RewriteEngine On
     RewriteCond %{HTTP_REFERER} !^$
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yourdomain.com [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?hltsltd\.com [NC]
     RewriteRule \.(jpg|jpeg|png|gif|svg|webp)$ - [F,NC]
 </IfModule>
 
