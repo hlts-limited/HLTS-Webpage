@@ -27,9 +27,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -38,18 +35,18 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="hlts-bundle.css">
     
     <title>HLTS Limited - Your Partner in Education</title>
     <link rel="icon" href="./images/logoh.png" type="image/png" />
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-white fixed-top px-4">
+    <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
         <!-- Logo on the left -->
         <a class="navbar-brand" href="index.html">
-          <img src="images/logoh.png" alt="Company Logo" height="70">
+          <img loading="lazy" src="images/logoh.png" alt="Company Logo" height="70">
         </a>
 
         <!-- Toggle button for mobile -->
@@ -61,21 +58,19 @@
         <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
       <ul class="navbar-nav mb-2 mb-lg-0">
       <li class="nav-item me-3">
-        <a class="nav-link" href="#news.html">
-          <i class="bi bi-newspaper"></i> NEWS
+        <a class="nav-link active" href="index.html">
+          <i class="bi bi-house"></i> HOME
         </a>
       </li>
 
-      <!-- ABOUT US Dropdown -->
       <li class="nav-item dropdown me-3">
         <a class="nav-link" href="about.html" id="aboutDropdown" role="button"  aria-expanded="false">
           <i class="bi bi-info-circle"></i> ABOUT US
         </a>
       </li>
 
-      <!-- SERVICES Dropdown -->
       <li class="nav-item dropdown me-3">
-        <a class="nav-link" href="#" id="servicesDropdown" role="button" aria-expanded="false">
+        <a class="nav-link" href="services.html" id="servicesDropdown" role="button" aria-expanded="false">
           <i class="bi bi-briefcase"></i> SERVICES
         </a>
       </li>
@@ -97,50 +92,48 @@
       </div>
     </nav>
 
-    <!-- section 2 -->
-    <section class="carousel-section mt-5 pt-4">
+    <section class="carousel-section mt-5 pt-4" style="background: url('images/bac.png') center center/cover no-repeat; min-height: 350px;">
       <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-          <!-- Slide 1 -->
+          <!-- Single Slide with No Image, Only Caption -->
           <div class="carousel-item active">
-            <img src="images/New images/compare-fibre-JiOFFI3W7IA-unsplash.jpg" class="d-block w-100" alt="Slide 1">
-            <div class="carousel-caption d-none d-md-block">
-              <h5>Welcome to HLTS</h5>
-              <p>...forward-thinking institution dedicated to transforming lives 
-                through education, technology, and sustainable...</p>
+            <div class="carousel-caption">
+              <h5>Welcome to HLTS Limited</h5>
+              <p>Overall, HLTS Limited stands as a catalyst for change, driving Africa toward a more 
+              digitally advanced future through innovation, empowerment, and impactful tech 
+              solutions.</p>
               <a href="about.html" class="btn btn-primary mt-3">Read More</a>
             </div>
           </div>
 
           <!-- Slide 2 -->
           <div class="carousel-item">
-            <img src="images/New images/kenny-eliason-zFSo6bnZJTw-unsplash.jpg" class="d-block w-100" alt="Slide 2">
-            <div class="carousel-caption d-none d-md-block">
+            
+            <div class="carousel-caption">
               <h5>HLTS@School</h5>
-              <p>Empowering students with smart learning tools.</p>
-              <a href="#" class="btn btn-primary mt-3">Learn More</a>
-              <a href="#" class="btn btn-primary mt-3">Sign Up</a>
+              <p>Empowering Schools (Pre-Tertiary) with tech driven methodologies.</p>
+              <a href="about.html#duties" class="btn btn-primary mt-3">Learn More</a>
+              <a href="school-form.html" class="btn btn-primary mt-3">Sign Up</a>
             </div>
           </div>
 
           <!-- Slide 3 -->
           <div class="carousel-item">
-            <img src="images/New images/marvin-meyer-SYTO3xs06fU-unsplash.jpg" class="d-block w-100" alt="Slide 3">
-            <div class="carousel-caption d-none d-md-block">
+            
+            <div class="carousel-caption">
               <h5>HLTS Institution</h5>
               <p>Transforming institutions with digital solutions.</p>
-              <a href="about.html" class="btn btn-primary mt-3">Learn More</a>
+              <a href="about.html#tech-institution" class="btn btn-primary mt-3">Learn More</a>
               <a href="registration-form.html" class="btn btn-primary mt-3">Register Now</a>
             </div>
           </div>
 
           <!-- Slide 4 -->
           <div class="carousel-item">
-            <img src="images/New images/maxim-hopman-8vn4KvfU640-unsplash.jpg" class="d-block w-100" alt="Slide 4">
-            <div class="carousel-caption d-none d-md-block">
+            <div class="carousel-caption">
               <h5>Explore More</h5>
               <p>Discover other services tailored to your needs.</p>
-              <a href="#" class="btn btn-primary mt-3">Our Services</a>
+              <a href="services.html" class="btn btn-primary mt-3">Our Services</a>
             </div>
           </div>
         </div>
@@ -148,139 +141,22 @@
         <!-- Controls -->
         <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon"></span>
+          <div class="carousel-preview carousel-preview-prev"></div>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
           <span class="carousel-control-next-icon"></span>
+          <div class="carousel-preview carousel-preview-next"></div>
         </button>
       </div>
     </section>
 
-    <!-- section 3 - Product Features -->
-    <section class="product-features py-5 px-4 bg-light">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="text-primary fw-bold">Our Powerful EdTech Solutions</h2>
-          <p class="lead text-muted">Transform education with intelligent, scalable platforms designed for the modern classroom</p>
-        </div>
 
-        <div class="row g-4">
-          <!-- Feature 1: HLTS@School -->
-          <div class="col-md-6 col-lg-4">
-            <div class="feature-card bg-white p-4 rounded shadow-sm h-100">
-              <div class="feature-icon mb-3">
-                <i class="bi bi-building text-primary" style="font-size: 2.5rem;"></i>
-              </div>
-              <h5 class="text-primary fw-bold">HLTS@School</h5>
-              <p class="text-muted mb-3">Complete school management system designed for K-12 institutions.</p>
-              <ul class="list-unstyled mb-3">
-                <li><i class="bi bi-check-circle-fill text-success"></i> Attendance & Grading</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Student Information System</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Parent-Teacher Communication</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Academic Analytics</li>
-              </ul>
-              <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
-            </div>
-          </div>
 
-          <!-- Feature 2: Online Learning -->
-          <div class="col-md-6 col-lg-4">
-            <div class="feature-card bg-white p-4 rounded shadow-sm h-100">
-              <div class="feature-icon mb-3">
-                <i class="bi bi-laptop text-primary" style="font-size: 2.5rem;"></i>
-              </div>
-              <h5 class="text-primary fw-bold">Online Learning Platform</h5>
-              <p class="text-muted mb-3">Interactive virtual classroom for remote and hybrid learning.</p>
-              <ul class="list-unstyled mb-3">
-                <li><i class="bi bi-check-circle-fill text-success"></i> Live Classes & Recording</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Assignment Management</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Real-time Feedback</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Mobile Accessible</li>
-              </ul>
-              <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
-            </div>
-          </div>
-
-          <!-- Feature 3: CBT System -->
-          <div class="col-md-6 col-lg-4">
-            <div class="feature-card bg-white p-4 rounded shadow-sm h-100">
-              <div class="feature-icon mb-3">
-                <i class="bi bi-pencil-square text-primary" style="font-size: 2.5rem;"></i>
-              </div>
-              <h5 class="text-primary fw-bold">CBT Assessment Suite</h5>
-              <p class="text-muted mb-3">Computer-based testing for objective evaluations and certifications.</p>
-              <ul class="list-unstyled mb-3">
-                <li><i class="bi bi-check-circle-fill text-success"></i> Automated Grading</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Question Bank Management</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Instant Results</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Anti-Cheating Features</li>
-              </ul>
-              <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
-            </div>
-          </div>
-
-          <!-- Feature 4: Consultation Services -->
-          <div class="col-md-6 col-lg-4">
-            <div class="feature-card bg-white p-4 rounded shadow-sm h-100">
-              <div class="feature-icon mb-3">
-                <i class="bi bi-chat-dots text-primary" style="font-size: 2.5rem;"></i>
-              </div>
-              <h5 class="text-primary fw-bold">Expert Consultation</h5>
-              <p class="text-muted mb-3">Strategic guidance for digital transformation in education.</p>
-              <ul class="list-unstyled mb-3">
-                <li><i class="bi bi-check-circle-fill text-success"></i> Digital Strategy</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Implementation Support</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Staff Training</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Technical Support</li>
-              </ul>
-              <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
-            </div>
-          </div>
-
-          <!-- Feature 5: Data Analytics -->
-          <div class="col-md-6 col-lg-4">
-            <div class="feature-card bg-white p-4 rounded shadow-sm h-100">
-              <div class="feature-icon mb-3">
-                <i class="bi bi-graph-up text-primary" style="font-size: 2.5rem;"></i>
-              </div>
-              <h5 class="text-primary fw-bold">Advanced Analytics</h5>
-              <p class="text-muted mb-3">Data-driven insights for better educational outcomes.</p>
-              <ul class="list-unstyled mb-3">
-                <li><i class="bi bi-check-circle-fill text-success"></i> Student Performance Reports</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Predictive Analytics</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Custom Dashboards</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Actionable Insights</li>
-              </ul>
-              <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
-            </div>
-          </div>
-
-          <!-- Feature 6: Integration Suite -->
-          <div class="col-md-6 col-lg-4">
-            <div class="feature-card bg-white p-4 rounded shadow-sm h-100">
-              <div class="feature-icon mb-3">
-                <i class="bi bi-arrow-left-right text-primary" style="font-size: 2.5rem;"></i>
-              </div>
-              <h5 class="text-primary fw-bold">Third-Party Integrations</h5>
-              <p class="text-muted mb-3">Seamless connectivity with your existing systems.</p>
-              <ul class="list-unstyled mb-3">
-                <li><i class="bi bi-check-circle-fill text-success"></i> LMS Integration</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Google Classroom</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Microsoft Teams</li>
-                <li><i class="bi bi-check-circle-fill text-success"></i> Payment Gateways</li>
-              </ul>
-              <a href="#" class="btn btn-outline-primary btn-sm">Learn More</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- section 4 -->
-    <section class="lead-section py-5 px-4">
+    <section class="lead-section py-5 px-4 section-blend-top" style="--section-blend-from: black;">
       <div class="container-fluid">
         <!-- Section Title -->
         <div class="text-center mb-5">
-          <h2 class="fw-bold">WE Lead From Front.</h2>
+          <h2 class="fw-bold">We Lead From Front.</h2>
           <p>Delivering excellence through innovation, precision, and integrity.</p>
         </div>
 
@@ -308,8 +184,8 @@
               </div>
               <div class="col-6">
                 <div class="stat-box bg-white p-4 rounded text-center shadow">
-                  <h5 class="text-dark">Satisfaction Rate</h5>
-                  <span class="counter text-primary" data-target="98">0</span><span class="text-primary fw-bold fs-4">%</span>
+                  <h5 class="text-dark">Satisfaction Rate [%]</h5>
+                  <span class="counter text-primary" data-target="98">0</span>
                 </div>
               </div>
             </div>
@@ -317,18 +193,20 @@
 
           <!-- Right Column: Image -->
           <div class="col-lg-6">
-            <img src="images/consult.jpeg" alt="Team Leading" class="img-fluid rounded shadow-sm">
+            <img src="images/2025meeting/CEO.jpg" alt="Team Leading" 
+            class="img-fluid rounded shadow-sm" loading="lazy" 
+            style="max-height:300px;object-fit:cover;width:100%;">
           </div>
         </div>
       </div>
     </section>
 
     <!-- For Schools & Students Section -->
-    <section class="for-users py-5 px-4">
+    <section class="for-users py-5 px-4 section-blend-top" style="--section-blend-from: #003080;">
       <div class="container">
         <div class="text-center mb-5">
           <h2 class="text-primary fw-bold">Solutions Tailored for You</h2>
-          <p class="lead text-muted">Whether you're a school administrator, teacher, or student, HLTS has the right solution</p>
+          <p class="lead text-white">Whether you're a school administrator, teacher, or student, HLTS Limited has the right solution for you.</p>
         </div>
 
         <div class="row g-4">
@@ -343,12 +221,12 @@
                 <p class="text-muted mb-4">Manage your entire institution efficiently with comprehensive tools for enrollment, grading, parent communication, and analytics.</p>
                 <h6 class="fw-bold">Key Benefits:</h6>
                 <ul class="list-unstyled mb-4">
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Reduce administrative workload by 60%</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Real-time performance dashboards</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Automated reporting & compliance</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Secure multi-user access</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Data-Driven insight & Analytics</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Digital Learning Platforms</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Administrative Efficiency & Compliance</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Scalable Professional Development & Support</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Get Started</a>
+                <button type="button" class="btn btn-primary btn-learn-more" data-card="administrators">Learn More</button>
               </div>
             </div>
           </div>
@@ -364,12 +242,12 @@
                 <p class="text-muted mb-4">Create engaging lessons, manage assignments, track student progress, and provide real-time feedback to enhance learning outcomes.</p>
                 <h6 class="fw-bold">Key Benefits:</h6>
                 <ul class="list-unstyled mb-4">
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Save 15 hours/week on grading</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Interactive lesson tools</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Individual student insights</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Parent communication portal</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Curriculum Enhancement & Digital Resources</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Assessment & Feedback Tools</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Collaboration & Classroom Management</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Professional Development & Support</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Learn More</a>
+                <button type="button" class="btn btn-primary btn-learn-more" data-card="teachers">Learn More</button>
               </div>
             </div>
           </div>
@@ -385,12 +263,12 @@
                 <p class="text-muted mb-4">Access your lessons, submit assignments, check grades, and collaborate with classmates all in one intuitive platform designed for learning.</p>
                 <h6 class="fw-bold">Key Benefits:</h6>
                 <ul class="list-unstyled mb-4">
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Easy-to-use mobile app</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> 24/7 access to learning materials</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Instant feedback on assignments</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Track your own progress</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Personalized Learning Experience</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Access to Digital Tools & Resources</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Collaboration & Peer Interaction</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Skill Development & Future Readiness</li>
                 </ul>
-                <a href="portal.html" class="btn btn-primary">Access Portal</a>
+                <button type="button" class="btn btn-primary btn-learn-more" data-card="students">Learn More</button>
               </div>
             </div>
           </div>
@@ -406,18 +284,38 @@
                 <p class="text-muted mb-4">Stay connected with your child's education. Monitor grades, attendance, and assignments in real-time and communicate with teachers easily.</p>
                 <h6 class="fw-bold">Key Benefits:</h6>
                 <ul class="list-unstyled mb-4">
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Real-time grade updates</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Attendance tracking</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Direct teacher messaging</li>
-                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Mobile notifications</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Transparent Progress Tracking</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Improved Communication Channels</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Support for At-Home Learning</li>
+                  <li class="mb-2"><i class="bi bi-check2-circle text-success"></i> Engagement & Community Building</li>
                 </ul>
-                <a href="#" class="btn btn-primary">Sign Up</a>
+                <button type="button" class="btn btn-primary btn-learn-more" data-card="parents">Learn More</button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- For Users Detail Modal -->
+    <div class="modal fade" id="forUsersDetailModal" tabindex="-1" aria-labelledby="forUsersDetailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="forUsersDetailModalLabel">Detail Explanation</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="forUsersDetailSummary" class="mb-4"></p>
+            <div id="forUsersDetailList" class="list-group list-group-flush"></div>
+          </div>
+          <div class="modal-footer">
+            <a id="forUsersDetailGetStarted" href="registration-form.html" class="btn btn-primary">Get Started</a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modern Meeting Gallery Section -->
     <section class="meeting-gallery-section" data-aos="fade-up">
@@ -427,77 +325,22 @@
           <p>Capturing moments of collaboration, innovation, and teamwork from our latest company gathering</p>
         </div>
         
-        <div class="gallery-grid">
-          <!-- Featured Gallery Item -->
-          <div class="gallery-item featured" data-aos="zoom-in" data-aos-delay="100">
-            <img src="images/2025meeting/team.jpg" alt="HLTS Team Meeting - Main Session">
-            <div class="gallery-overlay">
-              <h5>Strategic Planning Session</h5>
-              <p>Our leadership team discussing future initiatives and growth strategies</p>
-            </div>
-          </div>
-          
-          <!-- Gallery Item 2 -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-            <img src="images/2025meeting/CEO.jpg" alt="CEO Christopher Oyeh">
-            <div class="gallery-overlay">
-              <h5>Leadership Vision</h5>
-              <p>CEO Christopher Oyeh sharing the company's roadmap</p>
-            </div>
-          </div>
-          
-          <!-- Gallery Item 3 -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-            <img src="images/2025meeting/Supervisor.jpeg" alt="Gen Supervisor Joseph Amos">
-            <div class="gallery-overlay">
-              <h5>Team Coordination</h5>
-              <p>Gen Supervisor Joseph Amos presenting operational updates</p>
-            </div>
-          </div>
-          
-          <!-- Gallery Item 4 -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
-            <img src="images/2025meeting/DepSuper.jpg" alt="Deputy Supervisor Nnamdi Osi">
-            <div class="gallery-overlay">
-              <h5>Project Review</h5>
-              <p>Deputy Supervisor Nnamdi Osi reviewing project milestones</p>
-            </div>
-          </div>
-          
-          <!-- Gallery Item 5 -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="500">
-            <img src="images/Collins hlts.jpg" alt="Chief Engineer Collin Duru">
-            <div class="gallery-overlay">
-              <h5>Technical Excellence</h5>
-              <p>Chief Engineer Collin Duru discussing technical innovations</p>
-            </div>
-          </div>
-          
-          <!-- Gallery Item 6 -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="600">
-            <img src="images/building.png" alt="HLTS Office Building">
-            <div class="gallery-overlay">
-              <h5>Our Workspace</h5>
-              <p>The HLTS headquarters where innovation happens</p>
-            </div>
-          </div>
-        </div>
+        <div class="gallery-grid" id="random-gallery-grid"></div>
         
         <div class="text-center mt-5" data-aos="fade-up">
-          <a href="about.html" class="btn btn-primary btn-lg">
+          <a href="about.html#gallery-section" class="btn btn-primary btn-lg">
             <i class="bi bi-images"></i> View Full Gallery
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Section 6 - EdTech Insights -->
     <section id="blog-section" class="blog-section py-5 px-4 bg-light">
       <div class="container">
         <!-- Section Header -->
         <div class="text-center mb-5">
-          <h2 class="text-primary fw-bold">EdTech Insights & Tips</h2>
-          <p class="text-muted">Stay informed with expert advice on digital transformation in education.</p>
+          <h2 class="text-primary fw-bold">Tech Insights</h2>
+          <p class="text-muted">Stay informed with expert advice on digital transformation in technology.</p>
         </div>
 
         <!-- Blog Cards -->
@@ -505,11 +348,11 @@
           <!-- Blog 1 -->
           <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-              <img src="images/data.jpeg" class="card-img-top" alt="Digital Transformation">
+              <img src="images/data.jpeg" class="card-img-top" alt="Digital Transformation" loading="lazy">
               <div class="card-body">
                 <h5 class="card-title">5 Ways EdTech Improves Student Engagement</h5>
                 <p class="card-text">Discover how digital tools, interactive content, and personalized learning paths keep students motivated and engaged.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
+                <a href="about.html" class="btn btn-outline-primary btn-sm">Read More</a>
               </div>
             </div>
           </div>
@@ -517,11 +360,11 @@
           <!-- Blog 2 -->
           <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-              <img src="images/project1.jpeg" class="card-img-top" alt="Remote Learning">
+              <img src="images/project1.jpeg" class="card-img-top" alt="Remote Learning" loading="lazy">
               <div class="card-body">
                 <h5 class="card-title">Remote & Hybrid Learning: Best Practices</h5>
                 <p class="card-text">Learn strategies for effective online teaching, student accountability, and maintaining classroom culture in hybrid environments.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
+                <a href="services.html" class="btn btn-outline-primary btn-sm">Read More</a>
               </div>
             </div>
           </div>
@@ -529,11 +372,11 @@
           <!-- Blog 3 -->
           <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-              <img src="images/project2.jpeg" class="card-img-top" alt="Data Analytics">
+              <img src="images/project2.jpeg" class="card-img-top" alt="Data Analytics" loading="lazy">
               <div class="card-body">
                 <h5 class="card-title">Using Data Analytics to Improve Student Outcomes</h5>
                 <p class="card-text">How schools are leveraging student performance data to identify struggles early and provide targeted interventions.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
+                <a href="services.html" class="btn btn-outline-primary btn-sm">Read More</a>
               </div>
             </div>
           </div>
@@ -541,11 +384,11 @@
           <!-- Blog 4 -->
           <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-              <img src="images/project3.jpeg" class="card-img-top" alt="Assessment Tools">
+              <img src="images/project3.jpeg" class="card-img-top" alt="Assessment Tools" loading="lazy">
               <div class="card-body">
                 <h5 class="card-title">Modern Assessment Tools Beyond Multiple Choice</h5>
                 <p class="card-text">Explore innovative assessment methods that provide deeper insights into student understanding and critical thinking skills.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
+                <a href="contact.html" class="btn btn-outline-primary btn-sm">Read More</a>
               </div>
             </div>
           </div>
@@ -553,11 +396,11 @@
           <!-- Blog 5 -->
           <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-              <img src="images/webdev.jpeg" class="card-img-top" alt="Teacher Training">
+              <img src="images/webdev.jpeg" class="card-img-top" alt="Teacher Training" loading="lazy">
               <div class="card-body">
                 <h5 class="card-title">Professional Development for Digital Classrooms</h5>
                 <p class="card-text">Why teacher training is crucial for successful EdTech adoption and how to support educators through the transition.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
+                <a href="about.html" class="btn btn-outline-primary btn-sm">Read More</a>
               </div>
             </div>
           </div>
@@ -565,11 +408,11 @@
           <!-- Blog 6 -->
           <div class="col-md-4">
             <div class="card h-100 shadow-sm">
-              <img src="images/mockup.jpeg" class="card-img-top" alt="School Transformation">
+              <img src="images/mockup.jpeg" class="card-img-top" alt="School Transformation" loading="lazy">
               <div class="card-body">
                 <h5 class="card-title">Case Study: School Transformation with HLTS</h5>
                 <p class="card-text">See how institutions have increased student performance by 35% and reduced administrative burden using our platform.</p>
-                <a href="#" class="btn btn-outline-primary btn-sm">Read More</a>
+                <a href="about.html" class="btn btn-outline-primary btn-sm">Read More</a>
               </div>
             </div>
           </div>
@@ -579,267 +422,264 @@
 
 
     <!-- Success Stories Section -->
-    <section class="success-stories py-5 px-4 bg-white">
-      <div class="container">
-        <div class="text-center mb-5">
-          <h2 class="text-primary fw-bold">School Transformation Stories</h2>
-          <p class="lead text-muted">See how institutions have achieved remarkable results with HLTS</p>
-        </div>
-
-        <div class="row g-4">
-          <!-- Case Study 1 -->
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                  <div class="me-3">
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                  </div>
-                  <small class="text-muted">5/5 Rating</small>
-                </div>
-                <h5 class="fw-bold mb-2">St. Mary's Secondary School</h5>
-                <p class="text-muted small mb-3">Lagos, Nigeria</p>
-                <p class="mb-3">"HLTS transformed how we manage student data and communicate with parents. We've saved countless hours on administrative tasks."</p>
-                <hr>
-                <div class="row g-3 text-center">
-                  <div class="col">
-                    <h6 class="text-primary fw-bold">35%</h6>
-                    <small class="text-muted">Better Grades</small>
-                  </div>
-                  <div class="col">
-                    <h6 class="text-primary fw-bold">85%</h6>
-                    <small class="text-muted">Teacher Adoption</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Case Study 2 -->
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                  <div class="me-3">
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                  </div>
-                  <small class="text-muted">5/5 Rating</small>
-                </div>
-                <h5 class="fw-bold mb-2">Federal Academy Pakkam</h5>
-                <p class="text-muted small mb-3">Abuja, Nigeria</p>
-                <p class="mb-3">"The real-time analytics helped us identify struggling students early. Our performance has improved dramatically across all departments."</p>
-                <hr>
-                <div class="row g-3 text-center">
-                  <div class="col">
-                    <h6 class="text-primary fw-bold">28%</h6>
-                    <small class="text-muted">Less Dropout</small>
-                  </div>
-                  <div class="col">
-                    <h6 class="text-primary fw-bold">92%</h6>
-                    <small class="text-muted">Satisfaction</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Case Study 3 -->
-          <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                  <div class="me-3">
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                  </div>
-                  <small class="text-muted">5/5 Rating</small>
-                </div>
-                <h5 class="fw-bold mb-2">Brains International School</h5>
-                <p class="text-muted small mb-3">Port Harcourt, Nigeria</p>
-                <p class="mb-3">"Our teachers save 15 hours per week on administrative work. They can now focus on what they do best—teaching and mentoring."</p>
-                <hr>
-                <div class="row g-3 text-center">
-                  <div class="col">
-                    <h6 class="text-primary fw-bold">15hrs</h6>
-                    <small class="text-muted">Saved/Week</small>
-                  </div>
-                  <div class="col">
-                    <h6 class="text-primary fw-bold">98%</h6>
-                    <small class="text-muted">Parent Engagement</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center mt-5">
-          <a href="about.html" class="btn btn-primary btn-lg">Read More Success Stories</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 7 -->
-    <!-- Client Reviews Section -->
     <section class="testimonials-section py-5">
       <div class="container">
         <div class="text-center mb-5">
-          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3 d-inline-block">Testimonials</span>
-          <h2 class="fw-bold">What Our Clients Say</h2>
+          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3 d-inline-block">What People Say</span>
+          <h2 class="fw-bold" style="color: #0065ff;">Testimonials & Success Stories</h2>
           <p class="text-muted mx-auto" style="max-width: 600px;">Hear from schools, educators, and administrators who have transformed their institutions with HLTS solutions.</p>
         </div>
 
-        <div class="row g-4">
-          <!-- Review 1 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="testimonial-card h-100">
-              <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-              </div>
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-              </div>
-              <p class="testimonial-text">"HLTS@School completely transformed how we manage our school. From admissions to result processing, everything is now seamless and paperless. Our staff efficiency has improved by 60%."</p>
-              <div class="testimonial-author mt-auto">
-                <div class="author-avatar" style="background: linear-gradient(135deg, #002060, #0056d2);">AO</div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Adebayo Ogunleye</h6>
-                  <small class="text-muted">Principal, Greenfield Academy, Lagos</small>
+        <div class="row g-4 folders-row">
+          <!-- Testimonials Folder -->
+          <div class="col-lg-6">
+            <div class="folder-wrapper" id="testimonials-folder-slot">
+              <div class="row g-4">
+                <!-- Review 1 -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="testimonial-card h-100">
+                    <div class="quote-icon">
+                      <i class="bi bi-quote"></i>
+                    </div>
+                    <div class="stars mb-3">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"HLTS@School completely transformed how we manage our school. From admissions to result processing, everything is now seamless and paperless. Our staff efficiency has improved by 60%."</p>
+                    <div class="testimonial-author mt-auto">
+                      <div class="author-avatar" style="background: linear-gradient(135deg, #002060, #0056d2);">AO</div>
+                      <div>
+                        <h6 class="mb-0 fw-bold"> Mr Adebayo</h6>
+                        <small class="text-muted">Principal, Engreg High School, Lagos</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="testimonial-card h-100">
+                    <div class="quote-icon">
+                      <i class="bi bi-quote"></i>
+                    </div>
+                    <div class="stars mb-3">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"The CBT platform made our WAEC and JAMB prep seamless. Students can practice anywhere, anytime. We saw a 35% improvement in our students' exam scores within one term."</p>
+                    <div class="testimonial-author mt-auto">
+                      <div class="author-avatar" style="background: linear-gradient(135deg, #00875a, #36b37e);">FN</div>
+                      <div>
+                        <h6 class="mb-0 fw-bold">Miss Nnena</h6>
+                        <small class="text-muted">Head Mistress, Engreg International School, Lagos</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="testimonial-card h-100">
+                    <div class="quote-icon">
+                      <i class="bi bi-quote"></i>
+                    </div>
+                    <div class="stars mb-3">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-half text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"As a parent, the portal gives me real-time access to my children's grades, attendance, and school announcements. I feel more connected to their education than ever."</p>
+                    <div class="testimonial-author mt-auto">
+                      <div class="author-avatar" style="background: linear-gradient(135deg, #6554c0, #8777d9);">CO</div>
+                      <div>
+                        <h6 class="mb-0 fw-bold">Chidi Okafor</h6>
+                        <small class="text-muted">Parent, Engreg International School</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Review 4 -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="testimonial-card h-100">
+                    <div class="quote-icon">
+                      <i class="bi bi-quote"></i>
+                    </div>
+                    <div class="stars mb-3">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"The analytics dashboard is a game-changer. We can now track student performance trends, identify at-risk students early, and make data-driven decisions for our school."</p>
+                    <div class="testimonial-author mt-auto">
+                      <div class="author-avatar" style="background: linear-gradient(135deg, #ff5630, #ff8b6a);">SA</div>
+                      <div>
+                        <h6 class="mb-0 fw-bold">Sarah Adeyemi</h6>
+                        <small class="text-muted">Director, Nazareth School, Lagos</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Review 5 -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="testimonial-card h-100">
+                    <div class="quote-icon">
+                      <i class="bi bi-quote"></i>
+                    </div>
+                    <div class="stars mb-3">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"HLTS consulting team helped us digitize our entire school operations in just 3 weeks. The onboarding support was exceptional - they trained all 45 of our staff members."</p>
+                    <div class="testimonial-author mt-auto">
+                      <div class="author-avatar" style="background: linear-gradient(135deg, #0065ff, #4c9aff);">EI</div>
+                      <div>
+                        <h6 class="mb-0 fw-bold">Emmanuel Ibe</h6>
+                        <small class="text-muted">Proprietor, St. Philip Primary School, Lagos</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Review 6 -->
+                <div class="col-lg-4 col-md-6">
+                  <div class="testimonial-card h-100">
+                    <div class="quote-icon">
+                      <i class="bi bi-quote"></i>
+                    </div>
+                    <div class="stars mb-3">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"Our teachers love the lesson planning and grading tools. Report cards that used to take weeks now take hours. HLTS has given us back our most valuable resource - time."</p>
+                    <div class="testimonial-author mt-auto">
+                      <div class="author-avatar" style="background: linear-gradient(135deg, #00b8d9, #36d8f5);">HA</div>
+                      <div>
+                        <h6 class="mb-0 fw-bold">Hauwa Abdullahi</h6>
+                        <small class="text-muted">Head Teacher, Seaside, Lagos</small>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Review 2 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="testimonial-card h-100">
-              <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-              </div>
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-              </div>
-              <p class="testimonial-text">"The CBT platform made our WAEC and JAMB prep seamless. Students can practice anywhere, anytime. We saw a 35% improvement in our students' exam scores within one term."</p>
-              <div class="testimonial-author mt-auto">
-                <div class="author-avatar" style="background: linear-gradient(135deg, #00875a, #36b37e);">FN</div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Funke Nwachukwu</h6>
-                  <small class="text-muted">Vice Principal, Excel College, Abuja</small>
+          <!-- Success Stories Folder -->
+          <div class="col-lg-6">
+            <div class="folder-wrapper" id="success-stories-folder-slot">
+              <div class="row g-4">
+                <!-- Case Study 1 -->
+                <div class="col-md-6 col-lg-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <small class="text-muted">5/5 Rating</small>
+                      </div>
+                      <h5 class="fw-bold mb-2">St. Philip School</h5>
+                      <p class="text-muted small mb-3">Lagos, Nigeria</p>
+                      <p class="mb-3">"HLTS transformed how we manage student data and communicate with parents. We've saved countless hours on administrative tasks."</p>
+                      <hr>
+                      <div class="row g-3 text-center">
+                        <div class="col">
+                          <h6 class="text-primary fw-bold">35%</h6>
+                          <small class="text-muted">Better Grades</small>
+                        </div>
+                        <div class="col">
+                          <h6 class="text-primary fw-bold">85%</h6>
+                          <small class="text-muted">Teacher Adoption</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Review 3 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="testimonial-card h-100">
-              <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-              </div>
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-half text-warning"></i>
-              </div>
-              <p class="testimonial-text">"As a parent, the portal gives me real-time access to my children's grades, attendance, and school announcements. I feel more connected to their education than ever."</p>
-              <div class="testimonial-author mt-auto">
-                <div class="author-avatar" style="background: linear-gradient(135deg, #6554c0, #8777d9);">CO</div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Chidi Okafor</h6>
-                  <small class="text-muted">Parent, Harmony International School</small>
+                <!-- Case Study 2 -->
+                <div class="col-md-6 col-lg-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <small class="text-muted">5/5 Rating</small>
+                      </div>
+                      <h5 class="fw-bold mb-2">Nazareth School</h5>
+                      <p class="text-muted small mb-3">Festac Lagos, Nigeria</p>
+                      <p class="mb-3">"The real-time analytics helped us identify struggling students early. Our performance has improved dramatically across all departments."</p>
+                      <hr>
+                      <div class="row g-3 text-center">
+                        <div class="col">
+                          <h6 class="text-primary fw-bold">28%</h6>
+                          <small class="text-muted">Less Dropout</small>
+                        </div>
+                        <div class="col">
+                          <h6 class="text-primary fw-bold">92%</h6>
+                          <small class="text-muted">Satisfaction</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Review 4 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="testimonial-card h-100">
-              <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-              </div>
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-              </div>
-              <p class="testimonial-text">"The analytics dashboard is a game-changer. We can now track student performance trends, identify at-risk students early, and make data-driven decisions for our school."</p>
-              <div class="testimonial-author mt-auto">
-                <div class="author-avatar" style="background: linear-gradient(135deg, #ff5630, #ff8b6a);">SA</div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Sarah Adeyemi</h6>
-                  <small class="text-muted">Director, Pinnacle Schools Group, Ibadan</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review 5 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="testimonial-card h-100">
-              <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-              </div>
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-              </div>
-              <p class="testimonial-text">"HLTS consulting team helped us digitize our entire school operations in just 3 weeks. The onboarding support was exceptional - they trained all 45 of our staff members."</p>
-              <div class="testimonial-author mt-auto">
-                <div class="author-avatar" style="background: linear-gradient(135deg, #0065ff, #4c9aff);">EI</div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Emmanuel Ibe</h6>
-                  <small class="text-muted">Proprietor, Royal Heritage Academy, PH</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Review 6 -->
-          <div class="col-lg-4 col-md-6">
-            <div class="testimonial-card h-100">
-              <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-              </div>
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-              </div>
-              <p class="testimonial-text">"Our teachers love the lesson planning and grading tools. Report cards that used to take weeks now take hours. HLTS has given us back our most valuable resource - time."</p>
-              <div class="testimonial-author mt-auto">
-                <div class="author-avatar" style="background: linear-gradient(135deg, #00b8d9, #36d8f5);">HA</div>
-                <div>
-                  <h6 class="mb-0 fw-bold">Hauwa Abdullahi</h6>
-                  <small class="text-muted">Head Teacher, Crescent Model School, Kano</small>
+                <!-- Case Study 3 -->
+                <div class="col-md-6 col-lg-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                          <i class="bi bi-star-fill text-warning"></i>
+                        </div>
+                        <small class="text-muted">5/5 Rating</small>
+                      </div>
+                      <h5 class="fw-bold mb-2">Engreg High School</h5>
+                      <p class="text-muted small mb-3">Lagos, Nigeria</p>
+                      <p class="mb-3">"Our teachers save 15 hours per week on administrative work. They can now focus on what they do best—teaching and mentoring."</p>
+                      <hr>
+                      <div class="row g-3 text-center">
+                        <div class="col">
+                          <h6 class="text-primary fw-bold">15hrs</h6>
+                          <small class="text-muted">Saved/Week</small>
+                        </div>
+                        <div class="col">
+                          <h6 class="text-primary fw-bold">98%</h6>
+                          <small class="text-muted">Parent Engagement</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -852,7 +692,7 @@
             <div class="col-auto">
               <div class="trust-badge">
                 <i class="bi bi-shield-check fs-4 text-primary"></i>
-                <span>Trusted by 150+ Schools</span>
+                <span>Trusted by 4+ Schools</span>
               </div>
             </div>
             <div class="col-auto">
@@ -864,7 +704,7 @@
             <div class="col-auto">
               <div class="trust-badge">
                 <i class="bi bi-people-fill fs-4 text-primary"></i>
-                <span>50,000+ Users</span>
+                <span>1,000+ Users</span>
               </div>
             </div>
           </div>
@@ -872,7 +712,6 @@
       </div>
     </section>
 
-    <!-- section 8 -->
     <section class="enroll-section py-5 px-4 bg-light">
       <div class="container text-center">
         <div class="enroll-box bg-white p-5 rounded shadow-sm">
@@ -910,11 +749,11 @@
             <ul class="list-unstyled">
               <li><a href="index.html" class="text-light text-decoration-none">Home</a></li>
               <li><a href="about.html" class="text-light text-decoration-none">About Us</a></li>
-              <li><a href="#services.html" class="text-light text-decoration-none">Services</a></li>
+              <li><a href="services.html" class="text-light text-decoration-none">Services</a></li>
               <li><a href="contact.html" class="text-light text-decoration-none">Contact</a></li>
-              <li><a href="#faq.html" class="text-light text-decoration-none">FAQ</a></li>
-              <li><a href="#terms.html" class="text-light text-decoration-none">Terms of Service</a></li>
-              <li><a href="#blog.html" class="text-light text-decoration-none">Our Blog</a></li>
+              <li><a href="services.html" class="text-light text-decoration-none">FAQ</a></li>
+              <li><a href="contact.html" class="text-light text-decoration-none">Terms of Service</a></li>
+              <li><a href="about.html" class="text-light text-decoration-none">Our Blog</a></li>
             </ul>
           </div>
 
@@ -952,7 +791,7 @@
 
       <!-- WhatsApp Chat Widget -->
       <a href="https://wa.me/2348107005789" class="whatsapp-chat" target="_blank">
-        <img src="images/whatsapp.jpg" alt="Chat with us on WhatsApp">
+        <img src="images/whatsapp.jpg" alt="Chat with us on WhatsApp" loading="lazy">
       </a>
 
       <button id="backToTop" class="btn btn-primary">
@@ -967,12 +806,9 @@
     </script>
     
     <!-- AOS Animation Library -->
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    
-    <!-- Security Module -->
-    <script src="security.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js" defer></script>
     
     <!-- Custom JavaScript -->
-    <script src="script.js"></script>
+    <script src="hlts-bundle.js" defer></script>
   </body>
 </html>

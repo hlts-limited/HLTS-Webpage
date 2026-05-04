@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="HLTS Student Dashboard - Your personalized learning hub">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://unpkg.com">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="hlts-bundle.css">
+  
+  <title>Student Dashboard - HLTS Online School</title>
+  <link rel="icon" href="./images/logoh.png" type="image/png" />
+</head>
+
+<body class="dashboard-body">
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img loading="lazy" src="images/logoh.png" alt="HLTS Logo" class="sidebar-logo">
+      <button class="sidebar-toggle d-lg-none" onclick="toggleSidebar()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    
+    <div class="sidebar-user">
+      <div class="user-avatar">
+        <img loading="lazy" src="https://ui-avatars.com/api/?name=John+Doe&background=002060&color=fff&size=80" alt="User Avatar">
+        <span class="status-indicator online"></span>
+      </div>
+      <h6 class="user-name">John Doe</h6>
+      <span class="user-role">Tech Student</span>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <a href="#dashboard" class="nav-link" data-section="dashboard">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#courses" class="nav-link" data-section="courses">
+            <i class="bi bi-book-fill"></i>
+            <span>My Courses</span>
+            <span class="badge">6</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#assignments" class="nav-link" data-section="assignments">
+            <i class="bi bi-journal-check"></i>
+            <span>Assignments</span>
+            <span class="badge warning">3</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#exams" class="nav-link" data-section="exams">
+            <i class="bi bi-pencil-square"></i>
+            <span>Exams & CBT</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#grades" class="nav-link" data-section="grades">
+            <i class="bi bi-bar-chart-fill"></i>
+            <span>My Grades</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#schedule" class="nav-link" data-section="schedule">
+            <i class="bi bi-calendar3"></i>
+            <span>Timetable</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#messages" class="nav-link" data-section="messages">
+            <i class="bi bi-chat-dots-fill"></i>
+            <span>Messages</span>
+            <span class="badge">5</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#resources" class="nav-link" data-section="resources">
+            <i class="bi bi-folder-fill"></i>
+            <span>Resources</span>
+          </a>
+        </li>
+      </ul>
+      
+      <div class="nav-divider"></div>
+      
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#settings" class="nav-link" data-section="settings">
+            <i class="bi bi-gear-fill"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#help" class="nav-link" data-section="help">
+            <i class="bi bi-question-circle-fill"></i>
+            <span>Help & Support</span>
+          </a>
+        </li>
+        <li class="nav-item logout">
+          <a href="portal.html" class="nav-link">
+            <i class="bi bi-box-arrow-left"></i>
+            <span>Logout</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle d-lg-none" onclick="toggleSidebar()">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search courses, assignments...">
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="header-actions">
+          <button class="action-btn" title="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notification-badge">3</span>
+          </button>
+          <button class="action-btn" title="Calendar">
+            <i class="bi bi-calendar-event"></i>
+          </button>
+          <button class="action-btn" title="Messages">
+            <i class="bi bi-envelope"></i>
+            <span class="notification-badge">5</span>
+          </button>
+        </div>
+        
+        <div class="user-dropdown">
+          <button class="dropdown-toggle" data-bs-toggle="dropdown">
+            <img loading="lazy" src="https://ui-avatars.com/api/?name=John+Doe&background=002060&color=fff&size=40" alt="User">
+            <span class="d-none d-md-inline">John Doe</span>
+            <i class="bi bi-chevron-down"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#profile"><i class="bi bi-person"></i> My Profile</a></li>
+            <li><a class="dropdown-item" href="#settings"><i class="bi bi-gear"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="portal.html"><i class="bi bi-box-arrow-left"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+      <!-- Welcome Banner -->
+      <section class="welcome-banner">
+        <div class="welcome-text">
+          <h1>Welcome back, John! 👋</h1>
+          <p>Here's what's happening with your learning today.</p>
+        </div>
+        <div class="welcome-date">
+          <i class="bi bi-calendar3"></i>
+          <span id="currentDate">Monday, February 10, 2026</span>
+        </div>
+      </section>
+
+      <!-- Quick Stats Cards -->
+      <section class="stats-grid">
+        <div class="stat-card primary">
+          <div class="stat-icon">
+            <i class="bi bi-book"></i>
+          </div>
+          <div class="stat-info">
+            <h3>6</h3>
+            <p>Active Courses</p>
+          </div>
+          <div class="stat-trend up">
+            <i class="bi bi-arrow-up"></i> 2 new
+          </div>
+        </div>
+        
+        <div class="stat-card warning">
+          <div class="stat-icon">
+            <i class="bi bi-journal-check"></i>
+          </div>
+          <div class="stat-info">
+            <h3>3</h3>
+            <p>Pending Assignments</p>
+          </div>
+          <div class="stat-trend">
+            Due this week
+          </div>
+        </div>
+        
+        <div class="stat-card success">
+          <div class="stat-icon">
+            <i class="bi bi-trophy"></i>
+          </div>
+          <div class="stat-info">
+            <h3>78%</h3>
+            <p>Average Score</p>
+          </div>
+          <div class="stat-trend up">
+            <i class="bi bi-arrow-up"></i> +5%
+          </div>
+        </div>
+        
+        <div class="stat-card info">
+          <div class="stat-icon">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <div class="stat-info">
+            <h3>24h</h3>
+            <p>Study Time</p>
+          </div>
+          <div class="stat-trend">
+            This month
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Left Column -->
+        <div class="dashboard-left">
+          <!-- My Courses Section -->
+          <section class="dashboard-card courses-section">
+            <div class="card-header">
+              <h2><i class="bi bi-book"></i> My Courses</h2>
+              <a href="#courses" class="view-all">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="courses-grid">
+              <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                  <i class="bi bi-code-slash"></i>
+                </div>
+                <div class="course-info">
+                  <h4>Front-end Web Development</h4>
+                  <p>HTML, CSS & JavaScript</p>
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 75%;"></div>
+                  </div>
+                  <span class="progress-text">75% Complete</span>
+                </div>
+              </div>
+              
+              <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                  <i class="bi bi-bar-chart-line"></i>
+                </div>
+                <div class="course-info">
+                  <h4>Data Analysis</h4>
+                  <p>Excel, Python & Statistics</p>
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 60%;"></div>
+                  </div>
+                  <span class="progress-text">60% Complete</span>
+                </div>
+              </div>
+              
+              <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                  <i class="bi bi-palette"></i>
+                </div>
+                <div class="course-info">
+                  <h4>Graphics Design</h4>
+                  <p>Photoshop & Illustrator</p>
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 45%;"></div>
+                  </div>
+                  <span class="progress-text">45% Complete</span>
+                </div>
+              </div>
+              
+              <div class="course-card">
+                <div class="course-icon" style="background: linear-gradient(135deg, #ef4444, #f87171);">
+                  <i class="bi bi-server"></i>
+                </div>
+                <div class="course-info">
+                  <h4>Back-end Web Development</h4>
+                  <p>Python, APIs & Databases</p>
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 35%;"></div>
+                  </div>
+                  <span class="progress-text">35% Complete</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Upcoming Assignments -->
+          <section class="dashboard-card assignments-section">
+            <div class="card-header">
+              <h2><i class="bi bi-journal-check"></i> Upcoming Assignments</h2>
+              <a href="#assignments" class="view-all">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="assignments-list">
+              <div class="assignment-item urgent">
+                <div class="assignment-status">
+                  <span class="status-dot"></span>
+                </div>
+                <div class="assignment-info">
+                  <h4>Build a Responsive Portfolio Website</h4>
+                  <p><i class="bi bi-code-slash"></i> Front-end Web Development</p>
+                </div>
+                <div class="assignment-due">
+                  <span class="due-badge urgent">Due Tomorrow</span>
+                </div>
+                <button class="btn btn-sm btn-primary">Start</button>
+              </div>
+              
+              <div class="assignment-item warning">
+                <div class="assignment-status">
+                  <span class="status-dot"></span>
+                </div>
+                <div class="assignment-info">
+                  <h4>Sales Data Visualization Project</h4>
+                  <p><i class="bi bi-bar-chart-line"></i> Data Analysis</p>
+                </div>
+                <div class="assignment-due">
+                  <span class="due-badge warning">Due in 3 days</span>
+                </div>
+                <button class="btn btn-sm btn-outline-primary">Continue</button>
+              </div>
+              
+              <div class="assignment-item">
+                <div class="assignment-status">
+                  <span class="status-dot"></span>
+                </div>
+                <div class="assignment-info">
+                  <h4>Design a Brand Identity Package</h4>
+                  <p><i class="bi bi-palette"></i> Graphics Design</p>
+                </div>
+                <div class="assignment-due">
+                  <span class="due-badge">Due Feb 15</span>
+                </div>
+                <button class="btn btn-sm btn-outline-primary">View</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent Grades -->
+          <section class="dashboard-card grades-section">
+            <div class="card-header">
+              <h2><i class="bi bi-bar-chart"></i> Recent Grades</h2>
+              <a href="#grades" class="view-all">View All <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="grades-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Assessment</th>
+                    <th>Score</th>
+                    <th>Grade</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="subject-badge frontend">WEB</span></td>
+                    <td>HTML/CSS Project</td>
+                    <td>85/100</td>
+                    <td><span class="grade-badge A">A</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="subject-badge data">DATA</span></td>
+                    <td>Excel Dashboard</td>
+                    <td>72/100</td>
+                    <td><span class="grade-badge B">B</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="subject-badge graphics">GFX</span></td>
+                    <td>Logo Design</td>
+                    <td>78/100</td>
+                    <td><span class="grade-badge B">B</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="subject-badge backend">API</span></td>
+                    <td>REST API Quiz</td>
+                    <td>90/100</td>
+                    <td><span class="grade-badge A">A</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column -->
+        <div class="dashboard-right">
+          <!-- Today's Schedule -->
+          <section class="dashboard-card schedule-section">
+            <div class="card-header">
+              <h2><i class="bi bi-calendar3"></i> Today's Schedule</h2>
+            </div>
+            <div class="schedule-list">
+              <div class="schedule-item active">
+                <div class="schedule-time">
+                  <span>9:00 AM</span>
+                  <span class="duration">2hrs</span>
+                </div>
+                <div class="schedule-info">
+                  <h4>Front-end Web Development</h4>
+                  <p><i class="bi bi-person"></i> Mr. Adeyemi</p>
+                  <span class="location"><i class="bi bi-geo-alt"></i> Lab A</span>
+                </div>
+                <span class="status-badge live">Live Now</span>
+              </div>
+              
+              <div class="schedule-item">
+                <div class="schedule-time">
+                  <span>11:30 AM</span>
+                  <span class="duration">2hrs</span>
+                </div>
+                <div class="schedule-info">
+                  <h4>Data Analysis</h4>
+                  <p><i class="bi bi-person"></i> Mrs. Okonkwo</p>
+                  <span class="location"><i class="bi bi-geo-alt"></i> Lab B</span>
+                </div>
+              </div>
+              
+              <div class="schedule-item">
+                <div class="schedule-time">
+                  <span>2:00 PM</span>
+                  <span class="duration">2hrs</span>
+                </div>
+                <div class="schedule-info">
+                  <h4>Graphics Design</h4>
+                  <p><i class="bi bi-person"></i> Mr. Ibrahim</p>
+                  <span class="location"><i class="bi bi-geo-alt"></i> Design Studio</span>
+                </div>
+              </div>
+              
+              <div class="schedule-item">
+                <div class="schedule-time">
+                  <span>4:30 PM</span>
+                  <span class="duration">2hrs</span>
+                </div>
+                <div class="schedule-info">
+                  <h4>Back-end Development</h4>
+                  <p><i class="bi bi-person"></i> Dr. Nnamdi</p>
+                  <span class="location"><i class="bi bi-geo-alt"></i> Lab C</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Announcements -->
+          <section class="dashboard-card announcements-section">
+            <div class="card-header">
+              <h2><i class="bi bi-megaphone"></i> Announcements</h2>
+            </div>
+            <div class="announcements-list">
+              <div class="announcement-item new">
+                <div class="announcement-icon">
+                  <i class="bi bi-info-circle"></i>
+                </div>
+                <div class="announcement-content">
+                  <h4>Mock Exam Schedule Released</h4>
+                  <p>Check the timetable for upcoming WAEC mock exams starting March 1st.</p>
+                  <span class="announcement-time">2 hours ago</span>
+                </div>
+              </div>
+              
+              <div class="announcement-item">
+                <div class="announcement-icon warning">
+                  <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div class="announcement-content">
+                  <h4>Library Hours Extended</h4>
+                  <p>Library will remain open until 8PM during exam period.</p>
+                  <span class="announcement-time">Yesterday</span>
+                </div>
+              </div>
+              
+              <div class="announcement-item">
+                <div class="announcement-icon success">
+                  <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="announcement-content">
+                  <h4>Fee Payment Confirmed</h4>
+                  <p>Your 2nd term fees have been successfully processed.</p>
+                  <span class="announcement-time">3 days ago</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Quick Actions -->
+          <section class="dashboard-card quick-actions">
+            <div class="card-header">
+              <h2><i class="bi bi-lightning"></i> Quick Actions</h2>
+            </div>
+            <div class="actions-grid">
+              <a href="#cbt" class="action-item">
+                <i class="bi bi-pencil-square"></i>
+                <span>Take CBT</span>
+              </a>
+              <a href="#results" class="action-item">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>View Results</span>
+              </a>
+              <a href="#attendance" class="action-item">
+                <i class="bi bi-calendar-check"></i>
+                <span>Attendance</span>
+              </a>
+              <a href="#fees" class="action-item">
+                <i class="bi bi-credit-card"></i>
+                <span>Pay Fees</span>
+              </a>
+            </div>
+          </section>
+
+          <!-- Study Progress Chart -->
+          <section class="dashboard-card progress-chart-section">
+            <div class="card-header">
+              <h2><i class="bi bi-graph-up"></i> Weekly Progress</h2>
+            </div>
+            <div class="chart-placeholder">
+              <div class="progress-bars">
+                <div class="progress-item">
+                  <span class="day">Mon</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 60%;"></div>
+                  </div>
+                  <span class="hours">3h</span>
+                </div>
+                <div class="progress-item">
+                  <span class="day">Tue</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 80%;"></div>
+                  </div>
+                  <span class="hours">4h</span>
+                </div>
+                <div class="progress-item">
+                  <span class="day">Wed</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 45%;"></div>
+                  </div>
+                  <span class="hours">2h</span>
+                </div>
+                <div class="progress-item">
+                  <span class="day">Thu</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 90%;"></div>
+                  </div>
+                  <span class="hours">5h</span>
+                </div>
+                <div class="progress-item active">
+                  <span class="day">Fri</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 70%;"></div>
+                  </div>
+                  <span class="hours">3.5h</span>
+                </div>
+                <div class="progress-item">
+                  <span class="day">Sat</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 30%;"></div>
+                  </div>
+                  <span class="hours">1.5h</span>
+                </div>
+                <div class="progress-item">
+                  <span class="day">Sun</span>
+                  <div class="bar-container">
+                    <div class="bar" style="height: 50%;"></div>
+                  </div>
+                  <span class="hours">2.5h</span>
+                </div>
+              </div>
+              <div class="chart-summary">
+                <span class="total">Total: 21.5 hours this week</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
+  
+  <!-- Custom JavaScript -->
+  <script src="hlts-bundle.js" defer></script>
+  
+  <!-- Portal Interface JS -->
+  <script>
+    // Course Configuration - Each learner is enrolled in ONE program only
+    // Note: instructor and schedule data come from admin via localStorage
+    const courseConfig = {
+      frontend: {
+        name: 'Front-end Web Development',
+        shortName: 'Front-end Dev',
+        badge: 'WEB',
+        icon: 'bi-code-slash',
+        color: '#6366f1',
+        gradient: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+        description: 'HTML, CSS, JavaScript & React',
+        modules: ['HTML & CSS Fundamentals', 'JavaScript Programming', 'React Framework', 'Responsive Design', 'UI/UX Basics', 'Portfolio Project'],
+        assignments: [
+          { title: 'Build a Responsive Portfolio Website', due: 'Due Tomorrow', status: 'urgent' },
+          { title: 'JavaScript DOM Manipulation Project', due: 'Due in 3 days', status: 'warning' },
+          { title: 'React Todo App', due: 'Due Feb 15', status: '' }
+        ],
+        grades: [
+          { assessment: 'HTML/CSS Project', score: '85/100', grade: 'A' },
+          { assessment: 'JavaScript Quiz', score: '78/100', grade: 'B' },
+          { assessment: 'React Component Design', score: '82/100', grade: 'A' },
+          { assessment: 'Responsive Design Test', score: '90/100', grade: 'A' }
+        ]
+      },
+      backend: {
+        name: 'Back-end Web Development',
+        shortName: 'Back-end Dev',
+        badge: 'API',
+        icon: 'bi-server',
+        color: '#ef4444',
+        gradient: 'linear-gradient(135deg, #ef4444, #f87171)',
+        description: 'Python, APIs, Databases & Server Management',
+        modules: ['Python Fundamentals', 'Database Design (SQL)', 'REST API Development', 'Django Framework', 'Authentication & Security', 'Deployment & DevOps'],
+        assignments: [
+          { title: 'Build a REST API with Django', due: 'Due Tomorrow', status: 'urgent' },
+          { title: 'Database Schema Design Project', due: 'Due in 3 days', status: 'warning' },
+          { title: 'User Authentication System', due: 'Due Feb 18', status: '' }
+        ],
+        grades: [
+          { assessment: 'Python Basics Quiz', score: '88/100', grade: 'A' },
+          { assessment: 'SQL Database Project', score: '82/100', grade: 'A' },
+          { assessment: 'API Design Test', score: '75/100', grade: 'B' },
+          { assessment: 'Django CRUD Application', score: '90/100', grade: 'A' }
+        ]
+      },
+      data: {
+        name: 'Data Analysis',
+        shortName: 'Data Analysis',
+        badge: 'DATA',
+        icon: 'bi-bar-chart-line',
+        color: '#10b981',
+        gradient: 'linear-gradient(135deg, #10b981, #34d399)',
+        description: 'Excel, Python, SQL & Data Visualization',
+        modules: ['Excel Advanced Functions', 'Python for Data Analysis', 'SQL Queries', 'Data Visualization', 'Statistics & Probability', 'Power BI & Dashboards'],
+        assignments: [
+          { title: 'Sales Data Analysis with Excel', due: 'Due Tomorrow', status: 'urgent' },
+          { title: 'Python Data Cleaning Project', due: 'Due in 3 days', status: 'warning' },
+          { title: 'Interactive Dashboard with Power BI', due: 'Due Feb 20', status: '' }
+        ],
+        grades: [
+          { assessment: 'Excel Functions Test', score: '92/100', grade: 'A' },
+          { assessment: 'Python Pandas Project', score: '80/100', grade: 'A' },
+          { assessment: 'SQL Query Quiz', score: '85/100', grade: 'A' },
+          { assessment: 'Data Visualization Report', score: '78/100', grade: 'B' }
+        ]
+      },
+      graphics: {
+        name: 'Graphics Design',
+        shortName: 'Graphics Design',
+        badge: 'GFX',
+        icon: 'bi-palette',
+        color: '#f59e0b',
+        gradient: 'linear-gradient(135deg, #f59e0b, #fbbf24)',
+        description: 'Photoshop, Illustrator, CorelDRAW & Canva',
+        modules: ['Design Principles', 'Adobe Photoshop', 'Adobe Illustrator', 'CorelDRAW', 'Logo & Brand Design', 'Digital Marketing Graphics'],
+        assignments: [
+          { title: 'Design a Company Logo', due: 'Due Tomorrow', status: 'urgent' },
+          { title: 'Social Media Graphics Package', due: 'Due in 3 days', status: 'warning' },
+          { title: 'Complete Brand Identity Package', due: 'Due Feb 22', status: '' }
+        ],
+        grades: [
+          { assessment: 'Color Theory Quiz', score: '88/100', grade: 'A' },
+          { assessment: 'Photoshop Photo Edit', score: '90/100', grade: 'A' },
+          { assessment: 'Logo Design Project', score: '78/100', grade: 'B' },
+          { assessment: 'Illustrator Vector Art', score: '85/100', grade: 'A' }
+        ]
+      },
+      desktop: {
+        name: 'Desktop Publishing',
+        shortName: 'Desktop Pub',
+        badge: 'DTP',
+        icon: 'bi-file-earmark-richtext',
+        color: '#8b5cf6',
+        gradient: 'linear-gradient(135deg, #8b5cf6, #a78bfa)',
+        description: 'InDesign, Publisher, Layout & Print Design',
+        modules: ['Typography Basics', 'Adobe InDesign', 'MS Publisher', 'Print Layout Design', 'Book & Magazine Layout', 'Brochure & Flyer Design'],
+        assignments: [
+          { title: 'Design a Magazine Spread', due: 'Due Tomorrow', status: 'urgent' },
+          { title: 'Corporate Brochure Layout', due: 'Due in 3 days', status: 'warning' },
+          { title: 'Book Cover Design Project', due: 'Due Feb 25', status: '' }
+        ],
+        grades: [
+          { assessment: 'Typography Quiz', score: '82/100', grade: 'A' },
+          { assessment: 'InDesign Layout Project', score: '88/100', grade: 'A' },
+          { assessment: 'Print Design Test', score: '75/100', grade: 'B' },
+          { assessment: 'Brochure Design', score: '90/100', grade: 'A' }
+        ]
+      },
+      visual: {
+        name: 'Block-Based Programming',
+        shortName: 'Block Prog',
+        badge: 'VBP',
+        icon: 'bi-window-stack',
+        color: '#06b6d4',
+        gradient: 'linear-gradient(135deg, #06b6d4, #22d3ee)',
+        description: 'Scratch, App Inventor, Blockly & Game Development',
+        modules: ['Programming Logic', 'Scratch Fundamentals', 'MIT App Inventor', 'Blockly Programming', 'Game Development', 'Final Project'],
+        assignments: [
+          { title: 'Build a Calculator App', due: 'Due Tomorrow', status: 'urgent' },
+          { title: 'Student Management System GUI', due: 'Due in 3 days', status: 'warning' },
+          { title: 'Complete Desktop Application', due: 'Due Feb 28', status: '' }
+        ],
+        grades: [
+          { assessment: 'VB Basics Quiz', score: '85/100', grade: 'A' },
+          { assessment: 'Forms Design Project', score: '80/100', grade: 'A' },
+          { assessment: 'C# Programming Test', score: '72/100', grade: 'B' },
+          { assessment: 'Database Connection', score: '88/100', grade: 'A' }
+        ]
+      }
+    };
+
+    // Get current learner data
+    function getCurrentLearner() {
+      // Check sessionStorage for logged-in user
+      const sessionUser = JSON.parse(sessionStorage.getItem('hlts_user'));
+      if (sessionUser && sessionUser.id) {
+        // Get full learner data from localStorage
+        const learners = JSON.parse(localStorage.getItem('hlts_learners')) || [];
+        const learner = learners.find(l => l.id === sessionUser.id || l.email === sessionUser.email);
+        if (learner) return learner;
+      }
+      return null;
+    }
+
+    // Get instructor for a program from localStorage (set by admin)
+    function getInstructor(program) {
+      const instructors = JSON.parse(localStorage.getItem('hlts_instructors')) || [];
+      return instructors.find(i => i.program === program);
+    }
+
+    // Get schedule for a program from localStorage (set by admin)
+    function getSchedule(program) {
+      const schedules = JSON.parse(localStorage.getItem('hlts_schedules')) || {};
+      return schedules[program] || [];
+    }
+
+    // Initialize Dashboard
+    function initDashboard() {
+      const learner = getCurrentLearner();
+      
+      if (!learner) {
+        // No learner found - redirect to login
+        console.log('No learner session found');
+        // Uncomment to redirect: window.location.href = 'portal.html';
+        return;
+      }
+
+      const course = courseConfig[learner.course];
+      if (!course) {
+        console.log('Course not found for learner:', learner.course);
+        return;
+      }
+
+      // Get instructor and schedule from admin-set localStorage data
+      const instructor = getInstructor(learner.course);
+      const schedule = getSchedule(learner.course);
+
+      // Update user info
+      updateUserInfo(learner, course, instructor);
+      // Update stats
+      updateStats(course);
+      // Update course section (single course only)
+      updateCourseSection(course, instructor);
+      // Update assignments
+      updateAssignments(course);
+      // Update grades
+      updateGrades(course);
+      // Update schedule from admin data
+      updateSchedule(course, instructor, schedule);
+    }
+
+    // Update user info throughout the page
+    function updateUserInfo(learner, course, instructor) {
+      const fullName = `${learner.firstName} ${learner.lastName}`;
+      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(learner.firstName + '+' + learner.lastName)}&background=${course.color.replace('#', '')}&color=fff`;
+      
+      // Sidebar user
+      document.querySelector('.user-avatar img').src = avatarUrl + '&size=80';
+      document.querySelector('.user-name').textContent = fullName;
+      document.querySelector('.user-role').textContent = course.shortName + ' Student';
+      
+      // Header dropdown
+      document.querySelector('.user-dropdown img').src = avatarUrl + '&size=40';
+      document.querySelector('.user-dropdown .d-none').textContent = fullName;
+      
+      // Welcome banner
+      document.querySelector('.welcome-text h1').textContent = `Welcome back, ${learner.firstName}! 👋`;
+      document.querySelector('.welcome-text p').textContent = `Here's your ${course.shortName} learning progress today.`;
+
+      // Update sidebar badge to show 1 course
+      document.querySelector('.nav-link[data-section="courses"] .badge').textContent = '1';
+    }
+
+    // Update stats cards
+    function updateStats(course) {
+      // Update to show 1 course (single program)
+      document.querySelector('.stat-card.primary .stat-info h3').textContent = '1';
+      document.querySelector('.stat-card.primary .stat-info p').textContent = 'Enrolled Program';
+      document.querySelector('.stat-card.primary .stat-trend').innerHTML = '<i class="bi bi-bookmark-check"></i> ' + course.shortName;
+    }
+
+    // Update course section (single course display)
+    function updateCourseSection(course, instructor) {
+      const coursesGrid = document.querySelector('.courses-grid');
+      
+      // Calculate overall progress
+      const progressPercent = Math.floor(Math.random() * 30) + 50; // 50-80%
+      
+      // Get instructor info - use admin-set data if available, otherwise show placeholder
+      const instructorName = instructor ? `${instructor.title} ${instructor.firstName} ${instructor.lastName}` : 'Not yet assigned';
+      const instructorLab = instructor ? instructor.lab : 'TBD';
+      
+      // Show single enrolled course with all modules
+      coursesGrid.innerHTML = `
+        <div class="course-card main-course" style="grid-column: 1 / -1;">
+          <div class="course-icon" style="background: ${course.gradient}; width: 80px; height: 80px;">
+            <i class="${course.icon}" style="font-size: 2rem;"></i>
+          </div>
+          <div class="course-info" style="flex: 1;">
+            <h4>${course.name}</h4>
+            <p>${course.description}</p>
+            <p style="margin-top: 0.5rem; color: #64748b;"><i class="bi bi-person"></i> Instructor: ${instructorName} &nbsp; <i class="bi bi-geo-alt"></i> ${instructorLab}</p>
+            <div class="progress-bar" style="margin-top: 1rem;">
+              <div class="progress" style="width: ${progressPercent}%;"></div>
+            </div>
+            <span class="progress-text">${progressPercent}% Complete</span>
+          </div>
+        </div>
+        
+        <div class="modules-section" style="grid-column: 1 / -1; margin-top: 1rem;">
+          <h5 style="color: #374151; margin-bottom: 1rem;"><i class="bi bi-list-check"></i> Course Modules</h5>
+          <div class="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+            ${course.modules.map((module, index) => {
+              const moduleProgress = Math.min(100, (index + 1) * (progressPercent / course.modules.length) * 1.5);
+              const isComplete = moduleProgress >= 100;
+              return `
+                <div class="module-item" style="background: ${isComplete ? '#ecfdf5' : '#f8fafc'}; padding: 1rem; border-radius: 8px; border-left: 4px solid ${isComplete ? '#10b981' : course.color};">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="bi ${isComplete ? 'bi-check-circle-fill' : 'bi-circle'}" style="color: ${isComplete ? '#10b981' : '#94a3b8'};"></i>
+                    <span style="font-size: 0.9rem; color: ${isComplete ? '#065f46' : '#374151'};">${module}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Update assignments section
+    function updateAssignments(course) {
+      const assignmentsList = document.querySelector('.assignments-list');
+      
+      assignmentsList.innerHTML = course.assignments.map(assignment => `
+        <div class="assignment-item ${assignment.status}">
+          <div class="assignment-status">
+            <span class="status-dot"></span>
+          </div>
+          <div class="assignment-info">
+            <h4>${assignment.title}</h4>
+            <p><i class="${course.icon}"></i> ${course.name}</p>
+          </div>
+          <div class="assignment-due">
+            <span class="due-badge ${assignment.status}">${assignment.due}</span>
+          </div>
+          <button class="btn btn-sm ${assignment.status === 'urgent' ? 'btn-primary' : 'btn-outline-primary'}">
+            ${assignment.status === 'urgent' ? 'Start' : assignment.status === 'warning' ? 'Continue' : 'View'}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Update grades section
+    function updateGrades(course) {
+      const gradesTable = document.querySelector('.grades-table tbody');
+      
+      gradesTable.innerHTML = course.grades.map(grade => `
+        <tr>
+          <td><span class="subject-badge" style="background: ${course.color}; color: white;">${course.badge}</span></td>
+          <td>${grade.assessment}</td>
+          <td>${grade.score}</td>
+          <td><span class="grade-badge ${grade.grade}">${grade.grade}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Update schedule section - uses admin-set schedule data from localStorage
+    function updateSchedule(course, instructor, adminSchedule) {
+      const scheduleList = document.querySelector('.schedule-list');
+      
+      // If admin has set a schedule, use that; otherwise show message
+      if (adminSchedule && adminSchedule.length > 0) {
+        const instructorName = instructor ? `${instructor.title} ${instructor.firstName} ${instructor.lastName}` : 'Instructor';
+        const instructorLab = instructor ? instructor.lab : 'TBD';
+        
+        scheduleList.innerHTML = adminSchedule.map((item, index) => `
+          <div class="schedule-item ${index === 0 ? 'active' : ''}">
+            <div class="schedule-time">
+              <span>${item.time}</span>
+              <span class="duration">${item.duration}</span>
+            </div>
+            <div class="schedule-info">
+              <h4>${item.topic}</h4>
+              <p><i class="bi bi-person"></i> ${instructorName}</p>
+              <span class="location"><i class="bi bi-geo-alt"></i> ${instructorLab}</span>
+            </div>
+            ${index === 0 ? '<span class="status-badge live">Live Now</span>' : ''}
+          </div>
+        `).join('');
+      } else {
+        // No schedule set by admin yet
+        scheduleList.innerHTML = `
+          <div class="schedule-item" style="text-align: center; padding: 2rem;">
+            <i class="bi bi-calendar-x" style="font-size: 2rem; color: #94a3b8;"></i>
+            <p style="color: #64748b; margin-top: 1rem;">Class schedule has not been set yet.</p>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Please check back later or contact the administration.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Toggle Sidebar
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('sidebarOverlay').classList.toggle('active');
+      document.querySelector('.main-content').classList.toggle('sidebar-active');
+    }
+
+    // Update current date
+    function updateDate() {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const today = new Date();
+      document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDate();
+      initDashboard();
+    });
+
+    // Active nav link
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        this.parentElement.classList.add('active');
+      });
+    });
+
+    // Close sidebar on mobile when clicking outside
+    document.addEventListener('click', function(e) {
+      const sidebar = document.getElementById('sidebar');
+      const menuToggle = document.querySelector('.menu-toggle');
+      
+      if (window.innerWidth < 992) {
+        if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
