@@ -147,7 +147,7 @@ Then visit `http://localhost:8000`.
 - Christopher Oyeh - Founder/CEO
 - Joseph Amos - General Supervisor
 - Nnamdi Osi - Deputy Supervisor
-- Israel Akinola - Lead Developer
+- Israel Akinola - Software Engineer
 - Collin Duru - Chief Engineer
 
 ## Contact
