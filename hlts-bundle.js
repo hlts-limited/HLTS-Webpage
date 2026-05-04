@@ -661,10 +661,10 @@ function initializeForUsersDetailModal() {
       summary: 'HLTS provides school administrators with operational systems that boost efficiency, reduce manual work, and make decision-making data-driven across the whole institution.',
       buttonLink: 'school-form.html',
       items: [
-        { icon: 'bi-bar-chart-line-fill', text: 'Data-Driven Insight & Analytics: view real-time dashboards for attendance, exam results, staffing, and school performance so you can identify trends and act faster.' },
-        { icon: 'bi-globe2', text: 'Digital Learning Platforms: centralize lesson planning, student communications, assignment tracking, and resource sharing in one secure portal.' },
-        { icon: 'bi-gear-fill', text: 'Administrative Efficiency & Compliance: automate registration, billing, reporting, and regulatory documentation to reduce paperwork and improve accuracy.' },
-        { icon: 'bi-person-badge-fill', text: 'Scalable Professional Development & Support: deliver training resources, onboarding materials, and expert support so your staff can adopt technology smoothly and grow with demand.' }
+        { icon: 'bi-bar-chart-line-fill', text: 'Enrollment tools: Seamlessly onboard new students with simplified digital registration.' },
+        { icon: 'bi-globe2', text: 'Grading systems: Automate and manage grade calculations securely in one place.' },
+        { icon: 'bi-gear-fill', text: 'Parent communication: Send updates, notices, and direct messages to parents easily.' },
+        { icon: 'bi-person-badge-fill', text: 'Compliance dashboards: Track and fulfill regulatory requirements with real-time oversight.' }
       ]
     },
     teachers: {
@@ -672,10 +672,10 @@ function initializeForUsersDetailModal() {
       summary: 'Teachers gain modern classroom tools to design engaging lessons, give faster feedback, and manage student progress with less administrative overhead.',
       buttonLink: 'school-form.html',
       items: [
-        { icon: 'bi-book-half', text: 'Curriculum Enhancement & Digital Resources: create and reuse interactive lesson plans, multimedia content, and assessments that support differentiated learning.' },
-        { icon: 'bi-pencil-square', text: 'Assessment & Feedback Tools: build quizzes, grade faster with automation, and provide meaningful feedback that guides student improvement.' },
-        { icon: 'bi-people-fill', text: 'Collaboration & Classroom Management: coordinate assignments, share resources, and communicate with students and parents from a single classroom dashboard.' },
-        { icon: 'bi-award-fill', text: 'Professional Development & Support: access training guides, best-practice materials, and support tools that help you grow your teaching skills and digital confidence.' }
+        { icon: 'bi-book-half', text: 'Lesson planning: Create, organize, and reuse interactive lesson plans.' },
+        { icon: 'bi-pencil-square', text: 'Digital assignments: Distribute and collect work completely paper-free.' },
+        { icon: 'bi-people-fill', text: 'Student progress tracking: Monitor individual performance with analytical tools.' },
+        { icon: 'bi-award-fill', text: 'CBT tools: Build and deploy computer-based tests securely and automatically score them.' }
       ]
     },
     students: {
@@ -683,10 +683,10 @@ function initializeForUsersDetailModal() {
       summary: 'Students enjoy a personalized learning environment with instant access to lessons, assignments, support resources, and collaborative tools.',
       buttonLink: 'portal.html',
       items: [
-        { icon: 'bi-stars', text: 'Personalized Learning Experience: follow tailored pathways, receive content recommendations, and progress at a pace that matches your strengths and needs.' },
-        { icon: 'bi-journal-album', text: 'Access to Digital Tools & Resources: open learning materials, assignments, notes, and multimedia content from any device, anytime.' },
-        { icon: 'bi-people', text: 'Collaboration & Peer Interaction: work with classmates on projects, share ideas, and participate in group activities through built-in collaboration features.' },
-        { icon: 'bi-lightbulb-fill', text: 'Skill Development & Future Readiness: build digital literacy, communication, and problem-solving skills that prepare you for higher education and career success.' }
+        { icon: 'bi-stars', text: 'Access to lessons: Review course materials anytime, anywhere.' },
+        { icon: 'bi-journal-album', text: 'Grade checking: See current standing and feedback on past work instantly.' },
+        { icon: 'bi-people', text: 'Assignment submission: Upload homework and projects easily through the portal.' },
+        { icon: 'bi-lightbulb-fill', text: 'Peer collaboration: Work together with classmates on interactive group tasks.' }
       ]
     },
     parents: {
@@ -694,10 +694,10 @@ function initializeForUsersDetailModal() {
       summary: 'Parents stay involved and informed with clear progress tracking, improved communication, and practical support for supporting learning at home.',
       buttonLink: 'portal.html',
       items: [
-        { icon: 'bi-eye-fill', text: 'Transparent Progress Tracking: monitor grades, attendance, assignments, and performance milestones in one easy-to-read view.' },
-        { icon: 'bi-chat-dots-fill', text: 'Improved Communication Channels: message teachers directly, receive timely updates, and stay connected with school announcements.' },
-        { icon: 'bi-house-door-fill', text: 'Support for At-Home Learning: get homework reminders, study resources, and progress summaries that help you support your child effectively.' },
-        { icon: 'bi-people-fill', text: 'Engagement & Community Building: participate in school events, receive community news, and stay engaged with other parents and educators.' }
+        { icon: 'bi-eye-fill', text: 'Real-time grade monitoring: Stay updated on your child\'s performance effortlessly.' },
+        { icon: 'bi-chat-dots-fill', text: 'Attendance tracking: Track daily attendance and punctuality records.' },
+        { icon: 'bi-house-door-fill', text: 'Teacher messaging: Communicate directly with educators regarding your child\'s progress.' },
+        { icon: 'bi-people-fill', text: 'School announcements: Receive important news and updates directly to your device.' }
       ]
     }
   };

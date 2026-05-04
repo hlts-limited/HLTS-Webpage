@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="description" content="HLTS Limited is a Lagos-based EdTech company empowering schools and institutions across Africa with digital learning platforms, student portals, and administrative tools.">
+
+    <meta property="og:title" content="HLTS Limited - Your Partner in Education">
+
+    <meta property="og:description" content="Empowering African schools with technology-driven education solutions.">
+
+    <meta property="og:image" content="https://hltsltd.com/images/logoh.png">
+
+    <meta property="og:url" content="https://hltsltd.com">
+
+    <meta name="twitter:card" content="summary_large_image">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="HLTS Limited - Your Partner in Education. Transform your learning experience with innovative ed-tech solutions.">
@@ -762,9 +773,10 @@
             <h5 class="text-uppercase">Connect With Us</h5>
             <div class="d-flex gap-3 flex-wrap">
               <a href="https://web.facebook.com/profile.php?id=61551105837140" class="social-icon" title="Facebook"><i class="bi bi-facebook"></i></a>
-              <a href="https://twitter.com/hltslimited" class="social-icon" title="Twitter"><i class="bi bi-twitter"></i></a>
+              <a href="https://twitter.com/hltslimited" class="social-icon" title="Twitter/X"><i class="bi bi-twitter-x"></i></a>
               <a href="https://www.instagram.com/hltslimited/" class="social-icon" title="Instagram"><i class="bi bi-instagram"></i></a>
               <a href="https://www.linkedin.com/company/high-level-tech-services-limited" class="social-icon" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a href="https://wa.me/2348107005789" class="social-icon" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
               <a href="https://github.com/hlts-limited" class="social-icon" title="GitHub"><i class="bi bi-github"></i></a>
             </div>
           </div>
@@ -773,12 +785,29 @@
           <div class="col-md-3 mb-4">
             <h5 class="text-uppercase">Newsletter</h5>
             <p class="small">Subscribe for updates on our latest EdTech solutions.</p>
-            <form action="#" method="post">
+            <form id="newsletter-form" action="https://formspree.io/f/mvoeydnd" method="POST">
               <div class="input-group">
-                <input type="email" class="form-control" placeholder="Enter your email" required>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
                 <button class="btn btn-primary" type="submit">Subscribe</button>
               </div>
+              <div id="newsletter-success" class="text-success small mt-2 d-none">Thank you for subscribing!</div>
             </form>
+            <script>
+              document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                var form = this;
+                fetch(form.action, {
+                  method: form.method,
+                  body: new FormData(form),
+                  headers: { 'Accept': 'application/json' }
+                }).then(function(response) {
+                  if (response.ok) {
+                    form.reset();
+                    document.getElementById('newsletter-success').classList.remove('d-none');
+                  }
+                });
+              });
+            </script>
           </div>
         </div>
 
