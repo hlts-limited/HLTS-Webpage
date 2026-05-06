@@ -365,67 +365,114 @@
     </section>
 
     <script>
-    (function loadTechNews() {
+    (function() {
       var FALLBACK_IMG = 'images/project1.jpeg';
-      // Using TechCrunch RSS — reliably proxied by rss2json
-      var TECH_RSS = 'https://techcrunch.com/feed/';
-      var API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(TECH_RSS) + '&count=6';
+      var RSS_URL = 'https://techcrunch.com/feed/';
+      var PROXY = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
+      var REFRESH_MS = 10 * 60 * 1000; // 10 minutes
 
-      fetch(API_URL)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          var container = document.getElementById('blog-cards-container');
-          var loading   = document.getElementById('blog-loading');
+      function decodeContents(contents) {
+        if (contents.indexOf('base64,') !== -1) {
+          var b64 = contents.split('base64,')[1];
+          try {
+            var bytes = Uint8Array.from(atob(b64), function(c) { return c.charCodeAt(0); });
+            return typeof TextDecoder !== 'undefined'
+              ? new TextDecoder('utf-8').decode(bytes)
+              : decodeURIComponent(escape(atob(b64)));
+          } catch (e) { return atob(b64); }
+        }
+        return contents;
+      }
 
-          if (data.status !== 'ok' || !data.items || data.items.length === 0) {
-            if (loading) loading.innerHTML = '<p class="text-muted">Could not load news at this time. Please try again later.</p>';
-            return;
-          }
+      function getTagText(el, tag) {
+        var found = el.getElementsByTagName(tag);
+        return found.length ? found[0].textContent.trim() : '';
+      }
 
-          if (loading) loading.remove();
+      function showSpinner() {
+        var container = document.getElementById('blog-cards-container');
+        container.innerHTML =
+          '<div class="col-12 text-center py-5" id="blog-loading">'
+          + '<div class="spinner-border text-primary" role="status">'
+          + '<span class="visually-hidden">Loading...</span></div>'
+          + '<p class="mt-3 text-muted">Fetching latest tech news...</p>'
+          + '</div>';
+      }
 
-          var html = data.items.map(function(item) {
-            var title   = item.title.replace(/<[^>]*>/g, '');
-            var rawDesc = item.description ? item.description.replace(/<[^>]*>/g, '') : '';
-            var desc    = rawDesc.length > 120 ? rawDesc.substring(0, 120) + '...' : rawDesc || 'Click to read the full article.';
-            var date    = new Date(item.pubDate).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
-            var source  = item.author ? item.author.replace(/<[^>]*>/g, '') : 'Google News';
-            var thumb   = (item.thumbnail && item.thumbnail.startsWith('http')) ? item.thumbnail : FALLBACK_IMG;
-            var safeTitle = title.replace(/"/g, '&quot;');
+      function fetchNews() {
+        showSpinner();
 
-            return '<div class="col-md-4">'
-              + '<div class="card h-100 shadow-sm">'
-              + '<img src="' + FALLBACK_IMG + '" data-realsrc="' + thumb + '" '
-              + 'class="card-img-top blog-news-img" alt="' + safeTitle + '" '
-              + 'loading="lazy" onerror="this.src=\'' + FALLBACK_IMG + '\'" '
-              + 'style="height:180px;object-fit:cover;">'
-              + '<div class="card-body d-flex flex-column">'
-              + '<small class="text-muted mb-2"><i class="bi bi-newspaper"></i> ' + source + ' &middot; ' + date + '</small>'
-              + '<h5 class="card-title">' + title + '</h5>'
-              + '<p class="card-text flex-grow-1">' + desc + '</p>'
-              + '<a href="' + item.link + '" class="btn btn-outline-primary btn-sm mt-2" '
-              + 'target="_blank" rel="noopener noreferrer">'
-              + 'Read Full Article <i class="bi bi-box-arrow-up-right"></i></a>'
-              + '</div></div></div>';
-          }).join('');
+        fetch(PROXY)
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            var container = document.getElementById('blog-cards-container');
+            var loading   = document.getElementById('blog-loading');
 
-          container.insertAdjacentHTML('beforeend', html);
-
-          // Swap in real thumbnails after cards are rendered
-          document.querySelectorAll('.blog-news-img').forEach(function(img) {
-            var real = img.getAttribute('data-realsrc');
-            if (real && real !== FALLBACK_IMG) {
-              var probe = new Image();
-              probe.onload  = function() { img.src = real; };
-              probe.onerror = function() {};
-              probe.src = real;
+            if (!data || !data.contents) {
+              if (loading) loading.innerHTML = '<p class="text-muted">Could not load news at this time. Please try again later.</p>';
+              return;
             }
+
+            var xmlStr = decodeContents(data.contents);
+            var xml    = new DOMParser().parseFromString(xmlStr, 'text/xml');
+            var items  = Array.from(xml.getElementsByTagName('item')).slice(0, 6);
+
+            if (!items.length) {
+              if (loading) loading.innerHTML = '<p class="text-muted">No articles available right now. Please try again later.</p>';
+              return;
+            }
+
+            if (loading) loading.remove();
+
+            var html = items.map(function(item) {
+              var title   = getTagText(item, 'title').replace(/<[^>]*>/g, '') || 'Untitled';
+              var linkEl  = item.getElementsByTagName('link')[0];
+              var link    = linkEl ? (linkEl.textContent.trim() || linkEl.getAttribute('href') || '#') : getTagText(item, 'guid') || '#';
+              var rawDesc = getTagText(item, 'description').replace(/<[^>]*>/g, '');
+              var desc    = rawDesc.length > 120 ? rawDesc.substring(0, 120) + '...' : rawDesc || 'Click to read the full article.';
+              var pubDate = getTagText(item, 'pubDate');
+              var date    = pubDate ? new Date(pubDate).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+              var creatorEls = item.getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'creator');
+              var author  = (creatorEls.length ? creatorEls[0].textContent.trim() : '') || getTagText(item, 'author') || 'TechCrunch';
+              var thumb   = FALLBACK_IMG;
+              var mediaEls = item.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content');
+              if (mediaEls.length && mediaEls[0].getAttribute('url')) {
+                thumb = mediaEls[0].getAttribute('url');
+              } else {
+                var encEls = item.getElementsByTagName('enclosure');
+                if (encEls.length && encEls[0].getAttribute('url')) {
+                  thumb = encEls[0].getAttribute('url');
+                }
+              }
+              var safeTitle = title.replace(/"/g, '&quot;');
+
+              return '<div class="col-md-4">'
+                + '<div class="card h-100 shadow-sm">'
+                + '<img src="' + thumb + '" class="card-img-top blog-news-img" alt="' + safeTitle + '" '
+                + 'loading="lazy" onerror="this.src=\'' + FALLBACK_IMG + '\'" style="height:180px;object-fit:cover;">'
+                + '<div class="card-body d-flex flex-column">'
+                + '<small class="text-muted mb-2"><i class="bi bi-newspaper"></i> ' + author + ' &middot; ' + date + '</small>'
+                + '<h5 class="card-title">' + title + '</h5>'
+                + '<p class="card-text flex-grow-1">' + desc + '</p>'
+                + '<a href="' + link + '" class="btn btn-outline-primary btn-sm mt-2" '
+                + 'target="_blank" rel="noopener noreferrer">'
+                + 'Read Full Article <i class="bi bi-box-arrow-up-right"></i></a>'
+                + '</div></div></div>';
+            }).join('');
+
+            container.innerHTML = html;
+          })
+          .catch(function() {
+            var container = document.getElementById('blog-cards-container');
+            container.innerHTML = '<p class="text-center text-muted">Unable to load news. Please check your connection.</p>';
           });
-        })
-        .catch(function() {
-          var loading = document.getElementById('blog-loading');
-          if (loading) loading.innerHTML = '<p class="text-center text-muted">Unable to load news. Please check your connection.</p>';
-        });
+      }
+
+      // Initial load
+      fetchNews();
+
+      // Auto-refresh every 10 minutes
+      setInterval(fetchNews, REFRESH_MS);
     })();
     </script>
 
