@@ -1189,7 +1189,7 @@
 
       // Close modal and reset form
       bootstrap.Modal.getInstance(document.getElementById('addStudentModal')).hide();
-      form.reset();
+      document.getElementById('addStudentForm').reset();
 
       alert(`Learner ${firstName} ${lastName} has been added successfully!\nLearner ID: ${newLearner.id}`);
     }
