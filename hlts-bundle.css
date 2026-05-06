@@ -228,8 +228,8 @@ section {
   top: 3px;
   left: 50%;
   transform: translateX(-50%);
-  width: 55vw;
-  max-width: 900px;
+  width: calc(55vw + 70px);
+  max-width: 970px;
   z-index: 2000;
   border-radius: 0 0 1.25rem 1.25rem;
   box-shadow: 0 8px 32px 0 rgba(0,32,96,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.10);
