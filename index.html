@@ -367,20 +367,11 @@
     <script>
     (function() {
       var FALLBACK_IMG = 'images/project1.jpeg';
-      var RSS_URL = 'https://techcrunch.com/feed/';
-      var PROXY = 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL);
+      var PROXY = 'rss-proxy.php';
       var REFRESH_MS = 10 * 60 * 1000; // 10 minutes
 
       function decodeContents(contents) {
-        if (contents.indexOf('base64,') !== -1) {
-          var b64 = contents.split('base64,')[1];
-          try {
-            var bytes = Uint8Array.from(atob(b64), function(c) { return c.charCodeAt(0); });
-            return typeof TextDecoder !== 'undefined'
-              ? new TextDecoder('utf-8').decode(bytes)
-              : decodeURIComponent(escape(atob(b64)));
-          } catch (e) { return atob(b64); }
-        }
+        // PHP proxy returns raw XML — no base64 decoding needed
         return contents;
       }
 
