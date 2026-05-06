@@ -1764,6 +1764,11 @@ section {
   background: linear-gradient(180deg, #f8f9fc 0%, #ffffff 100%);
 }
 
+.management-team-section #teamCarousel .carousel-item {
+  height: auto;
+  min-height: 0;
+}
+
 .team-card-modern {
   background: #ffffff;
   border-radius: 20px;
@@ -1782,17 +1787,22 @@ section {
   position: relative;
   overflow: hidden;
   height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fb;
 }
 
-.team-img-modern {
+.management-team-section .team-img-modern {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center top;
   transition: transform 0.5s ease;
 }
 
 .team-card-modern:hover .team-img-modern {
-  transform: scale(1.08);
+  transform: none;
 }
 
 .team-overlay {
