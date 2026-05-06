@@ -82,7 +82,7 @@
       </li>
 
       <li class="nav-item me-3">
-        <a class="nav-link" href="https://hlts-ltd-hr.web.app" target="_blank" rel="noopener noreferrer">
+        <a class="nav-link" href="https://hlts-ltd-hr.web.app">
           <i class="bi bi-person-workspace"></i> STAFF PORTAL
         </a>
       </li>
@@ -346,85 +346,88 @@
         <!-- Section Header -->
         <div class="text-center mb-5">
           <h2 class="text-primary fw-bold">Tech Insights</h2>
-          <p class="text-muted">Stay informed with expert advice on digital transformation in technology.</p>
+          <p class="text-muted">Latest technology news, live from Google News.</p>
+          <small class="text-muted">
+            <i class="bi bi-circle-fill text-success" style="font-size:0.5rem;vertical-align:middle;"></i> Live Feed
+          </small>
         </div>
 
-        <!-- Blog Cards -->
-        <div class="row g-4">
-          <!-- Blog 1 -->
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="images/data.jpeg" class="card-img-top" alt="Digital Transformation" loading="lazy">
-              <div class="card-body">
-                <h5 class="card-title">5 Ways EdTech Improves Student Engagement</h5>
-                <p class="card-text">Discover how digital tools, interactive content, and personalized learning paths keep students motivated and engaged.</p>
-                <a href="about.html" class="btn btn-outline-primary btn-sm">Read More</a>
-              </div>
+        <!-- Blog Cards — populated by JS -->
+        <div class="row g-4" id="blog-cards-container">
+          <div class="col-12 text-center py-5" id="blog-loading">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
-          </div>
-
-          <!-- Blog 2 -->
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="images/project1.jpeg" class="card-img-top" alt="Remote Learning" loading="lazy">
-              <div class="card-body">
-                <h5 class="card-title">Remote & Hybrid Learning: Best Practices</h5>
-                <p class="card-text">Learn strategies for effective online teaching, student accountability, and maintaining classroom culture in hybrid environments.</p>
-                <a href="services.html" class="btn btn-outline-primary btn-sm">Read More</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Blog 3 -->
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="images/project2.jpeg" class="card-img-top" alt="Data Analytics" loading="lazy">
-              <div class="card-body">
-                <h5 class="card-title">Using Data Analytics to Improve Student Outcomes</h5>
-                <p class="card-text">How schools are leveraging student performance data to identify struggles early and provide targeted interventions.</p>
-                <a href="services.html" class="btn btn-outline-primary btn-sm">Read More</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Blog 4 -->
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="images/project3.jpeg" class="card-img-top" alt="Assessment Tools" loading="lazy">
-              <div class="card-body">
-                <h5 class="card-title">Modern Assessment Tools Beyond Multiple Choice</h5>
-                <p class="card-text">Explore innovative assessment methods that provide deeper insights into student understanding and critical thinking skills.</p>
-                <a href="contact.html" class="btn btn-outline-primary btn-sm">Read More</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Blog 5 -->
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="images/webdev.jpeg" class="card-img-top" alt="Teacher Training" loading="lazy">
-              <div class="card-body">
-                <h5 class="card-title">Professional Development for Digital Classrooms</h5>
-                <p class="card-text">Why teacher training is crucial for successful EdTech adoption and how to support educators through the transition.</p>
-                <a href="about.html" class="btn btn-outline-primary btn-sm">Read More</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Blog 6 -->
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="images/mockup.jpeg" class="card-img-top" alt="School Transformation" loading="lazy">
-              <div class="card-body">
-                <h5 class="card-title">Case Study: School Transformation with HLTS</h5>
-                <p class="card-text">See how institutions have increased student performance by 35% and reduced administrative burden using our platform.</p>
-                <a href="about.html" class="btn btn-outline-primary btn-sm">Read More</a>
-              </div>
-            </div>
+            <p class="mt-3 text-muted">Fetching latest tech news...</p>
           </div>
         </div>
       </div>
     </section>
+
+    <script>
+    (function loadTechNews() {
+      var FALLBACK_IMG = 'images/project1.jpeg';
+      // Using TechCrunch RSS — reliably proxied by rss2json
+      var TECH_RSS = 'https://techcrunch.com/feed/';
+      var API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(TECH_RSS) + '&count=6';
+
+      fetch(API_URL)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          var container = document.getElementById('blog-cards-container');
+          var loading   = document.getElementById('blog-loading');
+
+          if (data.status !== 'ok' || !data.items || data.items.length === 0) {
+            if (loading) loading.innerHTML = '<p class="text-muted">Could not load news at this time. Please try again later.</p>';
+            return;
+          }
+
+          if (loading) loading.remove();
+
+          var html = data.items.map(function(item) {
+            var title   = item.title.replace(/<[^>]*>/g, '');
+            var rawDesc = item.description ? item.description.replace(/<[^>]*>/g, '') : '';
+            var desc    = rawDesc.length > 120 ? rawDesc.substring(0, 120) + '...' : rawDesc || 'Click to read the full article.';
+            var date    = new Date(item.pubDate).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
+            var source  = item.author ? item.author.replace(/<[^>]*>/g, '') : 'Google News';
+            var thumb   = (item.thumbnail && item.thumbnail.startsWith('http')) ? item.thumbnail : FALLBACK_IMG;
+            var safeTitle = title.replace(/"/g, '&quot;');
+
+            return '<div class="col-md-4">'
+              + '<div class="card h-100 shadow-sm">'
+              + '<img src="' + FALLBACK_IMG + '" data-realsrc="' + thumb + '" '
+              + 'class="card-img-top blog-news-img" alt="' + safeTitle + '" '
+              + 'loading="lazy" onerror="this.src=\'' + FALLBACK_IMG + '\'" '
+              + 'style="height:180px;object-fit:cover;">'
+              + '<div class="card-body d-flex flex-column">'
+              + '<small class="text-muted mb-2"><i class="bi bi-newspaper"></i> ' + source + ' &middot; ' + date + '</small>'
+              + '<h5 class="card-title">' + title + '</h5>'
+              + '<p class="card-text flex-grow-1">' + desc + '</p>'
+              + '<a href="' + item.link + '" class="btn btn-outline-primary btn-sm mt-2" '
+              + 'target="_blank" rel="noopener noreferrer">'
+              + 'Read Full Article <i class="bi bi-box-arrow-up-right"></i></a>'
+              + '</div></div></div>';
+          }).join('');
+
+          container.insertAdjacentHTML('beforeend', html);
+
+          // Swap in real thumbnails after cards are rendered
+          document.querySelectorAll('.blog-news-img').forEach(function(img) {
+            var real = img.getAttribute('data-realsrc');
+            if (real && real !== FALLBACK_IMG) {
+              var probe = new Image();
+              probe.onload  = function() { img.src = real; };
+              probe.onerror = function() {};
+              probe.src = real;
+            }
+          });
+        })
+        .catch(function() {
+          var loading = document.getElementById('blog-loading');
+          if (loading) loading.innerHTML = '<p class="text-center text-muted">Unable to load news. Please check your connection.</p>';
+        });
+    })();
+    </script>
 
 
     <!-- Success Stories Section -->

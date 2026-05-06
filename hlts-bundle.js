@@ -532,7 +532,7 @@ const HLTSSecurity = {
     const links = document.querySelectorAll('a[href^="http"]');
     links.forEach(link => {
       const url = new URL(link.href);
-      if (url.origin !== window.location.origin) {
+      if (url.origin !== window.location.origin && link.href !== 'https://hlts-ltd-hr.web.app') {
         link.setAttribute('rel', 'noopener noreferrer');
         link.setAttribute('target', '_blank');
       }
