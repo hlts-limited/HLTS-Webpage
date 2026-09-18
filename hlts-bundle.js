@@ -564,6 +564,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 // Initialize on DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
+  initializePublicNavigation();
   initializeRandomGallery();
   initializeAOS();
   initializeCounters();
@@ -573,9 +574,187 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeLazyLoading();
   initializeFormValidation();
   initializeCarouselPreview();
+  initializeEcosystemExplorer();
   initializeForUsersDetailModal();
   initializeTestimonialFolder();
 });
+
+function initializePublicNavigation() {
+  const navbar = document.querySelector('nav.navbar');
+  if (!navbar || document.body.classList.contains('dashboard-body') || document.body.classList.contains('admin-body')) return;
+
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const isCurrent = (pages) => pages.includes(currentPage) ? ' active' : '';
+
+  navbar.innerHTML = `
+    <div class="container-fluid public-nav-inner">
+      <a class="navbar-brand" href="index.html" aria-label="HLTS Limited home">
+        <img loading="lazy" src="images/logoh.png" alt="HLTS Logo" height="70">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Open navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link${isCurrent(['index.html'])}" href="index.html"><i class="bi bi-house" aria-hidden="true"></i> Home</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle${isCurrent(['online-institution.html', 'course.html', 'registration-form.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-mortarboard" aria-hidden="true"></i> Learn</a>
+            <ul class="dropdown-menu public-dropdown">
+              <li><a class="dropdown-item" href="online-institution.html"><i class="bi bi-laptop"></i><span><strong>Online Institution</strong><small>Learn how HLTS Online Institution works</small></span></a></li>
+              <li><a class="dropdown-item" href="course.html"><i class="bi bi-journal-text"></i><span><strong>Courses</strong><small>Explore available programmes</small></span></a></li>
+              <li><a class="dropdown-item" href="registration-form.html"><i class="bi bi-person-plus"></i><span><strong>Register</strong><small>Start your learning journey</small></span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle${isCurrent(['school-form.html', 'services.html', 'cbt.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-grid" aria-hidden="true"></i> Solutions</a>
+            <ul class="dropdown-menu public-dropdown">
+              <li><a class="dropdown-item" href="school-form.html"><i class="bi bi-building"></i><span><strong>Academics</strong><small>Staff deployment for schools</small></span></a></li>
+              <li><a class="dropdown-item" href="services.html"><i class="bi bi-diagram-3"></i><span><strong>School Operations</strong><small>Systems, support, and workflows</small></span></a></li>
+              <li><a class="dropdown-item" href="cbt.html"><i class="bi bi-ui-checks-grid"></i><span><strong>CBT & Assessments</strong><small>Testing and result management</small></span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle${isCurrent(['community.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-people" aria-hidden="true"></i> Community</a>
+            <ul class="dropdown-menu public-dropdown">
+              <li><a class="dropdown-item" href="community.html"><i class="bi bi-globe2"></i><span><strong>TechMind Africa</strong><small>Connect, learn, and build together</small></span></a></li>
+              <li><a class="dropdown-item" href="community.html#vision"><i class="bi bi-stars"></i><span><strong>Our Vision</strong><small>See what the community is building toward</small></span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle${isCurrent(['about.html', 'faq.html', 'terms.html', 'contact.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-info-circle" aria-hidden="true"></i> Company</a>
+            <ul class="dropdown-menu public-dropdown">
+              <li><a class="dropdown-item" href="about.html"><i class="bi bi-building-check"></i><span><strong>About HLTS</strong><small>Our mission and people</small></span></a></li>
+              <li><a class="dropdown-item" href="faq.html"><i class="bi bi-question-circle"></i><span><strong>FAQs</strong><small>Answers to common questions</small></span></a></li>
+              <li><a class="dropdown-item" href="contact.html"><i class="bi bi-envelope"></i><span><strong>Contact</strong><small>Let us plan your next step</small></span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item nav-portal-item"><a class="nav-link${isCurrent(['portal.html'])}" href="portal.html"><i class="bi bi-person-badge" aria-hidden="true"></i> Student Portal</a></li>
+          <li class="nav-item"><a class="btn contact-btn" href="contact.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i> Talk to HLTS</a></li>
+        </ul>
+      </div>
+    </div>`;
+  const hoverNavigation = window.matchMedia('(min-width: 992px)');
+  const dropdownItems = navbar.querySelectorAll('.nav-item.dropdown');
+
+  const bindDropdownHover = () => {
+    dropdownItems.forEach((item) => {
+      const toggle = item.querySelector('[data-bs-toggle="dropdown"]');
+      if (!toggle || item.dataset.hoverBound === 'true') return;
+
+      const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
+      let closeTimer;
+
+      const openDropdown = () => {
+        window.clearTimeout(closeTimer);
+        dropdown.show();
+      };
+
+      const closeDropdown = () => {
+        window.clearTimeout(closeTimer);
+        closeTimer = window.setTimeout(() => dropdown.hide(), 120);
+      };
+
+      item.addEventListener('mouseenter', openDropdown);
+      item.addEventListener('mouseleave', closeDropdown);
+      item.dataset.hoverBound = 'true';
+    });
+  };
+
+  const unbindDropdownHover = () => {
+    dropdownItems.forEach((item) => {
+      if (item.dataset.hoverBound !== 'true') return;
+      const clone = item.cloneNode(true);
+      item.replaceWith(clone);
+    });
+  };
+
+  const updateDropdownHover = () => {
+    if (hoverNavigation.matches) {
+      bindDropdownHover();
+    } else {
+      unbindDropdownHover();
+    }
+  };
+
+  updateDropdownHover();
+  hoverNavigation.addEventListener('change', updateDropdownHover);
+}
+
+function initializeEcosystemExplorer() {
+  const tabs = document.querySelectorAll('.ecosystem-tab');
+  const data = {
+    academics: {
+      kicker: 'HLTS@School',
+      heading: 'Build a stronger school team.',
+      description: 'Deploy the right education professionals into your school and choose a support plan that fits your stage of growth.',
+      link: 'Explore Academic Plans',
+      href: 'school-form.html',
+      icon: 'bi-mortarboard-fill',
+      outcomes: ['Qualified academic staff', 'Three flexible service plans', 'Training and ongoing support']
+    },
+    operations: {
+      kicker: 'HLTS Operations',
+      heading: 'Make every school process work smarter.',
+      description: 'Bring CBT, result management, IT support, and daily school operations into a more reliable digital workflow.',
+      link: 'View Operations Services',
+      href: 'services.html',
+      icon: 'bi-diagram-3-fill',
+      outcomes: ['CBT and secure assessments', 'Result management tools', 'Responsive IT support']
+    },
+    institution: {
+      kicker: 'HLTS Online Institution',
+      heading: 'Turn ambition into practical skills.',
+      description: 'Learn with structured courses, expert guidance, and a digital environment built for the next generation of African talent.',
+      link: 'Explore the Institution',
+      href: 'registration-form.html',
+      icon: 'bi-laptop-fill',
+      outcomes: ['Career-ready courses', 'Expert mentorship', 'Flexible digital learning']
+    },
+    community: {
+      kicker: 'TechMind Africa',
+      heading: 'Give technology a bigger purpose.',
+      description: 'Join a community turning curiosity into capability through access, collaboration, and real opportunities to build.',
+      link: 'Meet Our Community',
+      href: 'about.html',
+      icon: 'bi-globe2',
+      outcomes: ['Peer learning network', 'Community-led projects', 'Access to tech opportunities']
+    }
+  };
+
+  const elements = {
+    kicker: document.getElementById('ecosystem-kicker'),
+    heading: document.getElementById('ecosystem-heading'),
+    description: document.getElementById('ecosystem-description'),
+    link: document.getElementById('ecosystem-link'),
+    icon: document.getElementById('ecosystem-icon'),
+    outcomes: [1, 2, 3].map((index) => document.getElementById(`ecosystem-outcome-${index}`))
+  };
+
+  if (!tabs.length || !elements.kicker) return;
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const track = data[tab.dataset.ecosystemTrack];
+      if (!track) return;
+
+      tabs.forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle('is-active', isActive);
+        item.setAttribute('aria-selected', String(isActive));
+      });
+
+      elements.kicker.textContent = track.kicker;
+      elements.heading.textContent = track.heading;
+      elements.description.textContent = track.description;
+      elements.link.childNodes[0].textContent = `${track.link} `;
+      elements.link.href = track.href;
+      elements.icon.className = `bi ${track.icon}`;
+      elements.outcomes.forEach((outcome, index) => {
+        outcome.textContent = track.outcomes[index];
+      });
+    });
+  });
+}
 
 // Carousel Preview Hover Effect
 function initializeCarouselPreview() {
