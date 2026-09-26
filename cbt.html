@@ -43,7 +43,7 @@
     <link rel="stylesheet" href="hlts-bundle.css">
     <title>CBT Exam Platform Setup & Management</title>
 </head>
-<body>
+<body class="cbt-page">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.html">
@@ -84,67 +84,69 @@
             </div>
         </nav>
 
-        <!-- Header Section: More Services -->
-        <header class="py-5" style="background: linear-gradient(135deg, #007bff 60%, #36d8f5 100%); color: #fff; margin-top: 80px;">
-            <div class="container text-center">
-                <h1 class="display-5 fw-bold mb-2" style="color: #fff;">More Services</h1>
-                <p class="lead mb-0" style="color: white;">Explore additional solutions and integrations to empower your institution.</p>
-            </div>
-        </header>
+        <main class="cbt-page-main">
+            <section class="cbt-hero">
+                <div class="container cbt-hero-layout">
+                    <div class="cbt-hero-copy">
+                        <span class="eyebrow">Assessment and exam operations</span>
+                        <h1>Make exam delivery more reliable.</h1>
+                        <p>HLTS helps schools set up and manage computer-based assessments, from question banks and secure student access to grading and reporting.</p>
+                        <div class="cbt-hero-actions">
+                            <a href="school-form.html" class="btn btn-primary">Plan your CBT setup <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                            <a href="#system-integration" class="cbt-text-link">Explore integrations <i class="bi bi-arrow-down-right" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <figure class="cbt-hero-visual">
+                        <img src="images/cbt.jpg" alt="Computer-based testing tools for digital assessment" fetchpriority="high">
+                        <figcaption><span>HLTS CBT support</span><strong>From setup through results</strong></figcaption>
+                    </figure>
+                </div>
+            </section>
 
-        <!-- Main Content -->
-        <div class="container py-5" style="margin-top: 100px;">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <h1 class="mb-4 text-primary">CBT Exam Platform Setup & Management</h1>
-                    <p class="lead">Our Computer-Based Testing (CBT) Exam Platform provides a seamless, secure, and scalable solution for schools to conduct online assessments. Here’s how we help you set up and manage your CBT exams:</p>
-                    <ul class="mb-4 list-unstyled cbt-bullet-list">
-                        <li><span class="cbt-bullet"><i class="bi bi-gear-fill text-primary"></i></span> <strong>Platform Setup:</strong> We handle the full deployment and configuration of the CBT platform tailored to your school’s needs.</li>
-                        <li><span class="cbt-bullet"><i class="bi bi-archive-fill text-success"></i></span> <strong>Question Bank Management:</strong> Easily upload, organize, and categorize questions for various subjects and classes.</li>
-                        <li><span class="cbt-bullet"><i class="bi bi-calendar-event-fill text-info"></i></span> <strong>Exam Scheduling:</strong> Schedule exams with flexible timing, duration, and access controls for different student groups.</li>
-                        <li><span class="cbt-bullet"><i class="bi bi-person-check-fill text-warning"></i></span> <strong>Student Access:</strong> Secure student logins and real-time monitoring to ensure exam integrity.</li>
-                        <li><span class="cbt-bullet"><i class="bi bi-clipboard-check-fill text-danger"></i></span> <strong>Automated Grading:</strong> Instant grading and result generation for objective questions, with manual review options for subjective answers.</li>
-                        <li><span class="cbt-bullet"><i class="bi bi-bar-chart-fill text-secondary"></i></span> <strong>Analytics & Reporting:</strong> Comprehensive performance analytics and downloadable reports for teachers and administrators.</li>
-                        <li><span class="cbt-bullet"><i class="bi bi-people-fill text-primary"></i></span> <strong>Support & Training:</strong> Full onboarding, training, and ongoing support for your staff and students.</li>
-                    </ul>
-                    <div class="text-center mt-5">
-                        <a href="school-form.html" class="btn btn-primary btn-lg">Apply Now</a>
+            <section class="cbt-capabilities">
+                <div class="container">
+                    <div class="cbt-section-heading">
+                        <span class="eyebrow">What HLTS supports</span>
+                        <h2>From exam setup to useful results.</h2>
+                        <p>Bring the practical pieces of computer-based testing into one supported workflow for your school.</p>
+                    </div>
+                    <div class="cbt-capability-layout">
+                        <ul class="cbt-bullet-list">
+                            <li><span class="cbt-bullet"><i class="bi bi-gear-fill" aria-hidden="true"></i></span><span><strong>Platform setup</strong>Deployment and configuration tailored to your school's needs.</span></li>
+                            <li><span class="cbt-bullet"><i class="bi bi-archive-fill" aria-hidden="true"></i></span><span><strong>Question bank management</strong>Upload, organize and categorize questions by subject and class.</span></li>
+                            <li><span class="cbt-bullet"><i class="bi bi-calendar-event-fill" aria-hidden="true"></i></span><span><strong>Exam scheduling</strong>Set timing, duration and access for different student groups.</span></li>
+                            <li><span class="cbt-bullet"><i class="bi bi-person-check-fill" aria-hidden="true"></i></span><span><strong>Student access</strong>Secure logins and real-time monitoring to support exam integrity.</span></li>
+                            <li><span class="cbt-bullet"><i class="bi bi-clipboard-check-fill" aria-hidden="true"></i></span><span><strong>Automated grading</strong>Generate results for objective questions and review subjective answers.</span></li>
+                            <li><span class="cbt-bullet"><i class="bi bi-bar-chart-fill" aria-hidden="true"></i></span><span><strong>Analytics and reporting</strong>Review performance and prepare reports for educators and administrators.</span></li>
+                            <li><span class="cbt-bullet"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span><strong>Support and training</strong>Onboarding and guidance for staff and students.</span></li>
+                        </ul>
+                        <aside class="cbt-workflow-panel">
+                            <span class="cbt-workflow-label">A supported exam workflow</span>
+                            <div><span>01</span><strong>Prepare</strong><small>Configure the platform, question bank and schedules.</small></div>
+                            <div><span>02</span><strong>Deliver</strong><small>Give students secure access to their assessments.</small></div>
+                            <div><span>03</span><strong>Review</strong><small>Grade work and review performance reports.</small></div>
+                            <a href="school-form.html" class="cbt-panel-link">Discuss school setup <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                        </aside>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <!-- Contact Banner (matching index.html style) -->
-        <section class="enroll-section py-5 px-4 bg-light">
-            <div class="container text-center">
-                <div class="enroll-box bg-white p-5 rounded shadow-sm">
-                    <h2 class="text-primary fw-bold mb-3">Enroll Into Our Institution</h2>
-                    <p class="text-muted mb-4">
-                        Ready to take the next step toward your future? Join HLTS and gain access to world-class training, expert mentorship, and a community that empowers your growth. Let’s get started!
-                    </p>
-                    <a href="registration-form.html" class="btn btn-primary btn-lg">Register Now</a>
-                    <a href="course.html" class="btn btn-primary btn-lg">Tuition Fee</a>
+            <section class="cbt-learner-panel">
+                <div class="container">
+                    <div>
+                        <span class="eyebrow">For individual learners</span>
+                        <h2>Looking to build your own skills?</h2>
+                        <p>Explore the HLTS Online Institution courses and choose a learning path that fits your goals.</p>
+                    </div>
+                    <div class="cbt-learner-actions">
+                        <a href="course.html" class="btn btn-outline-primary">Browse courses</a>
+                        <a href="registration-form.html" class="cbt-text-link">Register to learn <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <style>
-            .cbt-bullet-list li {
-                display: flex;
-                align-items: flex-start;
-                margin-bottom: 1rem;
-                font-size: 1.1rem;
-            }
-            .cbt-bullet {
-                margin-right: 0.75rem;
-                font-size: 1.5rem;
-                flex-shrink: 0;
-                margin-top: 0.15em;
-            }
-        </style>
+            </section>
 
         <!-- System Integration & Lab Setup Section -->
-        <section id="system-integration" class="py-5 px-4 bg-white">
+        <section id="system-integration" class="cbt-integration py-5 px-4 bg-white">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
@@ -169,6 +171,7 @@
                 </div>
             </div>
         </section>
+        </main>
 
         <footer class="footer bg-dark text-light pt-5 pb-3">
             <div class="container">
