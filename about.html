@@ -40,7 +40,7 @@
     <link rel="icon" href="./images/logoh.png" type="image/png" />
   </head>
 
-  <body>
+  <body class="about-page">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
@@ -94,12 +94,19 @@
     </nav>
 
     <!-- About Hero Section -->
-    <section class="portal-hero section-blend-top about-hero-bg" style="--section-blend-from: black;">
-      <div class="container-custom">
-        <div class="text-center" data-aos="fade-up">
-          <h1 class="display-4 fw-bold">About HLTS Limited</h1>
-          <p class="lead">Transforming lives through education, technology, and sustainable 
-            development</p>
+    <section class="about-story-hero">
+      <div class="container">
+        <div class="about-story-layout">
+          <div class="about-story-copy" data-aos="fade-up">
+            <span class="eyebrow">Our story</span>
+            <h1>About HLTS Limited</h1>
+            <p>Transforming lives through education, technology, and sustainable development.</p>
+            <a class="btn btn-primary" href="#duties">Explore our work <i class="bi bi-arrow-down-right" aria-hidden="true"></i></a>
+          </div>
+          <figure class="about-story-photo" data-aos="fade-up">
+            <img src="images/2027images/WhatsApp%20Image%202026-09-26%20at%203.21.18%20PM.jpeg" alt="HLTS members gathered at a recent event" fetchpriority="high">
+            <figcaption><span>HLTS in action</span><strong>Education and technology, built together.</strong></figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -109,7 +116,7 @@
       <div class="container">
         <div class="row g-5">
           <!-- Who We Are Column -->
-          <div class="col-lg-6" data-aos="fade-right">
+          <div class="col-lg-6" data-aos="fade-up">
             <h2 class="h3 fw-bold text-white mb-4">Who We Are?</h2>
             <p class="text-light mb-3">
               HLTS Limited is a forward-thinking technology company committed to transforming the 
@@ -137,7 +144,7 @@
           </div>
 
           <!-- Our Integrity Column -->
-          <div class="col-lg-6" data-aos="fade-left">
+          <div class="col-lg-6" data-aos="fade-up">
             <h2 class="h3 fw-bold text-white mb-4">Our Integrity</h2>
             <p class="text-light mb-3">
               At HLTS, integrity is the foundation of every service we provide. We believe in delivering value with honesty, accountability, and respect.
@@ -164,7 +171,7 @@
         <div class="row g-4">
 
           <!-- Vision & Mission Column -->
-          <div class="col-lg-5" data-aos="fade-right">
+          <div class="col-lg-5" data-aos="fade-up">
             <h2 class="h2 fw-bold text-primary mb-2">Our Vision &amp; Mission</h2>
             <p class="lead text-muted mb-4">Guiding our journey towards excellence and impact</p>
 
@@ -204,7 +211,7 @@
           <hr class="d-lg-none my-4" style="border-top: 5px solid #FF00FF; opacity: 1;">
 
           <!-- Core Values Column -->
-          <div class="col-lg-5" data-aos="fade-left">
+          <div class="col-lg-5" data-aos="fade-up">
             <h2 class="h2 fw-bold text-primary mb-2">Our Core Values</h2>
             <p class="lead text-muted mb-4">The principles that guide everything we do</p>
 
@@ -268,7 +275,7 @@
         </div>
 
         <div class="row g-5 align-items-start">
-          <div class="col-lg-6" data-aos="fade-right">
+          <div class="col-lg-6" data-aos="fade-up">
             <div class="portal-feature-card h-100 p-4">
               <div class="feature-icon mb-4">
                 <i class="bi bi-laptop"></i>
@@ -278,7 +285,7 @@
             </div>
           </div>
 
-          <div class="col-lg-6" data-aos="fade-left">
+          <div class="col-lg-6" data-aos="fade-up">
             <div class="portal-feature-card h-100 p-4">
               <div class="feature-icon mb-4">
                 <i class="bi bi-book"></i>
@@ -288,7 +295,7 @@
             </div>
           </div>
 
-          <div class="col-lg-6" data-aos="fade-right">
+          <div class="col-lg-6" data-aos="fade-up">
             <div class="portal-feature-card h-100 p-4">
               <div class="feature-icon mb-4">
                 <i class="bi bi-headset"></i>
@@ -298,7 +305,7 @@
             </div>
           </div>
 
-          <div class="col-lg-6" data-aos="fade-left">
+          <div class="col-lg-6" data-aos="fade-up">
             <div class="portal-feature-card h-100 p-4">
               <div class="feature-icon mb-4">
                 <i class="bi bi-graph-up-arrow"></i>
@@ -364,9 +371,10 @@
 
         <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
           <div class="carousel-indicators">
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Christopher Oyeh"></button>
+            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="1" aria-label="Israel Akinola"></button>
+            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="2" aria-label="Joseph Amos"></button>
+            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="3" aria-label="Chike"></button>
           </div>
 
           <div class="carousel-inner">
@@ -395,50 +403,54 @@
               </div>
             </div>
 
-            <!-- Team Member 2 -->
+            <!-- Executive Member: Israel Akinola -->
             <div class="carousel-item">
               <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-5">
                   <div class="team-card-modern">
                     <div class="team-img-wrapper">
-                      <img loading="lazy" src="images/Joseph amos.jpeg" alt="Joseph Amos" class="team-img-modern">
-                      <div class="team-overlay">
-                        <div class="social-icons-modern">
-                          <a href="https://twitter.com/hltslimited" title="Twitter"><i class="bi bi-twitter"></i></a>
-                          <a href="https://www.linkedin.com/company/high-level-tech-services-limited" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                          <a href="https://web.facebook.com/profile.php?id=61551105837140" title="Facebook"><i class="bi bi-facebook"></i></a>
-                        </div>
-                      </div>
+                      <img loading="lazy" src="images/Israel.jpeg" alt="Israel Akinola" class="team-img-modern">
                     </div>
                     <div class="team-info">
-                      <h5>Joseph Amos</h5>
-                      <span class="team-role">General Supervisor</span>
-                      <p class="team-bio">Operations expert ensuring seamless delivery of HLTS solutions across all partner schools.</p>
+                      <h5>Israel Akinola</h5>
+                      <span class="team-role">Executive Member</span>
+                      <p class="team-bio">Supports community learning and technology programmes that help learners and educators build practical digital skills.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Team Member 3 -->
+            <!-- Executive Member: Joseph Amos -->
             <div class="carousel-item">
               <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-5">
                   <div class="team-card-modern">
                     <div class="team-img-wrapper">
-                      <img loading="lazy" src="images/Collins hlts.jpg" alt="Collin Duru" class="team-img-modern">
-                      <div class="team-overlay">
-                        <div class="social-icons-modern">
-                          <a href="https://www.linkedin.com/company/high-level-tech-services-limited" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                          <a href="https://twitter.com/hltslimited" title="Twitter"><i class="bi bi-twitter"></i></a>
-                          <a href="https://github.com/hlts-limited" title="GitHub"><i class="bi bi-github"></i></a>
-                        </div>
-                      </div>
+                      <img loading="lazy" src="images/Joseph amos.jpeg" alt="Joseph Amos" class="team-img-modern">
                     </div>
                     <div class="team-info">
-                      <h5>Collin Duru</h5>
-                      <span class="team-role">Chief Engineer</span>
-                      <p class="team-bio">Technical mastermind behind HLTS platforms, specializing in scalable EdTech architecture.</p>
+                      <h5>Joseph Amos</h5>
+                      <span class="team-role">Executive Member</span>
+                      <p class="team-bio">Contributes to HLTS education services and partnership work with schools and institutions.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Member: Chike -->
+            <div class="carousel-item">
+              <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-5">
+                  <div class="team-card-modern">
+                    <div class="team-img-wrapper">
+                      <img loading="lazy" src="images/chike.jpg" alt="Chike" class="team-img-modern">
+                    </div>
+                    <div class="team-info">
+                      <h5>Chike</h5>
+                      <span class="team-role">Executive Member</span>
+                      <p class="team-bio">Supports HLTS's work connecting education with practical technology.</p>
                     </div>
                   </div>
                 </div>
@@ -463,11 +475,11 @@
     <section class="portal-cta">
       <div class="container-custom">
         <div class="row align-items-center">
-          <div class="col-lg-8" data-aos="fade-right">
+          <div class="col-lg-8" data-aos="fade-up">
             <h2>Ready to Be Part of Our Journey?</h2>
             <p>Join thousands of students and professionals who have transformed their lives with HLTS</p>
           </div>
-          <div class="col-lg-4 text-lg-end" data-aos="fade-left">
+          <div class="col-lg-4 text-lg-end" data-aos="fade-up">
             <a href="registration-form.html" class="btn contact-btn btn-lg pulse">
               <i class="bi bi-person-plus"></i> Register Now
             </a>
@@ -510,18 +522,18 @@
           </div>
           <!-- Gallery Item: Supervisor -->
           <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
-            <img src="images/2025meeting/Supervisor.jpeg" alt="Gen Supervisor Joseph Amos" loading="lazy">
+            <img src="images/2025meeting/Supervisor.jpeg" alt="HLTS team member sharing operational updates" loading="lazy">
             <div class="gallery-overlay">
               <h5>Team Coordination</h5>
-              <p>Gen Supervisor Joseph Amos presenting operational updates</p>
+              <p>Team members sharing operational updates</p>
             </div>
           </div>
-          <!-- Gallery Item: Deputy Supervisor -->
+          <!-- Gallery Item: Team Collaboration -->
           <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-            <img src="images/2025meeting/DepSuper.jpg" alt="Deputy Supervisor" loading="lazy">
+            <img src="images/2025meeting/DepSuper.jpg" alt="HLTS team members collaborating" loading="lazy">
             <div class="gallery-overlay">
-              <h5>Deputy Supervisor</h5>
-              <p>Deputy Supervisor engaging with the team</p>
+              <h5>Team Collaboration</h5>
+              <p>Colleagues sharing ideas during a planning session</p>
             </div>
           </div>
           <!-- Gallery Item: HLTS Group -->
