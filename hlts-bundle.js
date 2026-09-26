@@ -775,7 +775,7 @@ function initializeCarouselPreview() {
     const slide = slides[index];
     if (!slide) return null;
     const caption = slide.querySelector('.carousel-caption');
-    const title = caption?.querySelector('h5')?.textContent.trim() || '';
+    const title = caption?.querySelector('h1, h2, h5')?.textContent.trim() || '';
     const description = caption?.querySelector('p')?.textContent.trim() || '';
     return { title, description };
   }

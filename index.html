@@ -103,57 +103,111 @@
       </div>
     </nav>
 
-    <section class="carousel-section mt-5 pt-4" style="background: url('images/bac.png') center center/cover no-repeat; min-height: 350px;">
-      <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+    <section class="carousel-section home-hero" aria-label="Featured HLTS solutions">
+      <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
         <div class="carousel-inner">
-          <!-- Single Slide with No Image, Only Caption -->
           <div class="carousel-item active">
-            <div class="carousel-caption">
-              <h5>Build the future of learning.</h5>
-              <p>HLTS helps schools, institutions, and emerging talent move forward with people, platforms, and practical technology.</p>
-              <a href="#ecosystem-explorer" class="btn btn-primary mt-3">Explore HLTS</a>
+            <div class="home-hero-slide container">
+              <div class="carousel-caption home-hero-copy">
+                <span class="eyebrow">Education, people and technology</span>
+                <h1>Better learning starts with better support.</h1>
+                <p>HLTS helps schools strengthen their teams, institutions improve how they work, and learners build practical skills for what comes next.</p>
+                <div class="home-hero-actions">
+                  <a href="#ecosystem-explorer" class="btn btn-primary">Explore HLTS</a>
+                  <a href="contact.html" class="btn btn-outline-light">Talk to our team</a>
+                </div>
+                <p class="home-hero-audience">For schools, institutions and emerging talent</p>
+              </div>
+              <figure class="home-hero-visual">
+                <img src="images/achildcoding.jpeg" alt="A young learner using a laptop to explore coding" fetchpriority="high">
+                <figcaption class="home-hero-caption">
+                  <span>Learning with purpose</span>
+                  <strong>Skills for a changing world</strong>
+                </figcaption>
+              </figure>
             </div>
           </div>
 
-          <!-- Slide 2 -->
-          <div class="carousel-item d-none">
-            
-            <div class="carousel-caption">
-              <h5>HLTS@School</h5>
-              <p>Empowering Schools (Pre-Tertiary) with tech driven methodologies.</p>
-              <a href="about.html#duties" class="btn btn-primary mt-3">Learn More</a>
-              <a href="school-form.html" class="btn btn-primary mt-3">Sign Up</a>
+          <div class="carousel-item">
+            <div class="home-hero-slide container">
+              <div class="carousel-caption home-hero-copy">
+                <span class="eyebrow">HLTS@School</span>
+                <h2>Give your school the support to move forward.</h2>
+                <p>Connect your school with education professionals, practical technology and operational support designed around its needs.</p>
+                <div class="home-hero-actions">
+                  <a href="services.html" class="btn btn-primary">Explore school solutions</a>
+                  <a href="school-form.html" class="btn btn-outline-light">Work with HLTS</a>
+                </div>
+                <p class="home-hero-audience">People and systems, working together</p>
+              </div>
+              <figure class="home-hero-visual">
+                <img src="images/2025meeting/team.jpg" alt="HLTS team members planning education services" loading="lazy">
+                <figcaption class="home-hero-caption">
+                  <span>Support built around schools</span>
+                  <strong>Stronger teams. Better systems.</strong>
+                </figcaption>
+              </figure>
             </div>
           </div>
 
-          <!-- Slide 3 -->
-          <div class="carousel-item d-none">
-            
-            <div class="carousel-caption">
-              <h5>HLTS Institution</h5>
-              <p>Transforming institutions with digital solutions.</p>
-              <a href="about.html#tech-institution" class="btn btn-primary mt-3">Learn More</a>
-              <a href="registration-form.html" class="btn btn-primary mt-3">Register Now</a>
+          <div class="carousel-item">
+            <div class="home-hero-slide container">
+              <div class="carousel-caption home-hero-copy">
+                <span class="eyebrow">HLTS Online Institution</span>
+                <h2>Turn curiosity into practical digital skills.</h2>
+                <p>Explore guided learning in technology and creative fields, with courses that help learners develop skills they can put to work.</p>
+                <div class="home-hero-actions">
+                  <a href="online-institution.html" class="btn btn-primary">Discover the institution</a>
+                  <a href="course.html" class="btn btn-outline-light">Browse courses</a>
+                </div>
+                <p class="home-hero-audience">Learn, practice and keep progressing</p>
+              </div>
+              <figure class="home-hero-visual">
+                <img src="images/cbt.jpg" alt="Digital tools supporting technology learning and assessment" loading="lazy">
+                <figcaption class="home-hero-caption">
+                  <span>Practical learning</span>
+                  <strong>Build skills by doing</strong>
+                </figcaption>
+              </figure>
             </div>
           </div>
 
-          <!-- Slide 4 -->
-          <div class="carousel-item d-none">
-            <div class="carousel-caption">
-              <h5>Explore More</h5>
-              <p>Discover other services tailored to your needs.</p>
-              <a href="services.html" class="btn btn-primary mt-3">Our Services</a>
+          <div class="carousel-item">
+            <div class="home-hero-slide container">
+              <div class="carousel-caption home-hero-copy">
+                <span class="eyebrow">TechMind Africa</span>
+                <h2>Make room for more people to build.</h2>
+                <p>HLTS supports a community where people can learn openly, share ideas and turn their interest in technology into real projects.</p>
+                <div class="home-hero-actions">
+                  <a href="community.html" class="btn btn-primary">Meet the community</a>
+                  <a href="registration-form.html" class="btn btn-outline-light">Start learning</a>
+                </div>
+                <p class="home-hero-audience">Local insight. Shared ambition.</p>
+              </div>
+              <figure class="home-hero-visual">
+                <img src="images/2025meeting/hlts.jpg" alt="HLTS team members working together" loading="lazy">
+                <figcaption class="home-hero-caption">
+                  <span>Technology with purpose</span>
+                  <strong>Learn together. Build together.</strong>
+                </figcaption>
+              </figure>
             </div>
           </div>
         </div>
 
-        <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon"></span>
+        <div class="carousel-indicators home-hero-indicators">
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Show education and technology"></button>
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Show school solutions"></button>
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Show online learning"></button>
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="3" aria-label="Show TechMind Africa"></button>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev" aria-label="Previous featured solution">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <div class="carousel-preview carousel-preview-prev"></div>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon"></span>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next" aria-label="Next featured solution">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <div class="carousel-preview carousel-preview-next"></div>
         </button>
       </div>
