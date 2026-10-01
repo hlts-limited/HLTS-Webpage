@@ -449,7 +449,10 @@ const HLTSSecurity = {
     const applyDOMSecurity = () => {
       const forms = document.querySelectorAll('form');
       forms.forEach(form => {
-        this.addCSRFToForm(form);
+        // Only our own server checks the token; don't send it to third parties like Formspree.
+        if (new URL(form.action, window.location.href).origin === window.location.origin) {
+          this.addCSRFToForm(form);
+        }
         this.secureForm(form);
       });
 
@@ -492,13 +495,8 @@ const HLTSSecurity = {
       input.setAttribute('autocomplete', 'current-password');
     });
 
-    // Add input sanitization on blur
-    const textInputs = form.querySelectorAll('input[type="text"], input[type="email"], textarea');
-    textInputs.forEach(input => {
-      input.addEventListener('blur', () => {
-        input.value = this.sanitizeInput(input.value);
-      });
-    });
+    // Input is escaped where it is displayed (server and DOM), not in the field itself.
+    // Escaping on blur corrupted values such as "A & B" each time the field lost focus.
   },
 
   /**
@@ -573,6 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeGallery();
   initializeLazyLoading();
   initializeFormValidation();
+  initializeNewsletter();
   initializeCarouselPreview();
   initializeEcosystemExplorer();
   initializeForUsersDetailModal();
@@ -633,51 +632,30 @@ function initializePublicNavigation() {
         </ul>
       </div>
     </div>`;
+  // Hover opens dropdowns on desktop only. The handlers stay bound and check the
+  // breakpoint each time, so resizing between mobile and desktop keeps working.
   const hoverNavigation = window.matchMedia('(min-width: 992px)');
   const dropdownItems = navbar.querySelectorAll('.nav-item.dropdown');
 
-  const bindDropdownHover = () => {
-    dropdownItems.forEach((item) => {
-      const toggle = item.querySelector('[data-bs-toggle="dropdown"]');
-      if (!toggle || item.dataset.hoverBound === 'true') return;
+  dropdownItems.forEach((item) => {
+    const toggle = item.querySelector('[data-bs-toggle="dropdown"]');
+    if (!toggle || typeof bootstrap === 'undefined') return;
 
-      const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
-      let closeTimer;
+    const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
+    let closeTimer;
 
-      const openDropdown = () => {
-        window.clearTimeout(closeTimer);
-        dropdown.show();
-      };
-
-      const closeDropdown = () => {
-        window.clearTimeout(closeTimer);
-        closeTimer = window.setTimeout(() => dropdown.hide(), 120);
-      };
-
-      item.addEventListener('mouseenter', openDropdown);
-      item.addEventListener('mouseleave', closeDropdown);
-      item.dataset.hoverBound = 'true';
+    item.addEventListener('mouseenter', () => {
+      if (!hoverNavigation.matches) return;
+      window.clearTimeout(closeTimer);
+      dropdown.show();
     });
-  };
 
-  const unbindDropdownHover = () => {
-    dropdownItems.forEach((item) => {
-      if (item.dataset.hoverBound !== 'true') return;
-      const clone = item.cloneNode(true);
-      item.replaceWith(clone);
+    item.addEventListener('mouseleave', () => {
+      if (!hoverNavigation.matches) return;
+      window.clearTimeout(closeTimer);
+      closeTimer = window.setTimeout(() => dropdown.hide(), 120);
     });
-  };
-
-  const updateDropdownHover = () => {
-    if (hoverNavigation.matches) {
-      bindDropdownHover();
-    } else {
-      unbindDropdownHover();
-    }
-  };
-
-  updateDropdownHover();
-  hoverNavigation.addEventListener('change', updateDropdownHover);
+  });
 }
 
 function initializeEcosystemExplorer() {
@@ -706,7 +684,7 @@ function initializeEcosystemExplorer() {
       heading: 'Turn ambition into practical skills.',
       description: 'Learn with structured courses, expert guidance, and a digital environment built for the next generation of African talent.',
       link: 'Explore the Institution',
-      href: 'registration-form.html',
+      href: 'online-institution.html',
       icon: 'bi-laptop-fill',
       outcomes: ['Career-ready courses', 'Expert mentorship', 'Flexible digital learning']
     },
@@ -715,7 +693,7 @@ function initializeEcosystemExplorer() {
       heading: 'Give technology a bigger purpose.',
       description: 'Join a community turning curiosity into capability through access, collaboration, and real opportunities to build.',
       link: 'Meet Our Community',
-      href: 'about.html',
+      href: 'community.html',
       icon: 'bi-globe2',
       outcomes: ['Peer learning network', 'Community-led projects', 'Access to tech opportunities']
     }
@@ -1050,7 +1028,60 @@ function initializeAOS() {
       offset: 100,
       delay: 50
     });
+    return;
   }
+
+  // aos.css hides [data-aos] elements until the script runs. If the script
+  // failed to load, drop the attributes so the content is still visible.
+  document.querySelectorAll('[data-aos]').forEach(el => el.removeAttribute('data-aos'));
+}
+
+// ============================================
+// Newsletter Signup (Formspree)
+// ============================================
+function initializeNewsletter() {
+  document.querySelectorAll('form.newsletter-form').forEach(form => {
+    let status = form.querySelector('.newsletter-status');
+    if (!status) {
+      status = document.createElement('div');
+      status.className = 'newsletter-status small mt-2';
+      status.setAttribute('role', 'status');
+      status.setAttribute('aria-live', 'polite');
+      form.appendChild(status);
+    }
+
+    const showStatus = (message, ok) => {
+      status.textContent = message;
+      status.classList.toggle('text-success', ok);
+      status.classList.toggle('text-warning', !ok);
+    };
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const button = form.querySelector('button[type="submit"]');
+      if (button) button.disabled = true;
+      showStatus('Subscribing...', true);
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(response => {
+        if (!response.ok) throw new Error('Request failed');
+        form.reset();
+        showStatus('Thank you for subscribing!', true);
+      }).catch(() => {
+        showStatus('We could not subscribe you just now. Please try again, or email info@hltsltd.com.', false);
+      }).finally(() => {
+        if (button) button.disabled = false;
+      });
+    });
+  });
 }
 
 // ============================================
