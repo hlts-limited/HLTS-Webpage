@@ -1,87 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="description" content="HLTS Limited is a Lagos-based EdTech company empowering schools and institutions across Africa with digital learning platforms, student portals, and administrative tools.">
-
-    <meta property="og:title" content="HLTS Limited - Your Partner in Education">
-
-    <meta property="og:description" content="Empowering African schools with technology-driven education solutions.">
-
-    <meta property="og:image" content="https://hltsltd.com/images/logoh.png">
-
-    <meta property="og:url" content="https://hltsltd.com">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="HLTS Limited Tech Courses - Front-end, Back-end, Data Analysis, Graphics Design and more.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
-    
-    <link rel="stylesheet" href="hlts-bundle.css">
-    
-    <title>Tech Courses - HLTS Limited</title>
-    <link rel="icon" href="./images/logoh.png" type="image/png" />
-  </head>
-
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container-fluid">
-        <!-- Logo on the left -->
-        <a class="navbar-brand" href="index.html">
-          <img loading="lazy" src="images/logoh.png" alt="Company Logo" height="70">
-        </a>
-
-        <!-- Toggle button for mobile -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navigation links on the right -->
-        <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item me-3">
-              <a class="nav-link" href="index.html">
-                <i class="bi bi-house"></i> HOME
-              </a>
-            </li>
-
-            <li class="nav-item dropdown me-3">
-              <a class="nav-link" href="about.html" id="aboutDropdown" role="button" aria-expanded="false">
-                <i class="bi bi-info-circle"></i> ABOUT US
-              </a>
-            </li>
-
-            <li class="nav-item dropdown me-3">
-              <a class="nav-link" href="services.html" id="servicesDropdown" role="button" aria-expanded="false">
-                <i class="bi bi-briefcase"></i> SERVICES
-              </a>
-            </li>
-
-            <li class="nav-item me-3">
-              <a class="nav-link" href="portal.html">
-                <i class="bi bi-person-badge"></i> STUDENT PORTAL
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="btn contact-btn" href="contact.html">
-                <i class="bi bi-envelope"></i> CONTACT US
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+<?php
+$pageTitle = 'Tech Courses - HLTS Limited';
+$pageDescription = 'HLTS Limited Tech Courses - Front-end, Back-end, Data Analysis, Graphics Design and more.';
+include __DIR__ . '/partials/head.php';
+include __DIR__ . '/partials/nav.php';
+?>
 
     <main class="courses-page">
       <section class="courses-hero">
@@ -184,7 +106,4 @@
       <section class="courses-cta"><div class="container"><div><span class="eyebrow">Ready when you are</span><h2>Turn interest into your next skill.</h2></div><a href="registration-form.html" class="btn btn-primary">Register for a course <i class="bi bi-arrow-up-right"></i></a></div></section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script src="hlts-bundle.js" defer></script>
-  </body>
-</html>
+<?php include __DIR__ . '/partials/footer.php'; ?>

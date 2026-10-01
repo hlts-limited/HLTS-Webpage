@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Learn about HLTS Online Institution, our practical technology training and how to register.">
-  <meta name="author" content="HLTS Limited">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="hlts-bundle.css">
-  <title>HLTS Online Institution</title>
-  <link rel="icon" href="./images/logoh.png" type="image/png">
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark"></nav>
+<?php
+$pageTitle = 'HLTS Online Institution';
+$pageDescription = 'Learn about HLTS Online Institution, our practical technology training and how to register.';
+include __DIR__ . '/partials/head.php';
+include __DIR__ . '/partials/nav.php';
+?>
 
   <main class="institution-page">
     <section class="institution-hero">
@@ -76,18 +64,4 @@
     </section>
   </main>
 
-  <footer class="footer bg-dark text-light pt-5 pb-3">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4"><h5 class="text-uppercase">HLTS Limited</h5><p>Education expertise with a software mindset.</p><p><i class="bi bi-geo-alt"></i> Lagos, Nigeria</p><p><a href="mailto:info@hltsltd.com" class="text-light text-decoration-none">info@hltsltd.com</a></p></div>
-        <div class="col-md-4 mb-4"><h5 class="text-uppercase">Learn</h5><ul class="list-unstyled"><li><a href="online-institution.html" class="text-light text-decoration-none">Online Institution</a></li><li><a href="course.html" class="text-light text-decoration-none">Courses</a></li><li><a href="registration-form.html" class="text-light text-decoration-none">Register</a></li></ul></div>
-        <div class="col-md-4 mb-4"><h5 class="text-uppercase">Next step</h5><p>Ready to begin? Explore the courses or start your registration.</p><a href="registration-form.html" class="btn btn-primary">Register now</a></div>
-      </div>
-      <hr class="border-secondary"><div class="text-center mt-3"><small>&copy; 2026 HLTS Limited Nigeria. All rights reserved.</small></div>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="hlts-bundle.js" defer></script>
-</body>
-</html>
+<?php include __DIR__ . '/partials/footer.php'; ?>

@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="TechMind Africa is the HLTS community for learners, builders, educators, and technology enthusiasts creating a more capable digital Africa.">
-  <meta name="author" content="HLTS Limited">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="hlts-bundle.css">
-  <title>TechMind Africa | HLTS Limited</title>
-  <link rel="icon" href="./images/logoh.png" type="image/png">
-</head>
-<body class="community-page">
-  <nav class="navbar navbar-expand-lg navbar-dark"></nav>
+<?php
+$pageTitle = 'TechMind Africa | HLTS Limited';
+$pageDescription = 'TechMind Africa is the HLTS community for learners, builders, educators, and technology enthusiasts creating a more capable digital Africa.';
+$bodyClass = 'community-page';
+include __DIR__ . '/partials/head.php';
+include __DIR__ . '/partials/nav.php';
+?>
 
   <main>
     <section class="community-hero">
@@ -86,10 +75,4 @@
     <section class="community-cta"><div class="container"><span class="eyebrow">Your place in the community</span><h2>Bring your questions, ideas, and first draft.</h2><p>Start learning with HLTS and find your way into the TechMind Africa community.</p><a href="registration-form.html" class="btn btn-primary">Start your journey <i class="bi bi-arrow-up-right"></i></a></div></section>
   </main>
 
-  <footer class="footer bg-dark text-light pt-5 pb-3">
-    <div class="container"><div class="row"><div class="col-md-4 mb-4"><h5 class="text-uppercase">HLTS Limited</h5><p>Education expertise with a software mindset.</p><p><i class="bi bi-geo-alt"></i> Lagos, Nigeria</p><p><a href="mailto:info@hltsltd.com" class="text-light text-decoration-none">info@hltsltd.com</a></p></div><div class="col-md-4 mb-4"><h5 class="text-uppercase">Community</h5><ul class="list-unstyled"><li><a href="community.html" class="text-light text-decoration-none">TechMind Africa</a></li><li><a href="online-institution.html" class="text-light text-decoration-none">Online Institution</a></li><li><a href="course.html" class="text-light text-decoration-none">Courses</a></li></ul></div><div class="col-md-4 mb-4"><h5 class="text-uppercase">Join the movement</h5><p>Learn, build, and grow with people creating the future of Africa.</p><a href="registration-form.html" class="btn btn-primary">Join the community</a></div></div><hr class="border-secondary"><div class="text-center mt-3"><small>&copy; 2026 HLTS Limited Nigeria. All rights reserved.</small></div></div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="hlts-bundle.js" defer></script>
-</body>
-</html>
+<?php include __DIR__ . '/partials/footer.php'; ?>

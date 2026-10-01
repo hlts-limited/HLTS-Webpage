@@ -15,7 +15,20 @@
     # Remove www (or add it if you prefer)
     RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
     RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+    # Shared page parts are only included by PHP, never served directly
+    RewriteRule ^partials/ - [F,L]
+
+    # Pages are PHP files but keep their public .html addresses.
+    # /about.html quietly serves about.php, so existing links and search results still work.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} ^(.+)\.html$
+    RewriteCond %1.php -f
+    RewriteRule ^(.+)\.html$ $1.php [L]
 </IfModule>
+
+# Home page
+DirectoryIndex index.php index.html
 
 # ============================================
 # SECURITY HEADERS
@@ -78,6 +91,12 @@ Options -Indexes
         php_value error_log /var/log/php_errors.log
     </IfModule>
 </FilesMatch>
+
+# Local preview router; only used with `php -S`
+<Files dev-router.php>
+    Order allow,deny
+    Deny from all
+</Files>
 
 # Block demo dashboards from the public until they have a real login.
 # They store data only in the visitor's browser and have no authentication.

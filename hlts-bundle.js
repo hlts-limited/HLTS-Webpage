@@ -582,58 +582,9 @@ function initializePublicNavigation() {
   const navbar = document.querySelector('nav.navbar');
   if (!navbar || document.body.classList.contains('dashboard-body') || document.body.classList.contains('admin-body')) return;
 
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  const isCurrent = (pages) => pages.includes(currentPage) ? ' active' : '';
-
-  navbar.innerHTML = `
-    <div class="container-fluid public-nav-inner">
-      <a class="navbar-brand" href="index.html" aria-label="HLTS Limited home">
-        <img loading="lazy" src="images/logoh.png" alt="HLTS Logo" height="70">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Open navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
-        <ul class="navbar-nav mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link${isCurrent(['index.html'])}" href="index.html"><i class="bi bi-house" aria-hidden="true"></i> Home</a></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle${isCurrent(['online-institution.html', 'course.html', 'registration-form.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-mortarboard" aria-hidden="true"></i> Learn</a>
-            <ul class="dropdown-menu public-dropdown">
-              <li><a class="dropdown-item" href="online-institution.html"><i class="bi bi-laptop"></i><span><strong>Online Institution</strong><small>Learn how HLTS Online Institution works</small></span></a></li>
-              <li><a class="dropdown-item" href="course.html"><i class="bi bi-journal-text"></i><span><strong>Courses</strong><small>Explore available programmes</small></span></a></li>
-              <li><a class="dropdown-item" href="registration-form.html"><i class="bi bi-person-plus"></i><span><strong>Register</strong><small>Start your learning journey</small></span></a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle${isCurrent(['school-form.html', 'services.html', 'cbt.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-grid" aria-hidden="true"></i> Solutions</a>
-            <ul class="dropdown-menu public-dropdown">
-              <li><a class="dropdown-item" href="school-form.html"><i class="bi bi-building"></i><span><strong>Academics</strong><small>Staff deployment for schools</small></span></a></li>
-              <li><a class="dropdown-item" href="services.html"><i class="bi bi-diagram-3"></i><span><strong>School Operations</strong><small>Systems, support, and workflows</small></span></a></li>
-              <li><a class="dropdown-item" href="cbt.html"><i class="bi bi-ui-checks-grid"></i><span><strong>CBT & Assessments</strong><small>Testing and result management</small></span></a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle${isCurrent(['community.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-people" aria-hidden="true"></i> Community</a>
-            <ul class="dropdown-menu public-dropdown">
-              <li><a class="dropdown-item" href="community.html"><i class="bi bi-globe2"></i><span><strong>TechMind Africa</strong><small>Connect, learn, and build together</small></span></a></li>
-              <li><a class="dropdown-item" href="community.html#vision"><i class="bi bi-stars"></i><span><strong>Our Vision</strong><small>See what the community is building toward</small></span></a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle${isCurrent(['about.html', 'faq.html', 'terms.html', 'contact.html'])}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-info-circle" aria-hidden="true"></i> Company</a>
-            <ul class="dropdown-menu public-dropdown">
-              <li><a class="dropdown-item" href="about.html"><i class="bi bi-building-check"></i><span><strong>About HLTS</strong><small>Our mission and people</small></span></a></li>
-              <li><a class="dropdown-item" href="faq.html"><i class="bi bi-question-circle"></i><span><strong>FAQs</strong><small>Answers to common questions</small></span></a></li>
-              <li><a class="dropdown-item" href="contact.html"><i class="bi bi-envelope"></i><span><strong>Contact</strong><small>Let us plan your next step</small></span></a></li>
-            </ul>
-          </li>
-          <li class="nav-item nav-portal-item"><a class="nav-link${isCurrent(['portal.html'])}" href="portal.html"><i class="bi bi-person-badge" aria-hidden="true"></i> Student Portal</a></li>
-          <li class="nav-item"><a class="btn contact-btn" href="contact.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i> Talk to HLTS</a></li>
-        </ul>
-      </div>
-    </div>`;
-  // Hover opens dropdowns on desktop only. The handlers stay bound and check the
-  // breakpoint each time, so resizing between mobile and desktop keeps working.
+  // The menu markup comes from partials/nav.php; this only adds desktop hover.
+  // The handlers stay bound and check the breakpoint each time, so resizing
+  // between mobile and desktop keeps working.
   const hoverNavigation = window.matchMedia('(min-width: 992px)');
   const dropdownItems = navbar.querySelectorAll('.nav-item.dropdown');
 
