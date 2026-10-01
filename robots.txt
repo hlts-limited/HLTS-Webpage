@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /student.php
+Disallow: /submit.php
+Disallow: /payment-callback.php
+
+Sitemap: https://hltsltd.com/sitemap.xml

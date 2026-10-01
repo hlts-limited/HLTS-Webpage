@@ -11,15 +11,20 @@ error_reporting(0);
 ini_set('display_errors', '0');
 ini_set('log_errors', '1');
 
-function sanitizeInput($data) {
-    if (is_array($data)) {
-        return array_map('sanitizeInput', $data);
+// The notification email is plain text, so values are cleaned rather than
+// HTML-escaped (escaping here showed up as &amp; and &#039; in the email).
+// Anything echoed back into HTML goes through htmlspecialchars in renderResponse.
+function sanitizeInput($data, bool $multiline = false): string {
+    if (!is_string($data)) {
+        return '';
     }
 
-    $data = trim((string) $data);
-    $data = stripslashes($data);
+    $data = trim($data);
+    // Drop control characters; keep newlines and tabs only in multi-line fields.
+    $pattern = $multiline ? '/[^\P{C}\n\t]/u' : '/\p{C}/u';
+    $cleaned = preg_replace($pattern, '', $data);
 
-    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    return $cleaned === null ? '' : $cleaned;
 }
 
 function validateEmail($email) {
@@ -39,9 +44,11 @@ function logSecurityEvent($event, $details = '') {
     @file_put_contents($logFile, $message, FILE_APPEND);
 }
 
-function renderResponse($title, $message, $success) {
+function renderResponse($title, $message, $success, $backLink = 'registration-form.html', $backLabel = 'Return to Registration') {
     $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
     $safeMessage = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+    $safeBackLink = htmlspecialchars($backLink, ENT_QUOTES, 'UTF-8');
+    $safeBackLabel = htmlspecialchars($backLabel, ENT_QUOTES, 'UTF-8');
     $accent = $success ? '#10B981' : '#EF4444';
 
     echo '<!DOCTYPE html>';
@@ -66,7 +73,7 @@ function renderResponse($title, $message, $success) {
     echo '<h1>' . $safeTitle . '</h1>';
     echo '<p>' . $safeMessage . '</p>';
     echo '<div class="actions">';
-    echo '<a class="btn primary" href="registration-form.html">Return to Registration</a>';
+    echo '<a class="btn primary" href="' . $safeBackLink . '">' . $safeBackLabel . '</a>';
     echo '<a class="btn secondary" href="index.html">Go to Homepage</a>';
     echo '</div>';
     echo '</main>';
@@ -74,7 +81,7 @@ function renderResponse($title, $message, $success) {
     echo '</html>';
 }
 
-function checkRateLimit() {
+function checkRateLimit(array $form) {
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     $rateFile = sys_get_temp_dir() . '/hlts_rate_' . md5($ip);
     $attempts = [];
@@ -90,7 +97,7 @@ function checkRateLimit() {
         if (count($attempts) >= 5) {
             logSecurityEvent('RATE_LIMIT_EXCEEDED', 'IP: ' . $ip);
             http_response_code(429);
-            renderResponse('Too Many Requests', 'Too many submissions were made from this browser. Please try again later.', false);
+            renderResponse('Too Many Requests', 'Too many submissions were made from this browser. Please try again later.', false, $form['back'], $form['backLabel']);
             exit;
         }
     }
@@ -99,8 +106,8 @@ function checkRateLimit() {
     @file_put_contents($rateFile, json_encode($attempts));
 }
 
-function validateCSRF() {
-    $postedToken = $_POST['csrf_token'] ?? '';
+function validateCSRF(array $form) {
+    $postedToken = is_string($_POST['csrf_token'] ?? null) ? $_POST['csrf_token'] : '';
     $cookieToken = $_COOKIE['hlts_csrf_token'] ?? '';
     $sessionToken = $_SESSION['csrf_token'] ?? '';
     $expectedToken = $sessionToken !== '' ? $sessionToken : $cookieToken;
@@ -108,7 +115,7 @@ function validateCSRF() {
     if ($postedToken === '' || $expectedToken === '' || !hash_equals($expectedToken, $postedToken)) {
         logSecurityEvent('CSRF_VALIDATION_FAILED', 'Token mismatch or missing token');
         http_response_code(403);
-        renderResponse('Security Check Failed', 'The form security token was missing or invalid. Please refresh the registration page and try again.', false);
+        renderResponse('Security Check Failed', 'The form security token was missing or invalid. Please refresh the registration page and try again.', false, $form['back'], $form['backLabel']);
         exit;
     }
 }
@@ -119,38 +126,68 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-checkRateLimit();
-validateCSRF();
+// Each page that posts here sends a form_type so the email, the allowed
+// options and the "go back" link match the form the visitor actually used.
+$forms = [
+    'student' => [
+        'subject' => 'New Student Registration from HLTS Website',
+        'nameLabel' => 'Full name',
+        'optionLabel' => 'Program',
+        'back' => 'registration-form.html',
+        'backLabel' => 'Return to Registration',
+        'thanks' => 'Thank you for registering. Our team will contact you about your chosen program shortly.',
+        'options' => [
+            'frontend' => 'Front-end Development',
+            'backend' => 'Back-end Development',
+            'fullstack' => 'Full-Stack Development',
+            'data-analysis' => 'Data Analysis',
+            'graphic-design' => 'Graphic Design',
+            'video-editing' => 'Video Editing',
+            'desktop-publishing' => 'Desktop Publishing',
+            'visual-programming' => 'Visual Based Programming',
+        ],
+    ],
+    'school' => [
+        'subject' => 'New School Registration from HLTS Website',
+        'nameLabel' => 'School name',
+        'optionLabel' => 'Service',
+        'back' => 'school-form.html',
+        'backLabel' => 'Return to School Registration',
+        'thanks' => 'Thank you for registering your school. Our team will contact you to discuss the service you selected.',
+        'options' => [
+            'ict-facilitator' => 'ICT Facilitator Management',
+            'cbt-management' => 'CBT Exam Management',
+            'result-management' => 'Result Management',
+            'cloud' => 'Cloud Storage Management',
+            'lab-management' => 'Lab Management',
+            'curriculum' => 'Curriculum Development',
+            'web' => 'Web Development',
+            'graphic-design' => 'Graphic Design',
+            'video-editing' => 'Video Editing',
+            'desktop-publishing' => 'Desktop Publishing',
+            'result-setup' => 'Result Integration/Setup',
+            'lab-setup' => 'Lab Setup',
+            'cbt-setup' => 'CBT Exam Setup',
+        ],
+    ],
+];
+
+$formType = sanitizeInput($_POST['form_type'] ?? 'student');
+$form = $forms[$formType] ?? $forms['student'];
+
+checkRateLimit($form);
+validateCSRF($form);
 
 $name = sanitizeInput($_POST['fullName'] ?? '');
-$email = trim((string) ($_POST['email'] ?? ''));
+$email = sanitizeInput($_POST['email'] ?? '');
 $phone = sanitizeInput($_POST['phone'] ?? '');
 $program = sanitizeInput($_POST['program'] ?? '');
-$message = sanitizeInput($_POST['message'] ?? '');
-
-$programLabels = [
-    'frontend' => 'Front-end Development',
-    'backend' => 'Back-end Development',
-    'fullstack' => 'Full-Stack Development',
-    'data-analysis' => 'Data Analysis',
-    'graphic-design' => 'Graphic Design',
-    'video-editing' => 'Video Editing',
-    'desktop-publishing' => 'Desktop Publishing',
-    'visual-programming' => 'Visual Based Programming',
-    'cloud' => 'Cloud Storage Management',
-    'other' => 'Lab Management',
-    'dev' => 'Curriculum Development',
-    'web' => 'Web Development',
-    'result' => 'Result Integration/Setup',
-    'lab' => 'Lab Setup',
-    'cbt' => 'CBT Exam Setup',
-    'pay' => 'School Payment System Integration',
-];
+$message = sanitizeInput($_POST['message'] ?? '', true);
 
 $errors = [];
 
 if ($name === '') {
-    $errors[] = 'Full name is required.';
+    $errors[] = $form['nameLabel'] . ' is required.';
 }
 
 if (!validateEmail($email)) {
@@ -161,8 +198,8 @@ if (!validatePhone($phone)) {
     $errors[] = 'Please enter a valid Nigerian phone number.';
 }
 
-if (!array_key_exists($program, $programLabels)) {
-    $errors[] = 'Please select a valid program.';
+if (!array_key_exists($program, $form['options'])) {
+    $errors[] = 'Please select a valid ' . strtolower($form['optionLabel']) . '.';
 }
 
 if (!isset($_POST['terms'])) {
@@ -171,26 +208,25 @@ if (!isset($_POST['terms'])) {
 
 if ($errors !== []) {
     http_response_code(400);
-    renderResponse('Check the Form', implode(' ', $errors), false);
+    renderResponse('Check the Form', implode(' ', $errors), false, $form['back'], $form['backLabel']);
     exit;
 }
 
 $to = 'md@hltsltd.com';
-$subject = 'New Registration from HLTS Website';
-$body = "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\nProgram: {$programLabels[$program]}\nMessage:\n{$message}";
+$body = "{$form['nameLabel']}: {$name}\nEmail: {$email}\nPhone: {$phone}\n{$form['optionLabel']}: {$form['options'][$program]}\nMessage:\n{$message}";
 $headers = [
     'From: no-reply@hltsltd.com',
     'Reply-To: ' . $email,
     'Content-Type: text/plain; charset=UTF-8',
 ];
 
-$mailSent = mail($to, $subject, $body, implode("\r\n", $headers));
+$mailSent = mail($to, $form['subject'], $body, implode("\r\n", $headers));
 
 if ($mailSent) {
-    renderResponse('Registration Sent', 'Thank you for registering. Your submission has been received successfully.', true);
+    renderResponse('Registration Sent', $form['thanks'], true, $form['back'], $form['backLabel']);
     exit;
 }
 
-logSecurityEvent('MAIL_SEND_FAILED', 'Failed to send registration email');
+logSecurityEvent('MAIL_SEND_FAILED', 'Failed to send ' . $formType . ' registration email');
 http_response_code(500);
-renderResponse('Submission Failed', 'Your form was received, but the email notification could not be sent. Please try again later.', false);
+renderResponse('Submission Failed', 'Your form was received, but the email notification could not be sent. Please try again later.', false, $form['back'], $form['backLabel']);

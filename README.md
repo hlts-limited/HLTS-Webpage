@@ -1,162 +1,101 @@
 # HLTS Limited Website
 
-## Overview
+The public website, admin area and student portal for HLTS Limited: EdTech for primary and secondary schools, school operations, the HLTS Online Institution, the TechMind Africa community and HLTS digital solutions.
 
-This repository contains the HLTS Limited public website and supporting portal, dashboard, registration, and security pages. The project has been updated into a more complete education and service platform, with shared styling, bundled assets, and documentation for future maintenance.
+## What's here
 
-## Current Project State
+| Area | Pages |
+|---|---|
+| Home | `index.php`: animated "connected learning" hero, audience chooser, ecosystem tabs, live CBT demo, testimonials |
+| For schools | `services.php`, `school-management.php`, `cbt.php`, `staff-deployment.php`, `school-form.php`, `book-demo.php`, `it-support.php`, `results.php` (parent result checker) |
+| Online Institution | `online-institution.php`, `course.php`, `course-detail.php?c=…`, `registration-form.php` (with optional Paystack payment), `portal.php` + `student.php` (student portal), `verify-certificate.php` |
+| Digital solutions | `digital-solutions.php`, `portfolio.php`, `request-quote.php` |
+| TechMind Africa | `community.php`, `events.php`, `join-techmind.php` |
+| Company | `about.php`, `blog.php` + `post.php`, `careers.php`, `faq.php`, `contact.php`, `terms.php` |
+| Admin | `admin/`: leads, students, payments, results, certificates, articles, events, portfolio, jobs, course materials, staff accounts |
+| Endpoints | `submit.php` (every public form), `payment-callback.php`, `paystack-webhook.php`, `sitemap.php` (served as `/sitemap.xml`), `error.php` |
 
-The site now includes:
+Public pages keep their `.html` addresses (`/about.html` serves `about.php`), so old links still work.
 
-- A modern public homepage in [index.html](index.html)
-- Company information pages in [about.html](about.html), [services.html](services.html), [course.html](course.html), and [contact.html](contact.html)
-- Education-specific pages in [cbt.html](cbt.html), [registration-form.html](registration-form.html), and [school-form.html](school-form.html)
-- Student and admin experiences in [portal.html](portal.html), [portal_interface.html](portal_interface.html), and [admin_dashboard.html](admin_dashboard.html)
-- Security monitoring in [security-dashboard.html](security-dashboard.html)
-- Server-side form handling in [send-registration.php](send-registration.php)
-- Shared front-end assets in [hlts-bundle.css](hlts-bundle.css) and [hlts-bundle.js](hlts-bundle.js)
-- Supporting documentation in [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md), [FEATURE_SUMMARY.md](FEATURE_SUMMARY.md), [SECURITY_GUIDE.md](SECURITY_GUIDE.md), [SECURITY_QUICK_REFERENCE.md](SECURITY_QUICK_REFERENCE.md), [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md), and [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md)
+## How it is built
 
-## Change Log For Future Reference
+- **PHP 8.1+**, no framework and no Composer. Every entry point starts with `require __DIR__ . '/lib/app.php';`.
+- **`lib/`** holds the shared code:
+  - `config.php`: settings, with local overrides from `config/config.local.php`
+  - `db.php`: PDO for SQLite (local) or MySQL (live). Tables are created automatically on first connection.
+  - `content.php`: courses, fees, school modules, packages, team, testimonials, FAQs and the menu. **Edit content here.**
+  - `forms.php`: every public form defined once (fields, validation, email, what is saved)
+  - `ui.php`: page layout and reusable components
+  - `csrf.php`, `auth.php`, `ratelimit.php`, `mailer.php`, `paystack.php`, `results.php`
+- **`partials/`**: shared `<head>`, header and menu, footer
+- **`css/tokens.css`**: every colour, size, shadow and timing. All colours come from the HLTS logo (night navy, infinity indigo, violet, magenta, lavender, white). Never hard-code a colour elsewhere.
+- **`css/ui/`**: `base`, `components`, `forms`, `sections`, `pages`, `motion`, `admin`
+- **`js/`**: `boot.js` (runs first), `app.js` (menus, forms, search), `motion.js` (animations), `admin.js`
+- **Bootstrap 5.3** for grid and accessible components; **Bootstrap Icons** for icons.
 
-This section records the major changes already made to the project so future updates can stay consistent with the current structure.
+### Motion rules
 
-### Website Redesign
+Animations only move and fade things (`transform`, `opacity`). Small feedback takes 150–250 ms and content reveals take 400–800 ms. There is one standout scene per page: the network hero, the CBT demo, the result sheet, typing code, the device frames or the scroll path. Everything stops for visitors who have "reduce motion" switched on. Content is never hidden if scripts fail to load.
 
-- Refreshed the public site with a more modern layout and consistent branding
-- Added a shared design system using CSS variables, spacing consistency, shadows, and responsive layout rules
-- Improved navigation, section spacing, and visual hierarchy across the main pages
-- Added performance-oriented asset loading patterns such as preconnects and optimized external dependencies
-
-### Homepage And Public Pages
-
-- Updated the homepage experience in [index.html](index.html) to use a more polished landing-page layout
-- Added or refined the supporting public pages: [about.html](about.html), [services.html](services.html), [course.html](course.html), and [contact.html](contact.html)
-- Added the CBT offering page in [cbt.html](cbt.html) to present exam platform services
-- Added reusable footer and navigation patterns across pages for a consistent user experience
-
-### Portal And Dashboard Work
-
-- Added the student login experience in [portal.html](portal.html)
-- Added the student dashboard interface in [portal_interface.html](portal_interface.html)
-- Added the admin-facing dashboard in [admin_dashboard.html](admin_dashboard.html)
-- Included portal-oriented content for login, feature highlights, quick actions, schedules, grades, and announcements
-- Wired the portal flow so the student experience can connect to admin-managed schedule and course data
-
-### Registration And Form Handling
-
-- Added [registration-form.html](registration-form.html) for user enrollment
-- Added [school-form.html](school-form.html) for school-related submissions
-- Added [send-registration.php](send-registration.php) as the backend form handler
-- Documented the registration and verification flow so form submissions can be maintained safely
-
-### Security Work
-
-- Added [security-dashboard.html](security-dashboard.html) for monitoring and review of security status
-- Added [SECURITY_GUIDE.md](SECURITY_GUIDE.md), [SECURITY_QUICK_REFERENCE.md](SECURITY_QUICK_REFERENCE.md), and [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md) to document the security layer
-- Added [.htaccess](.htaccess) rules for production hardening on Apache hosts
-- Documented input validation, CSRF handling, rate limiting, and other defensive measures used by the project
-
-### Shared Assets And Bundles
-
-- Consolidated site styling into [hlts-bundle.css](hlts-bundle.css)
-- Consolidated site scripting into [hlts-bundle.js](hlts-bundle.js)
-- Kept the Bootstrap 5.3.8 distribution in [bootstrap-5.3.8-dist/](bootstrap-5.3.8-dist/)
-- Kept image assets in [images/](images/)
-
-## File Map
-
-### Public Pages
-
-- [index.html](index.html) - Main public homepage
-- [about.html](about.html) - Company overview
-- [services.html](services.html) - Services listing
-- [course.html](course.html) - Course offerings
-- [contact.html](contact.html) - Contact page
-- [cbt.html](cbt.html) - CBT platform page
-
-### Portal And Internal Pages
-
-- [portal.html](portal.html) - Student portal login page
-- [portal_interface.html](portal_interface.html) - Student dashboard interface
-- [admin_dashboard.html](admin_dashboard.html) - Admin dashboard
-- [security-dashboard.html](security-dashboard.html) - Security dashboard
-
-### Forms And Server Logic
-
-- [registration-form.html](registration-form.html) - Registration form
-- [school-form.html](school-form.html) - School form
-- [send-registration.php](send-registration.php) - Registration processing script
-
-### Shared Resources
-
-- [hlts-bundle.css](hlts-bundle.css) - Consolidated stylesheet
-- [hlts-bundle.js](hlts-bundle.js) - Consolidated JavaScript
-- [bootstrap-5.3.8-dist/](bootstrap-5.3.8-dist/) - Bootstrap framework assets
-- [images/](images/) - Media assets
-
-### Documentation
-
-- [README.md](README.md) - Project overview and reference
-- [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md) - Development notes
-- [FEATURE_SUMMARY.md](FEATURE_SUMMARY.md) - Feature-level summary
-- [SECURITY_GUIDE.md](SECURITY_GUIDE.md) - Security implementation guide
-- [SECURITY_QUICK_REFERENCE.md](SECURITY_QUICK_REFERENCE.md) - Security checklist
-- [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md) - Security summary
-- [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md) - Testing checklist
-
-## Tech Stack
-
-- HTML5
-- CSS3
-- JavaScript
-- PHP
-- Bootstrap 5.3.8
-- Bootstrap Icons
-- AOS animations
-- Google Fonts
-
-## Local Preview
-
-Open the site in a browser directly, or run it through a local web server for a more accurate preview.
-
-### Example Local Servers
+## Local preview
 
 ```bash
-python -m http.server 8000
+php -S localhost:8000 dev-router.php
 ```
 
-```bash
-php -S localhost:8000
-```
+Then open `http://localhost:8000`. Local preview uses SQLite (`storage/hlts.sqlite`) and writes emails to `storage/logs/mail.log` instead of sending them.
 
-```bash
-npx http-server
-```
+## Going live (cPanel)
 
-Then visit `http://localhost:8000`.
+1. Upload the files. `storage/` must be writable by PHP.
+2. In cPanel create a **MySQL database and user**, and an email account such as `no-reply@hltsltd.com`.
+3. Copy `config/config.example.php` to `config/config.local.php` and fill in:
+   - `app_key` and `setup_token`: long random strings (`php -r "echo bin2hex(random_bytes(32));"`)
+   - `db`: the MySQL details
+   - `mail`: the SMTP login for `no-reply@hltsltd.com`
+   - `paystack`: public and secret keys (optional; payments stay off until set)
+4. Visit `https://hltsltd.com/admin/setup.php?token=YOUR_SETUP_TOKEN` to create the first staff account. Then remove `setup_token`.
+5. In Paystack: **Settings → API Keys & Webhooks**, set the webhook URL to `https://hltsltd.com/paystack-webhook.php`.
+6. Submit `https://hltsltd.com/sitemap.xml` in Google Search Console.
 
-## Maintenance Notes
+`config/`, `lib/`, `storage/` and `partials/` are blocked from the web by `.htaccess`.
 
-- Update this README whenever a new page, asset, workflow, or security change is added.
-- Keep the file map in sync with the root of the repository.
-- Add a new entry to the change log whenever the project structure changes in a meaningful way.
+## Everyday tasks
 
-## Team
+- **New enquiries** arrive by email and appear in **Admin → Leads**. Update the status and add notes as you follow up. Use **Export CSV** for reports.
+- **Enrolling a learner:** open their registration lead and click **Enrol as student**. A student ID and temporary password are created and can be emailed to them.
+- **Course materials:** go to **Admin → Course materials** and add links (Drive, YouTube, Classroom). Students see them in the portal.
+- **Results:** go to **Admin → Results**, download the template, fill it in (one row per student, one column per subject), upload, then **print the PIN slips straight away**. PINs cannot be shown again, but you can issue a new one per student.
+- **Certificates:** go to **Admin → Certificates** and issue one. Print the certificate number on the certificate; anyone can verify it at `/verify-certificate.html`.
+- **Articles, events, portfolio and jobs:** create them in the admin, then set the status to **Published**. Example drafts marked "Example" are included; edit or delete them.
+- **Course fees, school modules and FAQs:** edit `lib/content.php`.
 
-- Christopher Oyeh - Founder/CEO
-- Joseph Amos - General Supervisor
-- Nnamdi Osi - Deputy Supervisor
-- Israel Akinola - Software Engineer
-- Collin Duru - Chief Engineer
+## Security notes
+
+- Server-side CSRF tokens on every form (one per session, so several tabs work).
+- Validation on the server for every field, a honeypot for bots, and rate limits on forms, sign-in, the results checker and certificate checks.
+- Passwords are hashed with `password_hash`. Sessions are renewed at sign-in and expire after 2 idle hours.
+- Result PINs are stored as keyed hashes.
+- Paystack amounts always come from the server; webhooks are signature-checked and payments re-verified with Paystack.
+- Output is escaped everywhere. Admin-written articles use a safe text format, not raw HTML.
+- There is a strict Content-Security-Policy with no inline scripts.
+
+## Retired files
+
+The rebuilt site no longer uses these. `.htaccess` blocks them, and they can be deleted:
+
+- `admin_dashboard.html`, `portal_interface.html`, `security-dashboard.html` (replaced by `admin/` and `student.php`)
+- `send-registration.php` (replaced by `submit.php`)
+- `hlts-bundle.js` (replaced by `js/`)
+- `css/base.css`, `css/components.css`, `css/pages.css`, `css/pages-extra.css`, `css/design-layer.css`, `css/dashboard-admin.css`, `css/dashboard-student.css`, `css/responsive.css`, `css/theme.css` (replaced by `css/tokens.css` and `css/ui/`)
+- `bootstrap-5.3.8-dist/` (Bootstrap now loads from the jsDelivr CDN)
+- `DEVELOPMENT_GUIDE.md`, `FEATURE_SUMMARY.md`, `SECURITY_*.md` and `TESTING_CHECKLIST.md` describe the old site
 
 ## Contact
 
-- Website: [www.hltslimited.com](https://www.hltslimited.com)
-- Email: info@hltsltd.com
+- Website: [hltsltd.com](https://hltsltd.com)
+- Email: CEO@hltsltd.com
 - Phone: +234 810 700 5789
 - Address: 8 Assembly Close, Folagoro, Somolu, Lagos, Nigeria
 
-## License
-
-© 2026 HLTS Limited. All rights reserved.
+© HLTS Limited. All rights reserved.
