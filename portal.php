@@ -1,135 +1,70 @@
 <?php
-$pageTitle = 'Student Portal (Launching Soon) - HLTS Online School';
-$pageDescription = 'The HLTS Online Institution student portal is launching soon. Enrolled students can contact HLTS for course materials and updates.';
-include __DIR__ . '/partials/head.php';
-include __DIR__ . '/partials/nav.php';
+require __DIR__ . '/lib/app.php';
+
+if (auth_user('student')) {
+    redirect('/student.php');
+}
+
+$error = '';
+$identifier = '';
+
+if (is_post()) {
+    csrf_require();
+    $identifier = trim((string) ($_POST['identifier'] ?? ''));
+    try {
+        if (auth_attempt('student', $identifier, (string) ($_POST['password'] ?? ''))) {
+            redirect('/student.php');
+        }
+        $error = 'That student ID or email and password do not match. Check and try again.';
+    } catch (RuntimeException $e) {
+        $error = $e->getMessage();
+    }
+}
+
+page_start([
+    'title' => 'Student Portal Sign In – HLTS Online Institution',
+    'description' => 'Sign in to the HLTS student portal to access your course materials, payments and certificate.',
+]);
+
+echo page_hero([
+    'crumbs' => [['Online Institution', page_url('online-institution')], ['Student portal']],
+    'eyebrow' => 'Student portal',
+    'title' => 'Welcome back, <span class="grad-text">learner.</span>',
+    'lead' => 'Sign in to see your course materials, payments and certificate.',
+]);
 ?>
 
-  <!-- Portal Hero Section -->
-  <section class="portal-hero">
-    <div class="container-custom">
-      <div class="row align-items-center">
-        <div class="col-lg-6" data-aos="fade-right">
-          <div class="portal-hero-copy">
-            <span class="eyebrow">HLTS Online Institution</span>
-            <h1>The student portal is launching soon.</h1>
-            <p class="lead">We are building a portal where you will access your courses, track your progress, and stay connected to your instructors. Until it opens, our team supports enrolled students directly.</p>
+<section class="section" id="form">
+  <div class="container">
+    <div class="form-page">
+      <?= form_aside('Need access?', 'New to the portal?', 'Your student ID and first password are sent when your registration is confirmed.', [
+          ['person-plus', 'Not registered yet?', 'Register for a course and we will set up your account.'],
+          ['key', 'Forgot your password?', 'Message us on WhatsApp from your registered number and we will reset it.'],
+          ['shield-lock', 'Keep it private', 'Never share your password, even with classmates.'],
+      ]) ?>
+      <div class="form-shell" data-reveal="zoom">
+        <div class="form-shell__head"><h2>Sign in</h2><p>Use your student ID (e.g. HLTS/2026/0001) or email.</p></div>
+<?php if ($error): ?>
+        <div class="notice notice--error mb-3" role="alert"><?= icon('exclamation-circle') ?><p><?= h($error) ?></p></div>
+<?php endif; ?>
+        <form method="post" action="/portal.php" class="form-grid" style="grid-template-columns: 1fr">
+          <?= csrf_field() ?>
+          <div class="field">
+            <label class="field-label" for="identifier">Student ID or email</label>
+            <div class="input-wrap"><input id="identifier" name="identifier" value="<?= h($identifier) ?>" autocomplete="username" required autofocus></div>
           </div>
-        </div>
-        <div class="col-lg-6" data-aos="fade-left">
-          <!-- Launching soon card. The previous login accepted any credentials, so it is
-               disabled until the portal has real accounts. -->
-          <div class="portal-login-card">
-            <div class="card-header">
-              <h3><i class="bi bi-hourglass-split"></i> Portal launching soon</h3>
-              <p>Already enrolled? Contact us for your course materials and updates.</p>
-            </div>
-            <div class="portal-form d-grid gap-3">
-              <a href="https://wa.me/2348107005789" class="btn btn-primary w-100">
-                <i class="bi bi-whatsapp"></i> Chat with us on WhatsApp
-              </a>
-              <a href="mailto:info@hltsltd.com" class="btn btn-outline-primary w-100">
-                <i class="bi bi-envelope"></i> Email info@hltsltd.com
-              </a>
-            </div>
-            <div class="portal-footer">
-              <p>Not enrolled yet? <a href="registration-form.html">Register for a course</a></p>
-            </div>
+          <div class="field">
+            <label class="field-label" for="password">Password</label>
+            <div class="input-wrap"><input id="password" type="password" name="password" autocomplete="current-password" required></div>
           </div>
-        </div>
+          <div class="form-nav">
+            <a class="text-link" href="<?= h(page_url('registration-form')) ?>">Register for a course <?= icon('arrow-right') ?></a>
+            <button type="submit" class="btn-hl btn-hl--primary btn-hl--lg"><span>Sign in</span> <?= icon('box-arrow-in-right') ?></button>
+          </div>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Portal Features Section -->
-  <section class="portal-features section-padding">
-    <div class="container-custom">
-      <div class="section-title" data-aos="fade-up">
-        <h2>What's Coming in the HLTS Portal</h2>
-        <p>Tools and resources we are building for your learning journey</p>
-      </div>
-      
-      <div class="row g-4 mt-5">
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="bi bi-speedometer2"></i>
-            </div>
-            <h4>Personal Dashboard</h4>
-            <p>Track your progress, assignments, and grades in one centralized location.</p>
-          </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="bi bi-journal-text"></i>
-            </div>
-            <h4>Course Materials</h4>
-            <p>Access all your course content, videos, and resources anytime, anywhere.</p>
-          </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="bi bi-pencil-square"></i>
-            </div>
-            <h4>Online Assessments</h4>
-            <p>Take quizzes and exams with instant feedback and detailed analytics.</p>
-          </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="bi bi-chat-dots"></i>
-            </div>
-            <h4>Live Communication</h4>
-            <p>Connect with instructors and peers through integrated messaging.</p>
-          </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="bi bi-calendar-event"></i>
-            </div>
-            <h4>Smart Calendar</h4>
-            <p>Stay organized with automated reminders for classes and deadlines.</p>
-          </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="bi bi-graph-up"></i>
-            </div>
-            <h4>Performance Analytics</h4>
-            <p>Visualize your learning progress with detailed reports and insights.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Portal CTA Section -->
-  <section class="portal-cta">
-    <div class="container-custom">
-      <div class="row align-items-center">
-        <div class="col-lg-8" data-aos="fade-right">
-          <h2>Ready to Start Your Learning Journey?</h2>
-          <p>Join thousands of students already succeeding with HLTS Online School</p>
-        </div>
-        <div class="col-lg-4 text-lg-end" data-aos="fade-left">
-          <a href="registration-form.html" class="btn btn-primary btn-lg">
-            <i class="bi bi-person-plus"></i> Register Now
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-
-<?php include __DIR__ . '/partials/footer.php'; ?>
+<?php page_end(); ?>

@@ -1,67 +1,65 @@
 <?php
-$pageTitle = 'HLTS Online Institution';
-$pageDescription = 'Learn about HLTS Online Institution, our practical technology training and how to register.';
-include __DIR__ . '/partials/head.php';
-include __DIR__ . '/partials/nav.php';
+require __DIR__ . '/lib/app.php';
+
+page_start([
+    'title' => 'HLTS Online Institution – Practical tech skills',
+    'description' => 'Learn practical technology skills with HLTS Online Institution: structured courses, guided support, real projects and verifiable certificates.',
+]);
+
+echo page_hero([
+    'crumbs' => [['Online Institution']],
+    'eyebrow' => 'HLTS Online Institution',
+    'title' => 'Practical skills for the future <span class="grad-text">you are building.</span>',
+    'lead' => 'Learn technology with structure, support and a clear path from beginner to confident builder.',
+    'actions' => button('Browse courses', page_url('course'), 'primary', 'arrow-right') . button('Register to learn', page_url('registration-form'), 'ghost-light', 'person-plus'),
+    'visual' => photo_frame('images/achildcoding.jpeg', 'A young learner coding on a laptop', 'Skills that move with you', 'Learn by building', true),
+]);
 ?>
 
-  <main class="institution-page">
-    <section class="institution-hero">
-      <div class="container">
-        <div class="institution-hero-copy">
-          <span class="eyebrow">HLTS Online Institution</span>
-          <h1>Practical skills for the future you are building.</h1>
-          <p>Learn technology with structure, support, and a clear path from beginner to confident builder.</p>
-          <div class="institution-actions">
-            <a href="registration-form.html" class="btn btn-primary">Register to learn <i class="bi bi-arrow-up-right"></i></a>
-            <a href="course.html" class="institution-text-link">View available courses <i class="bi bi-arrow-right"></i></a>
-          </div>
-        </div>
-        <div class="institution-hero-visual">
-          <img src="images/achildcoding.jpeg" alt="A student learning with a laptop" loading="eager">
-          <div class="institution-visual-badge"><i class="bi bi-stars"></i><span>Learn by building</span></div>
-          <div class="institution-visual-caption"><span>HLTS Online Institution</span><strong>Skills that move with you.</strong></div>
-          <div class="institution-hero-card">
-            <span class="institution-card-label">Your learning journey</span>
-            <div class="institution-journey-line"><span>01</span><strong>Choose a course</strong></div>
-            <div class="institution-journey-line"><span>02</span><strong>Complete registration</strong></div>
-            <div class="institution-journey-line"><span>03</span><strong>Start learning with HLTS</strong></div>
-          </div>
-        </div>
-      </div>
-    </section>
+<section class="section">
+  <div class="container">
+    <?= section_head('Why learn with us', 'Learning that leads somewhere.') ?>
+    <div class="grid grid--3" data-reveal-group>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon('compass') ?></span><h3>Clear direction</h3><p>Practical courses designed around skills you can use in school, work and real projects.</p></article>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon('person-workspace') ?></span><h3>Guided support</h3><p>Structured instruction, expert guidance and a community that keeps you moving.</p></article>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon('graph-up-arrow') ?></span><h3>Visible progress</h3><p>Follow your course, materials and payments in the student portal.</p></article>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon('kanban') ?></span><h3>Real projects</h3><p>Build things you can show: websites, dashboards, designs and videos.</p></article>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon('patch-check') ?></span><h3>Verifiable certificates</h3><p>Every certificate has a unique number anyone can check online.</p></article>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon('globe2') ?></span><h3>A community behind you</h3><p>Learners join TechMind Africa for meetups, mentors and opportunities.</p></article>
+    </div>
+  </div>
+</section>
 
-    <section class="institution-overview">
-      <div class="container">
-        <div class="institution-section-heading">
-          <span class="eyebrow">Why learn with us</span>
-          <h2>Learning that leads somewhere.</h2>
-        </div>
-        <div class="row g-4">
-          <div class="col-lg-4"><article class="institution-feature"><i class="bi bi-compass"></i><h3>Clear direction</h3><p>Explore practical courses designed around skills you can use in school, work, and real projects.</p></article></div>
-          <div class="col-lg-4"><article class="institution-feature"><i class="bi bi-person-workspace"></i><h3>Guided support</h3><p>Learn with structured instruction, expert guidance, and a community that keeps you moving.</p></article></div>
-          <div class="col-lg-4"><article class="institution-feature"><i class="bi bi-graph-up-arrow"></i><h3>Visible progress</h3><p>Use your learner portal to follow courses, assignments, assessments, and your progress.</p></article></div>
-        </div>
-      </div>
-    </section>
+<section class="section section--alt">
+  <div class="container">
+    <?= section_head('Popular courses', 'Start with one of these.') ?>
+    <div class="grid grid--3" data-reveal-group>
+<?php foreach (array_slice(courses(), 0, 3, true) as $slug => $course): ?>
+      <?= course_card($slug, $course) ?>
+<?php endforeach; ?>
+    </div>
+    <div class="center mt-5" data-reveal><?= button('See all courses', page_url('course'), 'secondary', 'arrow-right') ?></div>
+  </div>
+</section>
 
-    <section class="institution-register" id="how-to-register">
-      <div class="container">
-        <div class="institution-register-panel">
-          <div>
-            <span class="eyebrow">How to register</span>
-            <h2>Start in three simple steps.</h2>
-            <p>Registration takes you from choosing a course to joining the HLTS learning community.</p>
-          </div>
-          <ol class="institution-steps">
-            <li><span>01</span><div><strong>Choose your course</strong><small>Review the current courses and select the path that fits your goals.</small></div></li>
-            <li><span>02</span><div><strong>Complete the registration form</strong><small>Share your details and preferred learning programme.</small></div></li>
-            <li><span>03</span><div><strong>Receive your next steps</strong><small>Our team will confirm your registration and guide you through onboarding.</small></div></li>
-          </ol>
-          <a href="registration-form.html" class="btn btn-primary">Go to registration form <i class="bi bi-arrow-up-right"></i></a>
-        </div>
+<section class="section section--night" id="how-to-register">
+  <div class="container split split--top">
+    <div>
+      <?= section_head('How to register', 'Start in three simple steps.', 'From choosing a course to joining the HLTS learning community.', 'left') ?>
+      <div class="actions" data-reveal>
+        <?= button('Go to registration', page_url('registration-form'), 'light', 'arrow-right') ?>
+        <?= button('Verify a certificate', page_url('verify-certificate'), 'ghost-light', 'patch-check') ?>
       </div>
-    </section>
-  </main>
+    </div>
+    <ol class="path" data-path>
+      <span class="path__progress" aria-hidden="true"></span>
+      <li class="path__step"><span class="path__dot">1</span><div><h3>Choose your course</h3><p>Review the courses and pick the path that fits your goals.</p></div></li>
+      <li class="path__step"><span class="path__dot">2</span><div><h3>Register and pay</h3><p>Share your details, choose a payment plan and pay online or later.</p></div></li>
+      <li class="path__step"><span class="path__dot">3</span><div><h3>Start learning</h3><p>Our team confirms your place and sets up your student portal.</p></div></li>
+    </ol>
+  </div>
+</section>
 
-<?php include __DIR__ . '/partials/footer.php'; ?>
+<?= cta_band('Your next skill is one form away.', 'Register in two minutes. We will call you within one working day.', ['Register now', page_url('registration-form')], ['Student portal', page_url('portal'), 'person-badge']) ?>
+
+<?php page_end(); ?>

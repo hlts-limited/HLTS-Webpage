@@ -1,0 +1,4 @@
+# Secrets and runtime data
+config/config.local.php
+storage/*
+!storage/.htaccess

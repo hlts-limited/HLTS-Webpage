@@ -1900,7 +1900,7 @@ body.legal-page .legal-content a {
 
 /* Enrollment Section */
 .enroll-section {
-  background-image: url('images/enroll-bg.jpg');
+  background-image: url('../images/enroll-bg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

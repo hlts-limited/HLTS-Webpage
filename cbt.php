@@ -1,98 +1,91 @@
 <?php
-$pageTitle = 'CBT Exam Platform Setup & Management';
-$pageDescription = 'HLTS Limited - Your Partner in Education. Transform your learning experience with innovative ed-tech solutions.';
-$bodyClass = 'cbt-page';
-include __DIR__ . '/partials/head.php';
-include __DIR__ . '/partials/nav.php';
+require __DIR__ . '/lib/app.php';
+
+page_start([
+    'title' => 'CBT Exam Setup & Management – HLTS Limited',
+    'description' => 'HLTS sets up and manages computer-based tests for schools: question banks, scheduling, secure student access, automatic marking and result reports.',
+]);
+
+$questions = [
+    ['q' => 'Simplify: 3(x + 4) − 2x', 'options' => ['x + 12', '5x + 4', 'x + 4', '3x + 12'], 'answer' => 0],
+    ['q' => 'Which organ pumps blood around the body?', 'options' => ['Lungs', 'Heart', 'Liver', 'Kidney'], 'answer' => 1],
+    ['q' => 'Antonym of "scarce"', 'options' => ['Rare', 'Plentiful', 'Little', 'Thin'], 'answer' => 1],
+    ['q' => 'A byte is made up of…', 'options' => ['4 bits', '16 bits', '8 bits', '2 bits'], 'answer' => 2],
+];
+
+$demo = '<div class="cbt-demo" data-cbt-demo data-questions="' . h(json_encode($questions)) . '" role="img" aria-label="Animated example of a CBT exam being taken and marked">'
+    . '<div class="cbt-demo__top"><span class="cbt-demo__brand">' . icon('ui-checks-grid') . ' HLTS CBT · JSS 3 Test</span><span class="cbt-demo__timer">' . icon('stopwatch') . ' <span data-cbt-timer>30:00</span></span></div>'
+    . '<div class="cbt-demo__progress"><span data-cbt-progress></span></div>'
+    . '<div class="cbt-demo__body" aria-hidden="true"><p class="cbt-demo__num" data-cbt-num></p><p class="cbt-demo__q" data-cbt-question></p><ol class="cbt-demo__options" data-cbt-options></ol></div>'
+    . '<div class="cbt-demo__dots" data-cbt-dots aria-hidden="true"></div>'
+    . '<div class="cbt-demo__result" data-cbt-result hidden><svg class="tick-anim" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27 l7 7 l15 -16"/></svg><strong data-cbt-score>0%</strong><span>Marked instantly · Result saved</span></div>'
+    . '</div>';
+
+echo page_hero([
+    'crumbs' => [['For Schools', page_url('services')], ['CBT & Assessments']],
+    'eyebrow' => 'CBT & assessments',
+    'title' => 'Make exam delivery <span class="grad-text">reliable, fast and fair.</span>',
+    'lead' => 'HLTS sets up and runs computer-based tests for your school, from question banks and secure logins to instant marking and reports.',
+    'actions' => button('Plan your CBT setup', page_url('book-demo', ['interests[]' => 'cbt']), 'primary', 'calendar-check') . button('How it works', '#workflow', 'ghost-light', 'arrow-down'),
+    'visual' => $demo,
+]);
+
+$capabilities = [
+    ['gear', 'Platform setup', 'Deployment and configuration tailored to your school, on your network or in the cloud.'],
+    ['archive', 'Question banks', 'Upload, organise and reuse questions by subject, class and topic.'],
+    ['calendar-event', 'Exam scheduling', 'Set timing, duration and access for different classes and arms.'],
+    ['person-lock', 'Secure student access', 'Individual logins, shuffled questions and live monitoring protect integrity.'],
+    ['check2-all', 'Automatic marking', 'Objective questions are marked instantly; teachers review written answers.'],
+    ['bar-chart', 'Analytics & reports', 'Class and subject reports for teachers, leaders and parents.'],
+    ['mortarboard', 'WAEC & JAMB practice', 'Students rehearse real exam conditions long before exam day.'],
+    ['people', 'Training & support', 'Onboarding for staff and students, plus support on exam days.'],
+];
 ?>
 
-        <main class="cbt-page-main">
-            <section class="cbt-hero">
-                <div class="container cbt-hero-layout">
-                    <div class="cbt-hero-copy">
-                        <span class="eyebrow">Assessment and exam operations</span>
-                        <h1>Make exam delivery more reliable.</h1>
-                        <p>HLTS helps schools set up and manage computer-based assessments, from question banks and secure student access to grading and reporting.</p>
-                        <div class="cbt-hero-actions">
-                            <a href="school-form.html" class="btn btn-primary">Plan your CBT setup <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
-                            <a href="#system-integration" class="cbt-text-link">Explore integrations <i class="bi bi-arrow-down-right" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                    <figure class="cbt-hero-visual">
-                        <img src="images/cbt.jpg" alt="Computer-based testing tools for digital assessment" fetchpriority="high">
-                        <figcaption><span>HLTS CBT support</span><strong>From setup through results</strong></figcaption>
-                    </figure>
-                </div>
-            </section>
+<section class="section">
+  <div class="container">
+    <?= section_head('What HLTS handles', 'Everything between "set the test" and "share the results".') ?>
+    <div class="grid grid--4" data-reveal-group>
+<?php foreach ($capabilities as [$iconName, $title, $text]): ?>
+      <article class="card-hl" data-reveal><span class="icon-tile"><?= icon($iconName) ?></span><h3><?= h($title) ?></h3><p><?= h($text) ?></p></article>
+<?php endforeach; ?>
+    </div>
+  </div>
+</section>
 
-            <section class="cbt-capabilities">
-                <div class="container">
-                    <div class="cbt-section-heading">
-                        <span class="eyebrow">What HLTS supports</span>
-                        <h2>From exam setup to useful results.</h2>
-                        <p>Bring the practical pieces of computer-based testing into one supported workflow for your school.</p>
-                    </div>
-                    <div class="cbt-capability-layout">
-                        <ul class="cbt-bullet-list">
-                            <li><span class="cbt-bullet"><i class="bi bi-gear-fill" aria-hidden="true"></i></span><span><strong>Platform setup</strong>Deployment and configuration tailored to your school's needs.</span></li>
-                            <li><span class="cbt-bullet"><i class="bi bi-archive-fill" aria-hidden="true"></i></span><span><strong>Question bank management</strong>Upload, organize and categorize questions by subject and class.</span></li>
-                            <li><span class="cbt-bullet"><i class="bi bi-calendar-event-fill" aria-hidden="true"></i></span><span><strong>Exam scheduling</strong>Set timing, duration and access for different student groups.</span></li>
-                            <li><span class="cbt-bullet"><i class="bi bi-person-check-fill" aria-hidden="true"></i></span><span><strong>Student access</strong>Secure logins and real-time monitoring to support exam integrity.</span></li>
-                            <li><span class="cbt-bullet"><i class="bi bi-clipboard-check-fill" aria-hidden="true"></i></span><span><strong>Automated grading</strong>Generate results for objective questions and review subjective answers.</span></li>
-                            <li><span class="cbt-bullet"><i class="bi bi-bar-chart-fill" aria-hidden="true"></i></span><span><strong>Analytics and reporting</strong>Review performance and prepare reports for educators and administrators.</span></li>
-                            <li><span class="cbt-bullet"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span><strong>Support and training</strong>Onboarding and guidance for staff and students.</span></li>
-                        </ul>
-                        <aside class="cbt-workflow-panel">
-                            <span class="cbt-workflow-label">A supported exam workflow</span>
-                            <div><span>01</span><strong>Prepare</strong><small>Configure the platform, question bank and schedules.</small></div>
-                            <div><span>02</span><strong>Deliver</strong><small>Give students secure access to their assessments.</small></div>
-                            <div><span>03</span><strong>Review</strong><small>Grade work and review performance reports.</small></div>
-                            <a href="school-form.html" class="cbt-panel-link">Discuss school setup <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
-                        </aside>
-                    </div>
-                </div>
-            </section>
+<section class="section section--night" id="workflow">
+  <div class="container split split--top">
+    <div>
+      <?= section_head('A supported workflow', 'Prepare. Deliver. Review.', 'Three clear stages, with HLTS beside your team at each one.', 'left') ?>
+      <div class="actions" data-reveal>
+        <?= button('Book a CBT demo', page_url('book-demo', ['interests[]' => 'cbt']), 'light', 'calendar-check') ?>
+      </div>
+    </div>
+    <ol class="path" data-path>
+      <span class="path__progress" aria-hidden="true"></span>
+      <li class="path__step"><span class="path__dot">1</span><div><h3>Prepare</h3><p>We configure the platform, load question banks and set schedules for each class.</p></div></li>
+      <li class="path__step"><span class="path__dot">2</span><div><h3>Deliver</h3><p>Students sign in securely in the lab or on approved devices, with live monitoring.</p></div></li>
+      <li class="path__step"><span class="path__dot">3</span><div><h3>Review</h3><p>Scores are ready instantly. Teachers review, then results flow into report cards.</p></div></li>
+    </ol>
+  </div>
+</section>
 
-            <section class="cbt-learner-panel">
-                <div class="container">
-                    <div>
-                        <span class="eyebrow">For individual learners</span>
-                        <h2>Looking to build your own skills?</h2>
-                        <p>Explore the HLTS Online Institution courses and choose a learning path that fits your goals.</p>
-                    </div>
-                    <div class="cbt-learner-actions">
-                        <a href="course.html" class="btn btn-outline-primary">Browse courses</a>
-                        <a href="registration-form.html" class="cbt-text-link">Register to learn <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </section>
+<section class="section" id="system-integration">
+  <div class="container split">
+    <div data-reveal><?= photo_frame('images/setup.jpeg', 'Computer lab set up by HLTS', 'Labs designed, installed and maintained', 'Lab setup') ?></div>
+    <div>
+      <?= section_head('Labs & integrations', 'The infrastructure behind great exams.', 'We design and install computer labs and connect your school systems so information flows without retyping.', 'left') ?>
+      <ul class="check-list" data-reveal>
+        <li>Computer lab design, installation and staff training</li>
+        <li>Payment gateways, SMS and email notifications</li>
+        <li>Google Workspace and Microsoft Teams setup</li>
+        <li>Secure API access for custom solutions</li>
+        <li>Ongoing maintenance and technical support</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-        <!-- System Integration & Lab Setup Section -->
-        <section id="system-integration" class="cbt-integration py-5 px-4 bg-white">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="text-center mb-5">
-                            <div class="feature-icon mb-3" style="background: linear-gradient(135deg, #00b8d9, #36d8f5); display: inline-block; border-radius: 50%; padding: 18px;">
-                                <i class="bi bi-plug" style="font-size: 2.5rem; color: #fff;"></i>
-                            </div>
-                            <h2 class="text-primary fw-bold mb-3">System Integration & Lab Setup</h2>
-                            <p class="lead text-muted">Empower your institution with seamless integration of digital tools and modern computer labs. We connect your school to the best-in-class platforms for communication, payments, and learning, and set up state-of-the-art labs for hands-on education.</p>
-                        </div>
-                        <ul class="list-unstyled mb-4">
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Integration with payment gateways, SMS, and email platforms</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Google Workspace and Microsoft Teams setup</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Secure API access for custom solutions</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Full computer lab design, installation, and training</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Ongoing technical support and maintenance</li>
-                        </ul>
-                        <div class="text-center mt-4">
-                            <a href="school-form.html" class="btn btn-primary btn-lg">Apply Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        </main>
+<?= cta_band('Ready for smoother exam days?', 'See CBT running in a demo at your school. Bring your exam officer.', ['Book a CBT demo', page_url('book-demo', ['interests[]' => 'cbt'])], ['Check a result', page_url('results'), 'search']) ?>
 
-<?php include __DIR__ . '/partials/footer.php'; ?>
+<?php page_end(); ?>

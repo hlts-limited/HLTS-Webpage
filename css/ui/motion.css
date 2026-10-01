@@ -1,0 +1,195 @@
+/* ==========================================================================
+   MOTION
+   Rules: animate transform and opacity only; 150–250ms for feedback,
+   400–800ms for content appearing; one shared easing; everything stops
+   for visitors who ask for reduced motion.
+   ========================================================================== */
+
+/* ---- Scroll reveal ------------------------------------------------------
+   Content is only hidden once js/boot.js has added .js to <html>, so the
+   page is fully readable if scripts fail to load.                         */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity var(--dur-4) var(--ease-out),
+    transform var(--dur-4) var(--ease-out);
+  transition-delay: calc(var(--reveal-delay, 0) * var(--stagger));
+}
+
+.js [data-reveal="zoom"] { transform: scale(0.94); }
+.js [data-reveal="left"] { transform: translateX(-34px); }
+.js [data-reveal="right"] { transform: translateX(34px); }
+.js [data-reveal="fade"] { transform: none; }
+
+.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal-delay="1"] { --reveal-delay: 1; }
+[data-reveal-delay="2"] { --reveal-delay: 2; }
+[data-reveal-delay="3"] { --reveal-delay: 3; }
+[data-reveal-delay="4"] { --reveal-delay: 4; }
+[data-reveal-delay="5"] { --reveal-delay: 5; }
+[data-reveal-delay="6"] { --reveal-delay: 6; }
+
+/* Headline words rise one after another */
+.js .split-words .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.5em);
+  transition: opacity var(--dur-4) var(--ease-out), transform var(--dur-4) var(--ease-out);
+  transition-delay: calc(var(--i) * 55ms + 120ms);
+}
+
+.js .split-words.is-revealed .word {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- Cross-page transitions (supported browsers only) ------------------ */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: vt-out 220ms var(--ease-out) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 380ms var(--ease-out) both;
+}
+
+::view-transition-group(site-header) {
+  animation-duration: 0s;
+}
+
+@keyframes vt-out {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+/* ---- Shared keyframes --------------------------------------------------- */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes aurora {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(-6%, 4%, 0) rotate(8deg) scale(1.08); }
+  100% { transform: translate3d(4%, -3%, 0) rotate(-6deg) scale(0.96); }
+}
+
+@keyframes gradient-drift {
+  0% { background-position: 0% 30%; }
+  100% { background-position: 100% 70%; }
+}
+
+@keyframes marquee {
+  to { transform: translateX(calc(-50% - 9px)); }
+}
+
+@keyframes infinity-run {
+  to { stroke-dashoffset: -520; }
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes ping {
+  0% { opacity: 0.7; transform: scale(0.9); }
+  80%, 100% { opacity: 0; transform: scale(1.35); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes field-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes step-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes step-in-back {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes grow-bar {
+  from { transform: scaleY(0); }
+}
+
+@keyframes pop-in {
+  0% { opacity: 0; transform: scale(0.6); }
+  70% { opacity: 1; transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* ---- Reduced motion ---------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-reveal],
+  .js .split-words .word {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .marquee__track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+  }
+
+  .marquee__track [aria-hidden="true"] {
+    display: none;
+  }
+
+  .infinity__line {
+    stroke-dasharray: none !important;
+  }
+
+  .hero-net__pulse {
+    display: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,4 @@
+# Shared include, never requested directly
+<Files "_admin.php">
+    Require all denied
+</Files>

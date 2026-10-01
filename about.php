@@ -1,466 +1,104 @@
 <?php
-$pageTitle = 'About HLTS Limited - Our Mission & Values';
-$pageDescription = 'About HLTS Limited - Learn about our mission, vision, and values. Transforming lives through education, technology, and sustainable development.';
-$bodyClass = 'about-page';
-include __DIR__ . '/partials/head.php';
-include __DIR__ . '/partials/nav.php';
+require __DIR__ . '/lib/app.php';
+
+page_start([
+    'title' => 'About HLTS Limited – Our mission, values and team',
+    'description' => 'HLTS Limited is a Lagos EdTech company transforming lives through education, technology and sustainable development.',
+]);
+
+$gallery = [
+    ['images/2025meeting/team.jpg', 'Strategic planning session'],
+    ['images/2025meeting/team2.jpg', 'Team collaboration'],
+    ['images/2025meeting/CEO.jpg', 'CEO Christopher Oyeh sharing the roadmap'],
+    ['images/2025meeting/Supervisor.jpeg', 'Team coordination'],
+    ['images/2025meeting/DepSuper.jpg', 'Colleagues sharing ideas'],
+    ['images/2025meeting/hlts.jpg', 'The HLTS team'],
+];
+
+echo page_hero([
+    'crumbs' => [['Company'], ['About']],
+    'eyebrow' => 'Our story',
+    'title' => 'Transforming lives through <span class="grad-text">education and technology.</span>',
+    'lead' => 'HLTS Limited is a Lagos-based technology company making technology practical and accessible for schools, learners and communities across Africa.',
+    'actions' => button('Meet the team', '#team', 'primary', 'arrow-down') . button('Work with us', page_url('careers'), 'ghost-light', 'briefcase'),
+    'visual' => photo_frame('images/2027images/WhatsApp Image 2026-09-26 at 3.21.18 PM.jpeg', 'HLTS members at a recent event', 'Education and technology, built together', 'HLTS in action', true),
+]);
 ?>
 
-    <!-- About Hero Section -->
-    <section class="about-story-hero">
-      <div class="container">
-        <div class="about-story-layout">
-          <div class="about-story-copy" data-aos="fade-up">
-            <span class="eyebrow">Our story</span>
-            <h1>About HLTS Limited</h1>
-            <p>Transforming lives through education, technology, and sustainable development.</p>
-            <a class="btn btn-primary" href="#duties">Explore our work <i class="bi bi-arrow-down-right" aria-hidden="true"></i></a>
-          </div>
-          <figure class="about-story-photo" data-aos="fade-up">
-            <img src="images/2027images/WhatsApp%20Image%202026-09-26%20at%203.21.18%20PM.jpeg" alt="HLTS members gathered at a recent event" fetchpriority="high">
-            <figcaption><span>HLTS in action</span><strong>Education and technology, built together.</strong></figcaption>
-          </figure>
-        </div>
+<section class="section">
+  <div class="container split split--top">
+    <div>
+      <?= section_head('Who we are', 'A catalyst for a more digital Africa.', '', 'left') ?>
+      <div class="prose" data-reveal>
+        <p>HLTS Limited is a forward-thinking technology company focused on using innovation, digital tools and modern IT to solve real problems and drive sustainable development across Africa.</p>
+        <p>We empower individuals, schools, businesses and institutions through education technology, school operations, digital skills training, software development and technology integration.</p>
+        <p>We aim to bridge the digital divide by making technology more accessible and practical for everyday use.</p>
       </div>
-    </section>
+    </div>
+    <div class="grid grid--2" data-reveal-group>
+      <article class="card-hl" data-reveal><span class="icon-tile icon-tile--solid"><?= icon('eye') ?></span><h3>Our vision</h3><p>To be the leading catalyst for innovation and empowerment in Nigeria, fostering skilled professionals and sustainable communities through education and technology.</p></article>
+      <article class="card-hl" data-reveal><span class="icon-tile icon-tile--solid"><?= icon('bullseye') ?></span><h3>Our mission</h3><p>To deliver transformative learning experiences, practical solutions and expert guidance that equip people and organisations to thrive in a fast-changing world.</p></article>
+    </div>
+  </div>
+</section>
 
-    <!-- Who We Are & Our Integrity Section -->
-    <section class="py-5 px-4 section-blend-top about-whoweare-bg" style="--section-blend-from: black;">
-      <div class="container">
-        <div class="row g-5">
-          <!-- Who We Are Column -->
-          <div class="col-lg-6" data-aos="fade-up">
-            <h2 class="h3 fw-bold text-white mb-4">Who We Are?</h2>
-            <p class="text-light mb-3">
-              HLTS Limited is a forward-thinking technology company committed to transforming the 
-              face of technology across Africa. The company focuses on leveraging innovation, 
-              digital tools, and modern IT solutions to solve real-world problems and drive 
-              sustainable development on the continent.
-            </p>
-            <p class="text-light mb-3">
-              HLTS Limited is devoted to empowering individuals, businesses, and institutions 
-              by providing services such as software development, digital platforms, IT consulting, 
-              and technology integration. Through these solutions, the company helps improve 
-              efficiency, productivity, and access to digital opportunities.
-            </p>
-            <p class="text-light mb-3">
-              In addition, HLTS Limited plays a key role in promoting technological growth by 
-              supporting digital education, innovation, and entrepreneurship. The company aims to 
-              bridge the digital divide in Africa by making technology more accessible and 
-              practical for everyday use.
-            </p>
-            <p class="text-light">
-              Overall, HLTS Limited stands as a catalyst for change, driving Africa toward a more 
-              digitally advanced future through innovation, empowerment, and impactful tech 
-              solutions.
-            </p>
-          </div>
+<section class="section section--night">
+  <div class="container">
+    <?= section_head('What we stand for', 'Values that guide every project.') ?>
+    <div class="grid grid--4" data-reveal-group>
+      <article class="card-hl card-hl--dark" data-reveal><span class="icon-tile"><?= icon('award') ?></span><h3>Excellence</h3><p>The highest standards in everything we do.</p></article>
+      <article class="card-hl card-hl--dark" data-reveal><span class="icon-tile"><?= icon('lightning-charge') ?></span><h3>Innovation</h3><p>Creative, forward-thinking solutions.</p></article>
+      <article class="card-hl card-hl--dark" data-reveal><span class="icon-tile"><?= icon('people') ?></span><h3>Empowerment</h3><p>Helping people reach their full potential.</p></article>
+      <article class="card-hl card-hl--dark" data-reveal><span class="icon-tile"><?= icon('tree') ?></span><h3>Sustainability</h3><p>Lasting, positive impact for communities.</p></article>
+    </div>
+    <div class="actions mt-4" style="justify-content:center" data-reveal>
+      <span class="chip chip--dark"><?= icon('chat-heart') ?> Honest communication</span>
+      <span class="chip chip--dark"><?= icon('clipboard-check') ?> Accountability</span>
+      <span class="chip chip--dark"><?= icon('shield-check') ?> Ethical standards</span>
+      <span class="chip chip--dark"><?= icon('patch-check') ?> Quality assurance</span>
+    </div>
+  </div>
+</section>
 
-          <!-- Our Integrity Column -->
-          <div class="col-lg-6" data-aos="fade-up">
-            <h2 class="h3 fw-bold text-white mb-4">Our Integrity</h2>
-            <p class="text-light mb-3">
-              At HLTS, integrity is the foundation of every service we provide. We believe in delivering value with honesty, accountability, and respect.
-            </p>
-            <p class="text-light mb-3">
-              Our clients trust us because we uphold the highest standards—ensuring that every solution is not only effective but ethically sound. Whether it's in education, technology, or consulting, we remain committed to doing what's right, even when no one is watching.
-            </p>
-            <div class="mt-4">
-              <ul class="list-unstyled text-light">
-                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i><strong>Honest Communication</strong></li>
-                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i><strong>Accountability</strong></li>
-                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i><strong>Ethical Standards</strong></li>
-                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning me-2"></i><strong>Quality Assurance</strong></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<section class="section">
+  <div class="container">
+    <?= section_head('What we do', 'Five connected parts of one mission.') ?>
+    <div class="grid grid--3" data-reveal-group>
+      <a class="card-hl" href="<?= h(page_url('services')) ?>" data-reveal><span class="icon-tile"><?= icon('building') ?></span><h3>EdTech for schools</h3><p>Digital learning, school systems and curriculum integration for primary and secondary schools.</p><span class="card-hl__foot text-link">School solutions <?= icon('arrow-right') ?></span></a>
+      <a class="card-hl" href="<?= h(page_url('school-management')) ?>" data-reveal><span class="icon-tile"><?= icon('diagram-3') ?></span><h3>School operations</h3><p>CBT, results, IT support, daily operations, staff deployment and full management.</p><span class="card-hl__foot text-link">School management <?= icon('arrow-right') ?></span></a>
+      <a class="card-hl" href="<?= h(page_url('online-institution')) ?>" data-reveal><span class="icon-tile"><?= icon('mortarboard') ?></span><h3>Online Institution</h3><p>Structured, practical training in programming, web, data, design and digital tools.</p><span class="card-hl__foot text-link">Courses <?= icon('arrow-right') ?></span></a>
+      <a class="card-hl" href="<?= h(page_url('community')) ?>" data-reveal><span class="icon-tile"><?= icon('globe2') ?></span><h3>TechMind Africa</h3><p>A free community of learners, builders and educators growing together.</p><span class="card-hl__foot text-link">The community <?= icon('arrow-right') ?></span></a>
+      <a class="card-hl" href="<?= h(page_url('digital-solutions')) ?>" data-reveal><span class="icon-tile"><?= icon('code-slash') ?></span><h3>Digital solutions</h3><p>Websites, apps, portals and brands for schools and organisations.</p><span class="card-hl__foot text-link">What we build <?= icon('arrow-right') ?></span></a>
+      <a class="card-hl" href="<?= h(page_url('careers')) ?>" data-reveal><span class="icon-tile"><?= icon('briefcase') ?></span><h3>Careers</h3><p>Join the team, or our talent pool for school placements.</p><span class="card-hl__foot text-link">Open roles <?= icon('arrow-right') ?></span></a>
+    </div>
+  </div>
+</section>
 
-    <!-- Vision, Mission & Core Values Section -->
-    <section class="py-5 px-4 bg-white">
-      <div class="container">
-        <div class="row g-4">
+<section class="section section--alt" id="team">
+  <div class="container">
+    <?= section_head('Leadership', 'Meet the team.', 'The people driving HLTS\'s mission to transform education through technology.') ?>
+    <div class="grid grid--4" data-reveal-group>
+<?php foreach (team() as $member): ?>
+      <figure class="team-card" tabindex="0" data-reveal>
+        <img src="<?= h(img($member['image'])) ?>" alt="<?= h($member['name']) ?>" loading="lazy" decoding="async">
+        <figcaption class="team-card__info"><h3><?= h($member['name']) ?></h3><span class="team-card__role"><?= h($member['role']) ?></span><p class="team-card__bio"><?= h($member['bio']) ?></p></figcaption>
+      </figure>
+<?php endforeach; ?>
+    </div>
+  </div>
+</section>
 
-          <!-- Vision & Mission Column -->
-          <div class="col-lg-5" data-aos="fade-up">
-            <h2 class="h2 fw-bold text-primary mb-2">Our Vision &amp; Mission</h2>
-            <p class="lead text-muted mb-4">Guiding our journey towards excellence and impact</p>
+<section class="section" id="gallery-section">
+  <div class="container">
+    <?= section_head('Gallery', 'Moments from the HLTS team.') ?>
+    <div class="gallery" data-reveal="fade">
+<?php foreach ($gallery as [$src, $caption]): ?>
+      <figure><img src="<?= h(img($src)) ?>" alt="<?= h($caption) ?>" loading="lazy" decoding="async"><figcaption><?= h($caption) ?></figcaption></figure>
+<?php endforeach; ?>
+    </div>
+  </div>
+</section>
 
-            <div class="row g-3">
-              <!-- Vision Card -->
-              <div class="col-sm-6">
-                <div class="portal-feature-card h-100">
-                  <div class="feature-icon mb-4">
-                    <i class="bi bi-eye-fill"></i>
-                  </div>
-                  <h4 class="mb-3">Our Vision</h4>
-                  <p class="text-muted">
-                    To be the leading catalyst for innovation and empowerment in Nigeria, fostering a generation of skilled professionals and sustainable communities through education and technology.
-                  </p>
-                </div>
-              </div>
+<?= cta_band('Ready to be part of our journey?', 'Whether you run a school, want to learn, or need a digital partner, we would love to hear from you.', ['Talk to HLTS', page_url('contact')], ['Browse courses', page_url('course')]) ?>
 
-              <!-- Mission Card -->
-              <div class="col-sm-6">
-                <div class="portal-feature-card h-100">
-                  <div class="feature-icon mb-4">
-                    <i class="bi bi-bullseye"></i>
-                  </div>
-                  <h4 class="mb-3">Our Mission</h4>
-                  <p class="text-muted">
-                    To deliver transformative learning experiences, practical solutions, and expert guidance that equip individuals and organizations to thrive in a rapidly evolving world.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Thick Vertical Divider -->
-          <div class="col-lg-2 d-none d-lg-flex justify-content-center align-items-stretch">
-            <div style="width: 5px; background: linear-gradient(180deg, #FF00FF, #0710E9); border-radius: 3px;"></div>
-          </div>
-          <hr class="d-lg-none my-4" style="border-top: 5px solid #FF00FF; opacity: 1;">
-
-          <!-- Core Values Column -->
-          <div class="col-lg-5" data-aos="fade-up">
-            <h2 class="h2 fw-bold text-primary mb-2">Our Core Values</h2>
-            <p class="lead text-muted mb-4">The principles that guide everything we do</p>
-
-            <div class="row g-3">
-              <!-- Excellence -->
-              <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="portal-feature-card h-100">
-                  <div class="feature-icon mb-3">
-                    <i class="bi bi-award-fill"></i>
-                  </div>
-                  <h5>Excellence</h5>
-                  <p class="text-muted small">Striving for the highest standards in all we do</p>
-                </div>
-              </div>
-
-              <!-- Innovation -->
-              <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-delay="200">
-                <div class="portal-feature-card h-100">
-                  <div class="feature-icon mb-3">
-                    <i class="bi bi-lightning-charge-fill"></i>
-                  </div>
-                  <h5>Innovation</h5>
-                  <p class="text-muted small">Embracing creativity and forward-thinking solutions</p>
-                </div>
-              </div>
-
-              <!-- Empowerment -->
-              <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-delay="300">
-                <div class="portal-feature-card h-100">
-                  <div class="feature-icon mb-3">
-                    <i class="bi bi-people-fill"></i>
-                  </div>
-                  <h5>Empowerment</h5>
-                  <p class="text-muted small">Enabling individuals to reach their full potential</p>
-                </div>
-              </div>
-
-              <!-- Sustainability -->
-              <div class="col-12 col-sm-6" data-aos="fade-up" data-aos-delay="400">
-                <div class="portal-feature-card h-100">
-                  <div class="feature-icon mb-3">
-                    <i class="bi bi-tree-fill"></i>
-                  </div>
-                  <h5>Sustainability</h5>
-                  <p class="text-muted small">Creating lasting positive impact for communities</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Duties Section -->
-    <section id="duties" class="py-5 px-4 bg-white">
-      <div class="container">
-        <div class="text-center mb-5" data-aos="fade-up">
-          <h2 class="h2 fw-bold text-primary mb-2">HLTS Limited as an Ed-Tech Company</h2>
-          <p class="lead text-muted">A Tech Company Involved in Ed-Tech for Pre-Tertiary Institutions</p>
-        </div>
-
-        <div class="row g-5 align-items-start">
-          <div class="col-lg-6" data-aos="fade-up">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-laptop"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Digital Learning Solutions</h5>
-              <p class="text-muted">HLTS Limited, as an educational technology (Ed-Tech) company serving pre-tertiary institutions such as primary and secondary schools, is responsible for improving teaching and learning through the effective use of technology. Its duties include the design, development, and deployment of digital learning solutions such as e-learning platforms, school management systems, and interactive educational content tailored to young learners.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-book"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Curriculum Integration</h5>
-              <p class="text-muted">The company is tasked with integrating technology into school curricula by working closely with educators to ensure that digital tools align with educational standards and enhance learning outcomes. This involves creating and updating curriculum content, as well as supporting both student- and teacher-facing resources.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-headset"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Training &amp; Technical Support</h5>
-              <p class="text-muted">HLTS Limited provides training and technical support to teachers, school administrators, and students to ensure effective use of its platforms. This includes troubleshooting technical issues, managing learning systems, and guiding users on best practices in digital education.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-graph-up-arrow"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Innovation &amp; Data-Driven Improvement</h5>
-              <p class="text-muted">Furthermore, HLTS Limited monitors and evaluates learning data to improve student performance, ensures the security and reliability of its systems, and promotes innovation in education through continuous research and development. Overall, the company plays a vital role in enhancing access to quality education and supporting digital transformation in pre-tertiary institutions.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tech Institution Section -->
-    <section id="tech-institution" class="py-5 px-4 bg-light">
-      <div class="container">
-        <div class="text-center mb-5" data-aos="fade-up">
-          <h2 class="h2 fw-bold text-primary mb-2">HLTS Limited as a Tech Institution</h2>
-          <p class="lead text-muted">Developing Digital Skills and Promoting Innovation</p>
-        </div>
-
-        <div class="row g-5 align-items-start">
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-cpu"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Digital Skills Development</h5>
-              <p class="text-muted">HLTS Limited is a dynamic technology institution dedicated to developing digital skills and promoting innovation in the modern world. The organization focuses on providing high-quality training in information and communication technology (ICT), equipping learners with practical knowledge in areas such as computer operations, programming, web development, and digital tools.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-mortarboard"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Structured Learning Programs</h5>
-              <p class="text-muted">As a tech institution, HLTS Limited plays a key role in bridging the gap between theoretical education and real-world technological application. It offers structured learning programs, workshops, and hands-on training designed to prepare students for academic advancement, employment, and entrepreneurship in the digital economy.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="portal-feature-card h-100 p-4">
-              <div class="feature-icon mb-4">
-                <i class="bi bi-gear-wide-connected"></i>
-              </div>
-              <h5 class="fw-bold text-primary mb-3">Technical Guidance &amp; Capacity Building</h5>
-              <p class="text-muted">HLTS Limited supports individuals and organizations by offering technical guidance, digital solutions, and capacity-building programs. Through its commitment to excellence and innovation, the institution contributes to the growth of a skilled, tech-driven society and helps shape the future of technology development.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Management Team Section -->
-    <section class="management-team-section py-5">
-      <div class="container">
-        <div class="text-center mb-5">
-          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3 d-inline-block">Our Leadership</span>
-          <h2 class="fw-bold text-primary">Meet the Team</h2>
-          <p class="text-muted mx-auto" style="max-width: 600px;">The passionate leaders driving HLTS's mission to transform education through technology.</p>
-        </div>
-
-        <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
-          <div class="carousel-indicators">
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Christopher Oyeh"></button>
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="1" aria-label="Israel Akinola"></button>
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="2" aria-label="Joseph Amos"></button>
-            <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="3" aria-label="Chike"></button>
-          </div>
-
-          <div class="carousel-inner">
-            <!-- Team Member 1 -->
-            <div class="carousel-item active">
-              <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-5">
-                  <div class="team-card-modern">
-                    <div class="team-img-wrapper">
-                      <img loading="lazy" src="images/Mr Chris.jpg" alt="Christopher Oyeh" class="team-img-modern">
-                      <div class="team-overlay">
-                        <div class="social-icons-modern">
-                          <a href="https://twitter.com/hltslimited" title="Twitter"><i class="bi bi-twitter"></i></a>
-                          <a href="https://www.linkedin.com/company/high-level-tech-services-limited" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                          <a href="https://web.facebook.com/profile.php?id=61551105837140" title="Facebook"><i class="bi bi-facebook"></i></a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="team-info">
-                      <h5>Christopher Oyeh</h5>
-                      <span class="team-role">Founder & CEO</span>
-                      <p class="team-bio">Visionary leader with 10+ years in EdTech, driving innovation and digital transformation in education.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Executive Member: Israel Akinola -->
-            <div class="carousel-item">
-              <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-5">
-                  <div class="team-card-modern">
-                    <div class="team-img-wrapper">
-                      <img loading="lazy" src="images/Israel.jpeg" alt="Israel Akinola" class="team-img-modern">
-                    </div>
-                    <div class="team-info">
-                      <h5>Israel Akinola</h5>
-                      <span class="team-role">Executive Member</span>
-                      <p class="team-bio">Supports community learning and technology programmes that help learners and educators build practical digital skills.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Executive Member: Joseph Amos -->
-            <div class="carousel-item">
-              <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-5">
-                  <div class="team-card-modern">
-                    <div class="team-img-wrapper">
-                      <img loading="lazy" src="images/Joseph amos.jpeg" alt="Joseph Amos" class="team-img-modern">
-                    </div>
-                    <div class="team-info">
-                      <h5>Joseph Amos</h5>
-                      <span class="team-role">Executive Member</span>
-                      <p class="team-bio">Contributes to HLTS education services and partnership work with schools and institutions.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Executive Member: Chike -->
-            <div class="carousel-item">
-              <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-5">
-                  <div class="team-card-modern">
-                    <div class="team-img-wrapper">
-                      <img loading="lazy" src="images/chike.jpg" alt="Chike" class="team-img-modern">
-                    </div>
-                    <div class="team-info">
-                      <h5>Chike</h5>
-                      <span class="team-role">Executive Member</span>
-                      <p class="team-bio">Supports HLTS's work connecting education with practical technology.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Carousel Controls -->
-          <button class="carousel-control-prev" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="portal-cta">
-      <div class="container-custom">
-        <div class="row align-items-center">
-          <div class="col-lg-8" data-aos="fade-up">
-            <h2>Ready to Be Part of Our Journey?</h2>
-            <p>Join thousands of students and professionals who have transformed their lives with HLTS</p>
-          </div>
-          <div class="col-lg-4 text-lg-end" data-aos="fade-up">
-            <a href="registration-form.html" class="btn contact-btn btn-lg pulse">
-              <i class="bi bi-person-plus"></i> Register Now
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gallery Section (copied from meeting-gallery-section) -->
-    <section id="gallery-section" class="meeting-gallery-section" data-aos="fade-up">
-      <div class="container-custom">
-        <div class="section-title">
-          <h2>Our Gallery</h2>
-          <p>Capturing moments of collaboration, innovation, and teamwork from our company events</p>
-        </div>
-        <div class="gallery-grid">
-          <!-- Gallery Item: Team Main Session -->
-          <div class="gallery-item featured" data-aos="zoom-in" data-aos-delay="100">
-            <img src="images/2025meeting/team.jpg" alt="HLTS Team Meeting - Main Session" loading="lazy">
-            <div class="gallery-overlay">
-              <h5>Strategic Planning Session</h5>
-              <p>Our leadership team discussing future initiatives and growth strategies</p>
-            </div>
-          </div>
-          <!-- Gallery Item: Team 2 -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="150">
-            <img src="images/2025meeting/team2.jpg" alt="Team Collaboration" loading="lazy">
-            <div class="gallery-overlay">
-              <h5>Team Collaboration</h5>
-              <p>Team members brainstorming and collaborating on projects</p>
-            </div>
-          </div>
-          <!-- Gallery Item: CEO -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
-            <img src="images/2025meeting/CEO.jpg" alt="CEO Christopher Oyeh" loading="lazy">
-            <div class="gallery-overlay">
-              <h5>Leadership Vision</h5>
-              <p>CEO Christopher Oyeh sharing the company's roadmap</p>
-            </div>
-          </div>
-          <!-- Gallery Item: Supervisor -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="250">
-            <img src="images/2025meeting/Supervisor.jpeg" alt="HLTS team member sharing operational updates" loading="lazy">
-            <div class="gallery-overlay">
-              <h5>Team Coordination</h5>
-              <p>Team members sharing operational updates</p>
-            </div>
-          </div>
-          <!-- Gallery Item: Team Collaboration -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
-            <img src="images/2025meeting/DepSuper.jpg" alt="HLTS team members collaborating" loading="lazy">
-            <div class="gallery-overlay">
-              <h5>Team Collaboration</h5>
-              <p>Colleagues sharing ideas during a planning session</p>
-            </div>
-          </div>
-          <!-- Gallery Item: HLTS Group -->
-          <div class="gallery-item" data-aos="zoom-in" data-aos-delay="350">
-            <img src="images/2025meeting/hlts.jpg" alt="HLTS Group" loading="lazy">
-            <div class="gallery-overlay">
-              <h5>HLTS Group</h5>
-              <p>Group photo of HLTS team members</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-
-<?php include __DIR__ . '/partials/footer.php'; ?>
+<?php page_end(); ?>

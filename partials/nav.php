@@ -1,60 +1,78 @@
 <?php
 /**
- * Shared site navigation. Grouped by HLTS business line.
- * Requires partials/head.php to have run (it sets $currentPage and h()).
+ * Site header: desktop mega menu, mobile off-canvas menu and phone bottom bar.
+ * Menu items come from nav_groups() in lib/content.php.
  */
 
-$navActive = function (array $pages) use ($currentPage) {
-    return in_array($currentPage, $pages, true) ? ' active' : '';
-};
-$navCurrent = function (array $pages) use ($currentPage) {
-    return in_array($currentPage, $pages, true) ? ' aria-current="page"' : '';
-};
+$current = current_page();
+$groups = nav_groups();
+$isIn = fn (array $group) => in_array($current, $group['match'], true);
 ?>
-    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Main">
-      <div class="container-fluid public-nav-inner">
-        <a class="navbar-brand" href="index.html" aria-label="HLTS Limited home">
-          <img src="images/logoh.png" alt="HLTS Logo" height="70">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Open navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="mainNavbar">
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link<?= $navActive(['index']) ?>" href="index.html"<?= $navCurrent(['index']) ?>><i class="bi bi-house" aria-hidden="true"></i> Home</a></li>
+    <header class="site-header<?= !empty($GLOBALS['page']['solid_header']) ? ' is-solid' : '' ?>" data-header>
+      <div class="container">
+        <div class="site-header__bar">
+          <a class="brand" href="/" aria-label="HLTS Limited home">
+            <img src="/images/brand/logo-192.png" alt="" width="46" height="46">
+            <span class="brand__text"><span class="brand__name">HLTS</span><span class="brand__tag">TECHNOLOGY</span></span>
+          </a>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle<?= $navActive(['services', 'cbt', 'school-form']) ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-building" aria-hidden="true"></i> For Schools</a>
-              <ul class="dropdown-menu public-dropdown">
-                <li><a class="dropdown-item" href="services.html"<?= $navCurrent(['services']) ?>><i class="bi bi-diagram-3" aria-hidden="true"></i><span><strong>School Solutions</strong><small>Technology, operations and support</small></span></a></li>
-                <li><a class="dropdown-item" href="cbt.html"<?= $navCurrent(['cbt']) ?>><i class="bi bi-ui-checks-grid" aria-hidden="true"></i><span><strong>CBT &amp; Assessments</strong><small>Exam setup and result management</small></span></a></li>
-                <li><a class="dropdown-item" href="school-form.html"<?= $navCurrent(['school-form']) ?>><i class="bi bi-person-workspace" aria-hidden="true"></i><span><strong>Register Your School</strong><small>Staff deployment and school services</small></span></a></li>
-              </ul>
-            </li>
+          <nav class="main-nav" aria-label="Main">
+            <ul class="main-nav__list">
+<?php foreach ($groups as $key => $group): ?>
+              <li class="main-nav__item dropdown" data-hover-dropdown>
+                <button class="main-nav__link<?= $isIn($group) ? ' is-active' : '' ?>" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" id="nav-<?= h($key) ?>">
+                  <?= h($group['label']) ?> <?= icon('chevron-down') ?>
+                </button>
+                <div class="mega dropdown-menu" aria-labelledby="nav-<?= h($key) ?>">
+<?php foreach ($group['items'] as [$page, $label, $hint, $iconName]): ?>
+                  <a class="mega__item<?= $current === $page ? ' is-active' : '' ?>" href="<?= h(page_url($page)) ?>"<?= $current === $page ? ' aria-current="page"' : '' ?>>
+                    <span class="mega__icon"><?= icon($iconName) ?></span>
+                    <span><strong><?= h($label) ?></strong><small><?= h($hint) ?></small></span>
+                  </a>
+<?php endforeach; ?>
+                </div>
+              </li>
+<?php endforeach; ?>
+            </ul>
+          </nav>
 
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle<?= $navActive(['online-institution', 'course', 'registration-form']) ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-mortarboard" aria-hidden="true"></i> Online Institution</a>
-              <ul class="dropdown-menu public-dropdown">
-                <li><a class="dropdown-item" href="online-institution.html"<?= $navCurrent(['online-institution']) ?>><i class="bi bi-laptop" aria-hidden="true"></i><span><strong>About the Institution</strong><small>How HLTS Online Institution works</small></span></a></li>
-                <li><a class="dropdown-item" href="course.html"<?= $navCurrent(['course']) ?>><i class="bi bi-journal-text" aria-hidden="true"></i><span><strong>Courses</strong><small>Programmes and fees</small></span></a></li>
-                <li><a class="dropdown-item" href="registration-form.html"<?= $navCurrent(['registration-form']) ?>><i class="bi bi-person-plus" aria-hidden="true"></i><span><strong>Register</strong><small>Start your learning journey</small></span></a></li>
-              </ul>
-            </li>
-
-            <li class="nav-item"><a class="nav-link<?= $navActive(['community']) ?>" href="community.html"<?= $navCurrent(['community']) ?>><i class="bi bi-globe2" aria-hidden="true"></i> TechMind Africa</a></li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle<?= $navActive(['about', 'faq', 'terms', 'contact']) ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-info-circle" aria-hidden="true"></i> Company</a>
-              <ul class="dropdown-menu public-dropdown">
-                <li><a class="dropdown-item" href="about.html"<?= $navCurrent(['about']) ?>><i class="bi bi-building-check" aria-hidden="true"></i><span><strong>About HLTS</strong><small>Our mission and people</small></span></a></li>
-                <li><a class="dropdown-item" href="faq.html"<?= $navCurrent(['faq']) ?>><i class="bi bi-question-circle" aria-hidden="true"></i><span><strong>FAQs</strong><small>Answers to common questions</small></span></a></li>
-                <li><a class="dropdown-item" href="contact.html"<?= $navCurrent(['contact']) ?>><i class="bi bi-envelope" aria-hidden="true"></i><span><strong>Contact</strong><small>Talk to our team</small></span></a></li>
-              </ul>
-            </li>
-
-            <li class="nav-item nav-portal-item"><a class="nav-link<?= $navActive(['portal']) ?>" href="portal.html"<?= $navCurrent(['portal']) ?>><i class="bi bi-person-badge" aria-hidden="true"></i> Student Portal</a></li>
-            <li class="nav-item"><a class="btn contact-btn" href="contact.html"><i class="bi bi-arrow-up-right" aria-hidden="true"></i> Talk to HLTS</a></li>
-          </ul>
+          <div class="site-header__actions">
+            <?= button('Book a demo', page_url('book-demo'), 'primary', 'calendar-check', ['data-magnetic' => '']) ?>
+            <button class="nav-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-label="Open menu">
+              <?= icon('list') ?>
+            </button>
+          </div>
         </div>
       </div>
+    </header>
+
+    <div class="offcanvas offcanvas-end mobile-menu" tabindex="-1" id="mobileMenu" aria-labelledby="mobileMenuLabel">
+      <div class="offcanvas-header">
+        <a class="brand" href="/"><img src="/images/brand/logo-192.png" alt="" width="40" height="40"><span class="brand__text"><span class="brand__name" id="mobileMenuLabel">HLTS</span><span class="brand__tag">TECHNOLOGY</span></span></a>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
+      </div>
+      <div class="offcanvas-body">
+<?php foreach ($groups as $group): ?>
+        <details class="mobile-group"<?= $isIn($group) ? ' open' : '' ?>>
+          <summary><?= icon($group['icon']) ?> <?= h($group['label']) ?> <?= icon('chevron-down') ?></summary>
+          <ul>
+<?php foreach ($group['items'] as [$page, $label, , $iconName]): ?>
+            <li><a href="<?= h(page_url($page)) ?>"<?= $current === $page ? ' class="is-active" aria-current="page"' : '' ?>><?= icon($iconName) ?> <?= h($label) ?></a></li>
+<?php endforeach; ?>
+          </ul>
+        </details>
+<?php endforeach; ?>
+        <div class="mobile-menu__actions">
+          <?= button('Book a school demo', page_url('book-demo'), 'primary', 'calendar-check') ?>
+          <?= button('Chat on WhatsApp', 'https://wa.me/' . config('whatsapp'), 'ghost-light', 'whatsapp') ?>
+        </div>
+      </div>
+    </div>
+
+    <nav class="mobile-bar" aria-label="Quick links" data-mobile-bar>
+      <a href="/"<?= $current === 'index' ? ' class="is-active" aria-current="page"' : '' ?>><?= icon('house') ?><span>Home</span></a>
+      <a href="<?= h(page_url('services')) ?>"<?= $isIn($groups['schools']) ? ' class="is-active"' : '' ?>><?= icon('building') ?><span>Schools</span></a>
+      <a href="<?= h(page_url('course')) ?>"<?= $isIn($groups['learn']) ? ' class="is-active"' : '' ?>><?= icon('mortarboard') ?><span>Courses</span></a>
+      <a href="https://wa.me/<?= h(config('whatsapp')) ?>" target="_blank" rel="noopener"><?= icon('whatsapp') ?><span>WhatsApp</span></a>
+      <a class="mobile-bar__cta" href="<?= h(page_url('contact')) ?>"><?= icon('chat-dots') ?><span>Talk to us</span></a>
     </nav>
