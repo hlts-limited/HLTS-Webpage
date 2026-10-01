@@ -29,6 +29,7 @@ function admin_nav(): array
     return [
         'dashboard' => ['Dashboard', 'speedometer2', '/admin/'],
         'leads' => ['Leads & enquiries', 'inbox', '/admin/leads.php'],
+        'app-sync' => ['Staff app sync', 'arrow-repeat', '/admin/app-sync.php'],
         'students' => ['Students', 'person-badge', '/admin/students.php'],
         'payments' => ['Payments', 'credit-card', '/admin/payments.php'],
         'results' => ['Results', 'clipboard-data', '/admin/results.php'],

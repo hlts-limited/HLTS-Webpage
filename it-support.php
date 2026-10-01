@@ -7,7 +7,7 @@ page_start([
     'form' => 'support',
 ]);
 
-$form = simple_form('support', ['school', 'category', 'urgency', 'description', 'name', 'email', 'phone'], 'Send support request');
+$form = simple_form('support', ['school', 'category', 'urgency', 'description', 'name', 'email', 'phone', 'terms'], 'Send support request');
 
 echo form_page(
     [

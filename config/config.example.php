@@ -36,6 +36,13 @@ return [
         'smtp_pass' => '',
     ],
 
+    // Shared secret for sending form submissions to the HLTS staff app. Generate it once with
+    //   php -r "echo bin2hex(random_bytes(32));"
+    // and put the same value in Vercel as WEBSITE_WEBHOOK_SECRET.
+    'app_sync' => [
+        'secret' => '',
+    ],
+
     // Paystack dashboard > Settings > API Keys & Webhooks.
     // Set the webhook URL to https://hltsltd.com/paystack-webhook.php
     'paystack' => [

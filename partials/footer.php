@@ -54,13 +54,14 @@ $footerColumns = ['schools', 'learn', 'build', 'company'];
               <input type="email" id="newsletter-email" name="email" placeholder="Your email address" autocomplete="email" required>
               <button class="btn-hl btn-hl--primary" type="submit" data-submit><span class="btn-hl__label">Subscribe</span><span class="btn-hl__spinner" aria-hidden="true"></span></button>
             </div>
+            <?= form_field('newsletter', 'terms') ?>
             <?= success_panel() ?>
           </form>
         </div>
 
         <div class="site-footer__bottom">
           <span>&copy; <?= date('Y') ?> HLTS Limited. All rights reserved.</span>
-          <span><a href="<?= h(page_url('terms')) ?>">Terms &amp; Privacy</a> · <a href="<?= h(page_url('faq')) ?>">Help</a> · <a href="/admin/">Staff sign-in</a></span>
+          <span><a href="<?= h(page_url('privacy')) ?>">Privacy Policy</a> · <a href="<?= h(page_url('terms')) ?>">Terms</a> · <a href="<?= h(page_url('faq')) ?>">Help</a> · <a href="/admin/">Staff sign-in</a></span>
         </div>
       </div>
       <div class="site-footer__mark" aria-hidden="true"><?= infinity_svg('footer') ?></div>

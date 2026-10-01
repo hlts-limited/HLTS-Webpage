@@ -59,6 +59,14 @@ function config(string $key, $default = null)
                 'send_confirmations' => true,
             ],
 
+            // The HLTS staff app receives every form submission. Sending stays off until
+            // the secret is set in config.local.php (the same value as the app's
+            // WEBSITE_WEBHOOK_SECRET on Vercel).
+            'app_sync' => [
+                'url' => getenv('HLTS_APP_SYNC_URL') ?: 'https://hlts-hr.vercel.app/api/webhooks/website',
+                'secret' => (string) getenv('HLTS_APP_SYNC_SECRET'),
+            ],
+
             // Paystack. Payments stay switched off until a secret key is set.
             'paystack' => [
                 'public_key' => '',

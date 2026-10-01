@@ -232,6 +232,11 @@ function form_open(string $key, array $attrs = []): string
 {
     $class = 'smart-form ' . ($attrs['class'] ?? '');
     $html = '<form class="' . h(trim($class)) . '" method="post" action="/submit.php" data-form="' . h($key) . '" novalidate';
+    // Forms with an upload (CVs) must send files.
+    $definition = form_definition($key);
+    if ($definition && in_array('file', array_column($definition['fields'], 'type'), true)) {
+        $html .= ' enctype="multipart/form-data"';
+    }
     foreach ($attrs as $name => $value) {
         if ($name !== 'class') {
             $html .= ' ' . h($name) . '="' . h($value) . '"';
@@ -290,6 +295,11 @@ function form_field(string $formKey, string $name, array $extra = []): string
             $html .= '<span class="option__tick" aria-hidden="true">' . icon('check-lg') . '</span></span></label>';
         }
         $html .= '</div></fieldset>';
+    } elseif ($type === 'file') {
+        $html .= '<label class="field-label" for="' . h($id) . '">' . h($field['label']) . $req . '</label>';
+        $html .= '<label class="file-pick" for="' . h($id) . '">' . icon('file-earmark-arrow-up', 'file-pick__icon')
+            . '<span class="file-pick__text" data-file-name>Choose a file</span><span class="file-pick__button">Browse</span>'
+            . '<input type="file" id="' . h($id) . '" name="' . h($name) . '" accept="' . h($field['accept'] ?? '') . '" data-max-bytes="' . (int) ($field['max_bytes'] ?? 0) . '"' . ($required ? ' required' : '') . ' aria-describedby="' . h($describedBy) . '"' . $invalid . '></label>';
     } elseif ($type === 'consent') {
         $html .= '<label class="consent" for="' . h($id) . '"><input type="checkbox" id="' . h($id) . '" name="' . h($name) . '" value="1"' . ($old ? ' checked' : '') . ($required ? ' required' : '') . ' aria-describedby="' . h($describedBy) . '"' . $invalid . '><span class="consent__box" aria-hidden="true">' . icon('check-lg') . '</span><span>' . $field['label'] . '</span></label>';
     } else {
@@ -317,7 +327,11 @@ function form_field(string $formKey, string $name, array $extra = []): string
             $inputType = ['tel' => 'tel', 'email' => 'email', 'url' => 'url', 'date' => 'date'][$type] ?? 'text';
             $min = !empty($field['min_today']) ? ' min="' . date('Y-m-d') . '"' : '';
             $mode = $type === 'tel' ? ' inputmode="tel"' : '';
-            $html .= '<div class="input-wrap"><input type="' . $inputType . '"' . $common . $min . $mode . ' value="' . h($old) . '"><span class="input-ok" aria-hidden="true">' . icon('check-circle-fill') . '</span></div>';
+            $html .= '<div class="input-wrap"><input type="' . $inputType . '"' . $common . $min . $mode . ' value="' . h($old) . '"' . (!empty($field['same_as']) ? ' data-same-target="' . h($field['same_as']) . '"' : '') . '><span class="input-ok" aria-hidden="true">' . icon('check-circle-fill') . '</span></div>';
+            if (!empty($field['same_as'])) {
+                $same = !empty($state['old'][$name . '_same']);
+                $html .= '<label class="same-as"><input type="checkbox" name="' . h($name) . '_same" value="1" data-same-as="' . h($field['same_as']) . '"' . ($same ? ' checked' : '') . '> Same as my phone number</label>';
+            }
         }
     }
 
@@ -327,6 +341,12 @@ function form_field(string $formKey, string $name, array $extra = []): string
     $html .= '<p class="field-error" id="' . h($id) . '-error"' . ($error === '' ? ' hidden' : '') . '>' . icon('exclamation-circle') . '<span>' . h($error) . '</span></p>';
 
     return $html . '</div>';
+}
+
+/** The privacy checkbox for forms that don't go through submit.php (results, certificates). */
+function consent_checkbox(string $id, bool $checked = false, string $text = 'I have read and agree to the HLTS'): string
+{
+    return '<div class="field field--consent" data-field="terms"><label class="consent" for="' . h($id) . '"><input type="checkbox" id="' . h($id) . '" name="terms" value="1" required' . ($checked ? ' checked' : '') . '><span class="consent__box" aria-hidden="true">' . icon('check-lg') . '</span><span>' . h($text) . ' <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span></label></div>';
 }
 
 function form_fields(string $formKey, array $names): string

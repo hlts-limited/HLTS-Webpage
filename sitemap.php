@@ -9,7 +9,7 @@ $pages = ['index', 'services', 'school-management', 'cbt', 'staff-deployment', '
     'online-institution', 'course', 'registration-form', 'verify-certificate',
     'digital-solutions', 'portfolio', 'request-quote',
     'community', 'events', 'join-techmind',
-    'about', 'blog', 'careers', 'faq', 'contact', 'terms'];
+    'about', 'blog', 'careers', 'faq', 'contact', 'terms', 'privacy'];
 
 $urls = array_map(fn ($p) => absolute_url($p === 'index' ? '' : "$p.html"), $pages);
 foreach (array_keys(courses()) as $slug) {

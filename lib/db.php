@@ -96,7 +96,7 @@ function db_update(string $table, int $id, array $row): void
 
 function migrate(PDO $pdo): void
 {
-    $version = 1;
+    $version = 2;
     $marker = STORAGE_DIR . '/.schema-' . db_driver() . '-' . md5((string) config('db.name') . (string) config('db.sqlite_path'));
     if (is_file($marker) && (int) file_get_contents($marker) >= $version) {
         return;
@@ -245,6 +245,22 @@ function migrate(PDO $pdo): void
             status VARCHAR(20) NOT NULL DEFAULT 'draft',
             created_at VARCHAR(19) NOT NULL
         )",
+        "app_sync (
+            id $id,
+            lead_id INT NOT NULL,
+            form VARCHAR(40) NOT NULL,
+            payload $text NOT NULL,
+            file_path VARCHAR(255) NOT NULL DEFAULT '',
+            file_name VARCHAR(255) NOT NULL DEFAULT '',
+            file_mime VARCHAR(120) NOT NULL DEFAULT '',
+            status VARCHAR(20) NOT NULL DEFAULT 'pending',
+            attempts INT NOT NULL DEFAULT 0,
+            last_error VARCHAR(255) NOT NULL DEFAULT '',
+            next_attempt_at VARCHAR(19) NOT NULL,
+            sent_at VARCHAR(19) NULL,
+            created_at VARCHAR(19) NOT NULL,
+            updated_at VARCHAR(19) NOT NULL
+        )",
         "materials (
             id $id,
             course_slug VARCHAR(60) NOT NULL,
@@ -266,6 +282,8 @@ function migrate(PDO $pdo): void
         'results_lookup' => 'results (student_ref, batch_id)',
         'payments_email' => 'payments (email)',
         'materials_course' => 'materials (course_slug)',
+        'app_sync_due' => 'app_sync (status, next_attempt_at)',
+        'app_sync_lead' => 'app_sync (lead_id)',
     ];
     foreach ($indexes as $name => $definition) {
         try {

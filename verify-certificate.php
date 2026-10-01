@@ -36,6 +36,7 @@ echo page_hero([
           <label class="field-label" for="code">Certificate number</label>
           <div class="input-wrap"><input id="code" name="code" value="<?= h($code) ?>" placeholder="HLTS-2026-ABC123" autocomplete="off" required></div>
         </div>
+        <?= consent_checkbox('cert-terms', !empty($_GET['terms'])) ?>
         <div class="form-nav"><button class="btn-hl btn-hl--primary btn-hl--block" type="submit"><span>Verify certificate</span> <?= icon('patch-check') ?></button></div>
       </form>
     </div>

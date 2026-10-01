@@ -616,3 +616,37 @@ input[type="date"] {
 .smart-form.is-done > :not(.form-success):not(input) {
   display: none !important;
 }
+
+/* File upload (CVs) */
+.file-pick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-md, 12px);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease-spring);
+}
+.file-pick:hover,
+.file-pick:focus-within { border-color: var(--indigo-500); }
+.file-pick input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.file-pick__icon { font-size: 1.4rem; color: var(--indigo-500); }
+.file-pick__text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--body); }
+.file-pick__button { padding: 6px 12px; border-radius: 999px; background: var(--grad-brand); color: var(--white); font-size: var(--fs-sm); font-weight: 600; }
+.file-pick:has(input[aria-invalid="true"]) { border-color: var(--danger); }
+
+/* "Same as my phone number" */
+.same-as { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; font-size: var(--fs-sm); color: var(--body); cursor: pointer; }
+.same-as input { width: 16px; height: 16px; accent-color: var(--indigo-500); }
+input[readonly] { opacity: 0.75; }
+
+/* Consent in the footer newsletter form */
+.footer-news .field--consent { margin-top: 10px; }
+.footer-news .consent { color: inherit; font-size: 0.8rem; opacity: 0.9; }
+.footer-news .consent a { color: inherit; text-decoration: underline; }
+
+/* Consent on the results and certificate lookups */
+.form-shell .consent { margin-top: 4px; }

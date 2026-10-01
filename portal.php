@@ -57,6 +57,7 @@ echo page_hero([
             <label class="field-label" for="password">Password</label>
             <div class="input-wrap"><input id="password" type="password" name="password" autocomplete="current-password" required></div>
           </div>
+          <p class="small muted">By signing in you agree to the <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/terms.html" target="_blank" rel="noopener">Terms of Service</a>.</p>
           <div class="form-nav">
             <a class="text-link" href="<?= h(page_url('registration-form')) ?>">Register for a course <?= icon('arrow-right') ?></a>
             <button type="submit" class="btn-hl btn-hl--primary btn-hl--lg"><span>Sign in</span> <?= icon('box-arrow-in-right') ?></button>

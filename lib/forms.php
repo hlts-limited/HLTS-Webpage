@@ -74,9 +74,26 @@ function course_fee_data(): array
     return $data;
 }
 
+/** Version of the privacy policy visitors agree to. Change it when the policy changes. */
+const PRIVACY_VERSION = '2026-10-01';
+
+/** Largest CV accepted (the staff app's limit). */
+const CV_MAX_BYTES = 4194304;
+
+/** Nigerian states, for location questions. */
+function ng_states(): array
+{
+    $states = ['Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT (Abuja)', 'Gombe', 'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 'Yobe', 'Zamfara'];
+    return array_combine(array_map('slugify', $states), $states);
+}
+
 function form_definitions(): array
 {
-    $consent = ['type' => 'consent', 'label' => 'I agree to the <a href="/terms.html#terms-of-service" target="_blank" rel="noopener">Terms</a> and <a href="/terms.html#privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>.', 'required' => true];
+    $policy = '<a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>';
+    $consent = ['type' => 'consent', 'label' => "I have read and agree to the $policy and <a href=\"/terms.html\" target=\"_blank\" rel=\"noopener\">Terms of Service</a>, and I consent to HLTS using the details in this form to respond to my request.", 'required' => true];
+    $consentJob = ['type' => 'consent', 'label' => "I have read and agree to the $policy. I consent to HLTS keeping my details and CV to consider me for roles, and understand they are deleted 30 days after a decision not to proceed, or sooner if I ask.", 'required' => true];
+    $whatsapp = ['type' => 'tel', 'label' => 'WhatsApp number', 'required' => true, 'autocomplete' => 'tel', 'placeholder' => '0810 000 0000', 'same_as' => 'phone', 'help' => 'We contact shortlisted candidates on WhatsApp.'];
+    $cv = ['type' => 'file', 'label' => 'Upload your CV', 'required' => true, 'accept' => '.pdf,.doc,.docx', 'max_bytes' => CV_MAX_BYTES, 'help' => 'PDF or Word document (.pdf, .doc, .docx), up to 4 MB.'];
     $name = ['type' => 'text', 'label' => 'Full name', 'required' => true, 'autocomplete' => 'name', 'max' => 120];
     $email = ['type' => 'email', 'label' => 'Email address', 'required' => true, 'autocomplete' => 'email', 'placeholder' => 'you@example.com'];
     $phone = ['type' => 'tel', 'label' => 'Phone number', 'required' => true, 'autocomplete' => 'tel', 'placeholder' => '0810 000 0000'];
@@ -156,6 +173,7 @@ function form_definitions(): array
                 'name' => ['type' => 'text', 'label' => 'Your name', 'required' => true, 'autocomplete' => 'name', 'max' => 120],
                 'email' => $email,
                 'phone' => $phone,
+                'terms' => $consent,
             ],
             'lead' => ['name' => 'name', 'email' => 'email', 'phone' => 'phone', 'organisation' => 'school'],
             'summary' => fn ($d) => strtoupper($d['urgency']) . ' · ' . ($d['category'] ?? ''),
@@ -208,6 +226,7 @@ function form_definitions(): array
                 'email' => $email,
                 'phone' => ['type' => 'tel', 'label' => 'Phone number', 'required' => false, 'autocomplete' => 'tel'],
                 'message' => ['type' => 'textarea', 'label' => 'Message', 'required' => true, 'max' => 4000],
+                'terms' => $consent,
             ],
             'lead' => ['name' => 'name', 'email' => 'email', 'phone' => 'phone'],
             'summary' => fn ($d) => 'Topic: ' . ($d['topic'] ?? ''),
@@ -217,17 +236,56 @@ function form_definitions(): array
             'title' => 'Job application',
             'subject' => 'New job application',
             'success' => 'Application received. If your profile matches, our team will contact you for the next stage.',
+            'private' => true,
             'fields' => [
                 'job' => ['type' => 'hidden', 'label' => 'Role', 'required' => true, 'max' => 191],
                 'name' => $name,
                 'email' => $email,
                 'phone' => $phone,
-                'cv_url' => ['type' => 'url', 'label' => 'Link to your CV or LinkedIn', 'required' => true, 'placeholder' => 'https://', 'help' => 'Google Drive, Dropbox or LinkedIn. Make sure the link is viewable.'],
+                'whatsapp' => $whatsapp,
+                'cv' => $cv,
+                'cv_url' => ['type' => 'url', 'label' => 'LinkedIn or portfolio link', 'required' => false, 'placeholder' => 'https://'],
                 'message' => ['type' => 'textarea', 'label' => 'Why are you a good fit?', 'required' => true, 'max' => 3000],
-                'terms' => $consent,
+                'terms' => $consentJob,
             ],
             'lead' => ['name' => 'name', 'email' => 'email', 'phone' => 'phone'],
             'summary' => fn ($d) => 'Applied for: ' . $d['job'],
+        ],
+
+        'candidate' => [
+            'title' => 'Talent pool registration',
+            'subject' => 'New candidate in the talent pool',
+            'success' => 'Thank you. Your details and CV are with our HR team. When a role fits you, we will contact you on WhatsApp or by phone.',
+            'private' => true,
+            'fields' => [
+                'roles' => ['type' => 'checkbox-cards', 'label' => 'Which roles are you interested in?', 'required' => true, 'options' => [
+                    'ict-teacher' => 'ICT / computer teacher',
+                    'coding-instructor' => 'Coding & robotics instructor',
+                    'lab-technician' => 'Lab assistant / technician',
+                    'it-support' => 'IT support',
+                    'supervisor' => 'Academic supervisor',
+                    'developer' => 'Software developer',
+                    'operations' => 'Administration / operations',
+                    'other' => 'Other',
+                ]],
+                'qualification' => ['type' => 'select', 'label' => 'Highest qualification', 'required' => true, 'options' => ['ssce' => 'SSCE / O-level', 'ond-nce' => 'OND / NCE', 'hnd' => 'HND', 'degree' => 'Bachelor’s degree', 'masters' => 'Master’s degree or higher', 'professional' => 'Professional certification']],
+                'experience' => ['type' => 'select', 'label' => 'Years of relevant experience', 'required' => true, 'options' => ['none' => 'None yet', '1-2' => '1–2 years', '3-5' => '3–5 years', '6-10' => '6–10 years', '10-plus' => 'More than 10 years']],
+                'skills' => ['type' => 'textarea', 'label' => 'Key skills', 'required' => true, 'placeholder' => 'e.g. Microsoft Office, Scratch, Python, networking, CBT setup, classroom management', 'max' => 1500],
+                'state' => ['type' => 'select', 'label' => 'State you live in', 'required' => true, 'options' => ng_states()],
+                'area' => ['type' => 'text', 'label' => 'Area or town', 'required' => true, 'placeholder' => 'e.g. Somolu', 'max' => 80],
+                'relocate' => ['type' => 'radio', 'label' => 'Can you work at schools outside your area?', 'required' => true, 'options' => ['yes' => 'Yes', 'nearby' => 'Nearby areas only', 'no' => 'No']],
+                'start' => ['type' => 'radio', 'label' => 'When can you start?', 'required' => true, 'options' => ['now' => 'Immediately', '2-weeks' => 'In 2 weeks', '1-month' => 'In a month', 'later' => 'Later']],
+                'salary' => ['type' => 'text', 'label' => 'Expected monthly salary (₦)', 'required' => false, 'placeholder' => 'e.g. 120,000', 'max' => 40],
+                'name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'whatsapp' => $whatsapp,
+                'cv' => $cv,
+                'about' => ['type' => 'textarea', 'label' => 'Anything else we should know?', 'required' => false, 'max' => 1500],
+                'terms' => $consentJob,
+            ],
+            'lead' => ['name' => 'name', 'email' => 'email', 'phone' => 'phone'],
+            'summary' => fn ($d) => implode(', ', array_map(fn ($r) => form_definition('candidate')['fields']['roles']['options'][$r] ?? $r, (array) $d['roles'])) . ' · ' . (ng_states()[$d['state']] ?? ''),
         ],
 
         'newsletter' => [
@@ -237,6 +295,7 @@ function form_definitions(): array
             'confirm' => false,
             'fields' => [
                 'email' => ['type' => 'email', 'label' => 'Email address', 'required' => true],
+                'terms' => ['type' => 'consent', 'label' => "I agree to the $policy and to receive occasional HLTS emails. I can unsubscribe at any time.", 'required' => true],
             ],
             'lead' => ['email' => 'email'],
             'summary' => fn ($d) => 'Newsletter',
@@ -263,7 +322,7 @@ function normalise_phone(string $phone): string
  * Validate posted values against a form definition.
  * Returns [cleanData, errors] where errors is field => message.
  */
-function validate_form(array $definition, array $input): array
+function validate_form(array $definition, array $input, array $files = []): array
 {
     $data = [];
     $errors = [];
@@ -272,6 +331,19 @@ function validate_form(array $definition, array $input): array
         $raw = $input[$name] ?? null;
         $label = strip_tags($field['label']);
         $required = !empty($field['required']);
+
+        if ($field['type'] === 'file') {
+            [$data[$name], $error] = validate_upload($files[$name] ?? null, $field);
+            if ($error !== null) {
+                $errors[$name] = $error;
+            }
+            continue;
+        }
+
+        // "Same as my phone number" ticked: use the phone number given above.
+        if (!empty($field['same_as']) && (!is_string($raw) || trim($raw) === '') && !empty($input[$name . '_same'])) {
+            $raw = $input[$field['same_as']] ?? null;
+        }
 
         if ($field['type'] === 'checkbox-cards') {
             $values = array_values(array_filter(array_map('strval', (array) $raw)));
@@ -346,6 +418,44 @@ function validate_form(array $definition, array $input): array
     }
 
     return [$data, $errors];
+}
+
+/** Identify an uploaded CV by its bytes: PDF, Word (.docx) or old Word (.doc). */
+function sniff_cv(string $path): ?array
+{
+    $bytes = (string) @file_get_contents($path, false, null, 0, CV_MAX_BYTES + 1);
+    if (str_starts_with($bytes, '%PDF-')) {
+        return ['ext' => 'pdf', 'mime' => 'application/pdf'];
+    }
+    if (str_starts_with($bytes, "PK\x03\x04") && str_contains($bytes, 'word/')) {
+        return ['ext' => 'docx', 'mime' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    }
+    if (str_starts_with($bytes, "\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1")) {
+        return ['ext' => 'doc', 'mime' => 'application/msword'];
+    }
+    return null;
+}
+
+/** Check one uploaded file. Returns [fileInfo|null, error|null]. */
+function validate_upload(?array $file, array $field): array
+{
+    $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
+    if ($error === UPLOAD_ERR_NO_FILE || ($file['size'] ?? 0) === 0) {
+        return [null, !empty($field['required']) ? 'Attach your CV.' : null];
+    }
+    $max = (int) ($field['max_bytes'] ?? CV_MAX_BYTES);
+    if (in_array($error, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) || (int) $file['size'] > $max) {
+        return [null, 'Your CV must be ' . round($max / 1048576) . ' MB or smaller.'];
+    }
+    if ($error !== UPLOAD_ERR_OK || !is_string($file['tmp_name'] ?? null)) {
+        return [null, 'The upload did not finish. Please try again.'];
+    }
+    $type = sniff_cv($file['tmp_name']);
+    if (!$type) {
+        return [null, 'Upload a PDF or Word document (.pdf, .doc or .docx).'];
+    }
+    $base = preg_replace('/[^\w .()-]/u', '', pathinfo((string) ($file['name'] ?? 'cv'), PATHINFO_FILENAME)) ?: 'cv';
+    return [['tmp' => $file['tmp_name'], 'name' => mb_substr(trim($base), 0, 100) . '.' . $type['ext'], 'ext' => $type['ext'], 'mime' => $type['mime'], 'size' => (int) $file['size']], null];
 }
 
 /** Human-readable version of the submitted data for emails and the admin area. */

@@ -5,17 +5,21 @@ $result = null;
 $batch = null;
 $error = '';
 $studentId = '';
+$agreed = false;
 
 if (is_post()) {
     csrf_require();
     $studentId = strtoupper(trim((string) ($_POST['student_id'] ?? '')));
     $pin = preg_replace('/\D/', '', (string) ($_POST['pin'] ?? '')) ?? '';
+    $agreed = !empty($_POST['terms']);
 
     if (!rate_limit('results:' . client_ip(), 10, 3600)) {
         $error = 'Too many attempts from your connection. Please wait an hour and try again.';
         log_event('RESULTS_RATE_LIMITED');
     } elseif ($studentId === '' || strlen($pin) < 6) {
         $error = 'Enter the student ID and the PIN printed on the result slip.';
+    } elseif (!$agreed) {
+        $error = 'Tick the box to agree to the Privacy Policy before checking a result.';
     } else {
         $result = db_one(
             'SELECT r.* FROM results r JOIN result_batches b ON b.id = r.batch_id
@@ -65,6 +69,7 @@ echo page_hero([
             <div class="input-wrap"><input id="pin" name="pin" inputmode="numeric" autocomplete="off" required placeholder="10-digit PIN"></div>
             <p class="field-help">Printed on the slip from your school. Keep it private.</p>
           </div>
+          <?= consent_checkbox('results-terms', !empty($agreed), 'I am the student or their parent/guardian, and I agree to the HLTS') ?>
         </div>
         <div class="form-nav"><button class="btn-hl btn-hl--primary btn-hl--block btn-hl--lg" type="submit"><span>Check result</span> <?= icon('search') ?></button></div>
       </form>

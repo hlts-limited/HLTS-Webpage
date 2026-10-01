@@ -9,6 +9,13 @@
 
 require __DIR__ . '/lib/app.php';
 
+// A CV larger than the server allows empties the whole post; say so instead of "unknown form".
+if (is_post() && empty($_POST) && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+    $message = 'Your file is too large. Please upload a CV of 4 MB or less.';
+    wants_json() ? json_response(['ok' => false, 'message' => $message], 413) : render_message_page('File too large', $message, false);
+    exit;
+}
+
 if (!is_post()) {
     http_response_code(405);
     render_message_page('Use the form', 'Please submit this from one of the forms on the website.', false);
@@ -49,7 +56,7 @@ if (!rate_limit("form:$key:" . client_ip(), 6, 600)) {
     $fail('Too many submissions from your connection. Please wait a few minutes and try again.', [], 429);
 }
 
-[$data, $errors] = validate_form($definition, $_POST);
+[$data, $errors] = validate_form($definition, $_POST, $_FILES);
 
 // Course-specific rules.
 if ($key === 'student' && !isset($errors['course'])) {
@@ -68,6 +75,22 @@ if ($errors) {
     $fail('Please check the highlighted fields.', $errors);
 }
 
+// An uploaded CV is kept privately until it has been sent to the staff app.
+$upload = null;
+foreach ($definition['fields'] as $name => $field) {
+    if ($field['type'] === 'file' && is_array($data[$name] ?? null)) {
+        $upload = store_upload($data[$name]);
+        if (!$upload) {
+            log_event('UPLOAD_SAVE_FAILED', $key);
+            $fail('We could not save your CV just now. Please try again.', [$name => 'Upload failed. Please try again.'], 500);
+        }
+        $data[$name] = $upload['name'];
+    }
+}
+
+// Proof of consent: when, and to which version of the privacy policy.
+$consent = !empty($data['terms']) ? ['at' => date(DATE_ATOM), 'version' => PRIVACY_VERSION] : null;
+
 $map = $definition['lead'];
 $details = describe_submission($definition, $data);
 
@@ -79,7 +102,7 @@ try {
         'phone' => (string) ($data[$map['phone'] ?? ''] ?? ''),
         'organisation' => (string) ($data[$map['organisation'] ?? ''] ?? ''),
         'summary' => mb_substr(($definition['summary'])($data), 0, 250),
-        'payload' => json_encode($data, JSON_UNESCAPED_UNICODE),
+        'payload' => json_encode($data + ['_consent' => $consent], JSON_UNESCAPED_UNICODE),
         'status' => 'new',
         'ip' => client_ip(),
         'created_at' => now(),
@@ -90,14 +113,29 @@ try {
     $leadId = null;
 }
 
-// Email the team.
-$body = '';
-foreach ($details as $label => $value) {
-    $body .= $label . ': ' . $value . "\n";
+// Hand it to the staff app (sent after the visitor has their answer; see the end of this file).
+if ($leadId) {
+    try {
+        app_sync_queue($leadId, $key, app_payload($leadId, $key, $definition, $data, now(), $consent, $upload['name'] ?? null), $upload);
+    } catch (Throwable $e) {
+        error_log('App sync queue failed: ' . $e->getMessage());
+    }
 }
-$body .= "\nReceived: " . now() . ($leadId ? "\nView in admin: " . absolute_url("admin/lead.php?id=$leadId") : '');
+
+// Email the team. Job seekers' details stay out of email: they are only in the staff app.
+$body = '';
+if (!empty($definition['private'])) {
+    $body .= "A new " . strtolower($definition['title']) . " has arrived" . (isset($data['job']) ? ' for: ' . $data['job'] : '') . ".\n\n"
+        . "For privacy, the details and CV are not included in this email. Open Recruitment in the HLTS staff app to see them:\n"
+        . "https://hlts-hr.vercel.app/recruitment\n";
+} else {
+    foreach ($details as $label => $value) {
+        $body .= $label . ': ' . $value . "\n";
+    }
+}
+$body .= "\nReceived: " . now() . ($leadId && empty($definition['private']) ? "\nView in admin: " . absolute_url("admin/lead.php?id=$leadId") : '');
 $notifyTo = config("notify_to_by_form.$key") ?: config('notify_to');
-$emailOk = send_mail((string) $notifyTo, $definition['subject'] . (isset($data['name']) && $data['name'] !== '' ? ': ' . $data['name'] : ''), $body, $data['email'] ?? null);
+$emailOk = send_mail((string) $notifyTo, $definition['subject'] . (empty($definition['private']) && isset($data['name']) && $data['name'] !== '' ? ': ' . $data['name'] : ''), $body, empty($definition['private']) ? ($data['email'] ?? null) : null);
 
 if (!$leadId && !$emailOk) {
     log_event('SUBMISSION_LOST', $key);
@@ -127,6 +165,21 @@ if ($key === 'student' && !empty($_POST['pay_now']) && paystack_enabled() && cou
         log_event('PAYSTACK_INIT_FAILED', $e->getMessage());
     }
 }
+
+// Deliver to the staff app once the visitor's response has gone out, so they never wait for it.
+register_shutdown_function(function () use ($leadId) {
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
+    if (function_exists('fastcgi_finish_request')) {
+        fastcgi_finish_request();
+    }
+    try {
+        app_sync_run(5, $leadId);
+    } catch (Throwable $e) {
+        error_log('App sync failed: ' . $e->getMessage());
+    }
+});
 
 if (wants_json()) {
     json_response(['ok' => true, 'message' => $definition['success'], 'redirect' => $redirect]);

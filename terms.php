@@ -2,7 +2,7 @@
 require __DIR__ . '/lib/app.php';
 
 page_start([
-    'title' => 'Terms of Service & Privacy Policy – HLTS Limited',
+    'title' => 'Terms of Service – HLTS Limited',
     'description' => 'The terms for using HLTS services and how HLTS collects, stores and protects information.',
 ]);
 
@@ -11,7 +11,7 @@ echo page_hero([
     'eyebrow' => 'Legal',
     'title' => 'Terms of Service <span class="grad-text">&amp; Privacy Policy</span>',
     'lead' => 'The terms for using HLTS services, and how we handle your information.',
-    'actions' => button('Terms of Service', '#terms-of-service', 'ghost-light', 'arrow-down') . button('Privacy Policy', '#privacy-policy', 'ghost-light', 'arrow-down'),
+    'actions' => button('Terms of Service', '#terms-of-service', 'ghost-light', 'arrow-down') . button('Privacy Policy', page_url('privacy'), 'ghost-light', 'shield-lock'),
 ]);
 ?>
 
@@ -31,16 +31,7 @@ echo page_hero([
       <p>We may suspend or close accounts that break these terms, share proprietary content without permission, or fail to meet subscription obligations. Institutions are notified before any permanent closure.</p>
 
       <h2 id="privacy-policy">Privacy Policy</h2>
-      <h3>1. What we collect</h3>
-      <p>Information you give us through forms (such as name, email, phone and school), and, for partner schools, student names, academic results, attendance and parent or guardian contact details. We also collect basic, anonymous usage information to improve the website.</p>
-      <h3>2. How we use it</h3>
-      <p>To respond to enquiries, deliver the services you ask for, manage courses and results, process payments and send updates you have agreed to receive.</p>
-      <h3>3. How we store and protect it</h3>
-      <p>Data is stored securely with role-based access, encrypted connections, regular backups and modern security practices. Result PINs are stored in a form that cannot be read back.</p>
-      <h3>4. Sharing</h3>
-      <p>We never sell, rent or trade personal data or student records. We share information only with service providers who help us run our services (for example, payment and email providers), and only as needed.</p>
-      <h3>5. Your rights and contact</h3>
-      <p>You can ask to see, correct or delete your information. Email <a href="mailto:<?= h(config('email_public')) ?>"><?= h(config('email_public')) ?></a> or write to us at <?= h(config('address')) ?>.</p>
+      <p>How we collect, use, protect and delete personal information is set out in full in our <a href="<?= h(page_url('privacy')) ?>">Privacy Policy</a>. By submitting any form on this website you confirm you have read it.</p>
       <p class="small muted">Last updated <?= date('F Y') ?>.</p>
     </article>
   </div>

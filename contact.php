@@ -34,7 +34,7 @@ echo page_hero([
       </aside>
       <div class="form-shell" data-reveal="zoom">
         <div class="form-shell__head"><h2>Send a message</h2><p>We usually reply within one working day.</p></div>
-        <?= simple_form('contact', ['topic', 'name', 'email', 'phone', 'message'], 'Send message') ?>
+        <?= simple_form('contact', ['topic', 'name', 'email', 'phone', 'message', 'terms'], 'Send message') ?>
         <div class="grid grid--2 mt-4">
           <a class="card-hl" href="<?= h(page_url('book-demo')) ?>"><h3><?= icon('calendar-check') ?> Book a school demo</h3><p class="small">See HLTS in action at your school.</p></a>
           <a class="card-hl" href="<?= h(page_url('request-quote')) ?>"><h3><?= icon('chat-square-quote') ?> Request a quote</h3><p class="small">For websites, apps and portals.</p></a>

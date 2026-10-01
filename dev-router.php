@@ -26,7 +26,7 @@ $serve = function (string $script, ?int $status = null) {
 };
 
 // Private folders and legacy files that .htaccess blocks on the live site.
-if (preg_match('#^/(partials|lib|config|storage)(/|$)#', $path)
+if (preg_match('#^/(partials|lib|config|storage|bin)(/|$)#', $path)
     || preg_match('#^/admin/_#', $path)
     || preg_match('#^/(admin_dashboard|security-dashboard|portal_interface)\.html$#', $path)
     || preg_match('#/\.#', $path)) {

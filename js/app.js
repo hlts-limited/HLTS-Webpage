@@ -97,6 +97,8 @@
     tel: 'Enter a valid phone number, like 0810 000 0000.',
     url: 'Enter a full link starting with https://',
     consent: 'Please agree to continue.',
+    fileSize: 'This file is too large.',
+    fileType: 'Upload a PDF or Word document (.pdf, .doc or .docx).',
   };
 
   function fieldValue(field) {
@@ -146,6 +148,11 @@
       error = messages.tel;
     } else if (type === 'url' && !/^https?:\/\/\S+\.\S+/i.test(value)) {
       error = messages.url;
+    } else if (type === 'file' && input.files && input.files[0]) {
+      const file = input.files[0];
+      const max = Number(input.dataset.maxBytes || 0);
+      if (max && file.size > max) error = `${messages.fileSize} The limit is ${Math.round(max / 1048576)} MB.`;
+      else if (!/\.(pdf|docx?)$/i.test(file.name)) error = messages.fileType;
     }
 
     showFieldError(field, error);
@@ -236,8 +243,41 @@
     show(0);
   }
 
+  /* "Same as my phone number" copies the phone into the WhatsApp field and keeps it in step. */
+  function initSameAs(form) {
+    $$('[data-same-as]', form).forEach((box) => {
+      const field = box.closest('.field');
+      const target = field && $('input[data-same-target]', field);
+      const source = $(`[name="${box.dataset.sameAs}"]`, form);
+      if (!target || !source) return;
+      const sync = () => {
+        if (!box.checked) return;
+        target.value = source.value;
+        validateField(field);
+      };
+      box.addEventListener('change', () => {
+        target.readOnly = box.checked;
+        sync();
+      });
+      source.addEventListener('input', sync);
+      if (box.checked) target.readOnly = true;
+    });
+    // Show the chosen file's name.
+    $$('input[type="file"]', form).forEach((input) => {
+      const label = $('[data-file-name]', input.closest('.file-pick') || form);
+      input.addEventListener('change', () => {
+        if (label) label.textContent = input.files && input.files[0] ? input.files[0].name : 'Choose a file';
+      });
+    });
+    form.addEventListener('reset', () => {
+      $$('[data-file-name]', form).forEach((l) => (l.textContent = 'Choose a file'));
+      $$('input[data-same-target]', form).forEach((i) => (i.readOnly = false));
+    });
+  }
+
   function initForm(form) {
     if (form.dataset.stepped) initStepped(form);
+    initSameAs(form);
 
     // Live validation: check a field once it has been touched.
     form.addEventListener('focusout', (event) => {
