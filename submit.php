@@ -171,9 +171,13 @@ register_shutdown_function(function () use ($leadId) {
     if (session_status() === PHP_SESSION_ACTIVE) {
         session_write_close();
     }
+    // Send the response now: PHP-FPM and LiteSpeed (Hostinger) each have their own way.
     if (function_exists('fastcgi_finish_request')) {
         fastcgi_finish_request();
+    } elseif (function_exists('litespeed_finish_request')) {
+        litespeed_finish_request();
     }
+    ignore_user_abort(true);
     try {
         app_sync_run(5, $leadId);
     } catch (Throwable $e) {
