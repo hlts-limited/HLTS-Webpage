@@ -19,7 +19,7 @@ const APP_SYNC_MAX_ATTEMPTS = 50;
 
 function app_sync_enabled(): bool
 {
-    return (string) config('app_sync.url') !== '' && (string) config('app_sync.secret') !== '';
+    return (string) config('app_sync.url') !== '' && trim((string) config('app_sync.secret')) !== '';
 }
 
 /** The record sent to the app for one submission. */
@@ -113,7 +113,7 @@ function app_sync_send(array $row): string
         $path = null; // the file is gone; send the details without it
     }
     $timestamp = (string) time();
-    $signature = hash_hmac('sha256', $timestamp . '.' . $payload . '.' . ($path ? hash_file('sha256', $path) : ''), (string) config('app_sync.secret'));
+    $signature = hash_hmac('sha256', $timestamp . '.' . $payload . '.' . ($path ? hash_file('sha256', $path) : ''), trim((string) config('app_sync.secret')));
 
     $fields = ['payload' => $payload];
     if ($path) {
