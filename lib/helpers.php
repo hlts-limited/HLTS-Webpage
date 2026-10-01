@@ -39,8 +39,22 @@ function client_ip(): string
  */
 function page_url(string $page, array $query = []): string
 {
+    if (is_external_url($page)) {
+        return $page;
+    }
     $url = $page === 'index' ? '/' : '/' . $page . '.html';
     return $query ? $url . '?' . http_build_query($query) : $url;
+}
+
+function is_external_url(string $url): bool
+{
+    return (bool) preg_match('#^https?://#i', $url);
+}
+
+/** Extra attributes for menu links: external sites open in a new tab. */
+function link_target(string $page): string
+{
+    return is_external_url($page) ? ' target="_blank" rel="noopener"' : '';
 }
 
 function absolute_url(string $path = ''): string

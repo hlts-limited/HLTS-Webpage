@@ -329,6 +329,7 @@ function nav_groups(): array
                 ['about', 'About HLTS', 'Our mission and people', 'building-check'],
                 ['blog', 'Insights', 'Ideas on education and technology', 'newspaper'],
                 ['careers', 'Careers', 'Work with HLTS', 'briefcase'],
+                ['https://hlts-hr.vercel.app/', 'Staff Portal', 'For HLTS staff', 'person-lock'],
                 ['faq', 'FAQs', 'Answers to common questions', 'question-circle'],
                 ['contact', 'Contact', 'Talk to our team', 'envelope'],
             ],

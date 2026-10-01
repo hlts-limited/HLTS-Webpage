@@ -25,7 +25,7 @@ $isIn = fn (array $group) => in_array($current, $group['match'], true);
                 </button>
                 <div class="mega dropdown-menu" aria-labelledby="nav-<?= h($key) ?>">
 <?php foreach ($group['items'] as [$page, $label, $hint, $iconName]): ?>
-                  <a class="mega__item<?= $current === $page ? ' is-active' : '' ?>" href="<?= h(page_url($page)) ?>"<?= $current === $page ? ' aria-current="page"' : '' ?>>
+                  <a class="mega__item<?= $current === $page ? ' is-active' : '' ?>" href="<?= h(page_url($page)) ?>"<?= link_target($page) ?><?= $current === $page ? ' aria-current="page"' : '' ?>>
                     <span class="mega__icon"><?= icon($iconName) ?></span>
                     <span><strong><?= h($label) ?></strong><small><?= h($hint) ?></small></span>
                   </a>
@@ -57,7 +57,7 @@ $isIn = fn (array $group) => in_array($current, $group['match'], true);
           <summary><?= icon($group['icon']) ?> <?= h($group['label']) ?> <?= icon('chevron-down') ?></summary>
           <ul>
 <?php foreach ($group['items'] as [$page, $label, , $iconName]): ?>
-            <li><a href="<?= h(page_url($page)) ?>"<?= $current === $page ? ' class="is-active" aria-current="page"' : '' ?>><?= icon($iconName) ?> <?= h($label) ?></a></li>
+            <li><a href="<?= h(page_url($page)) ?>"<?= link_target($page) ?><?= $current === $page ? ' class="is-active" aria-current="page"' : '' ?>><?= icon($iconName) ?> <?= h($label) ?></a></li>
 <?php endforeach; ?>
           </ul>
         </details>
