@@ -74,7 +74,7 @@ echo page_hero([
 
 <section class="section section--night">
   <div class="container split">
-    <div data-reveal><?= photo_frame('images/Israel.jpeg', 'Israel Akinola, TechMind Africa community lead', 'Community Lead, TechMind Africa', 'Israel Akinola') ?></div>
+    <div data-reveal><?= photo_frame('images/2027images/ISRAEL.png', 'Israel Akinola, TechMind Africa community lead', 'Community Lead, TechMind Africa', 'Israel Akinola') ?></div>
     <div>
       <?= section_head('Community lead', 'Meet Israel Akinola.', '', 'left') ?>
       <div class="prose" data-reveal>

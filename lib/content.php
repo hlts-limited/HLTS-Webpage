@@ -238,7 +238,7 @@ function team(): array
 {
     return [
         ['name' => 'Christopher Oyeh', 'role' => 'Founder & CEO', 'image' => 'images/Mr Chris.jpg', 'bio' => 'Visionary leader with 10+ years in EdTech, driving innovation and digital transformation in education.'],
-        ['name' => 'Israel Akinola', 'role' => 'Community Lead, TechMind Africa', 'image' => 'images/Israel.jpeg', 'bio' => 'Leads TechMind Africa and supports learning programmes that help learners and educators build practical digital skills.'],
+        ['name' => 'Israel Akinola', 'role' => 'Community Lead, TechMind Africa', 'image' => 'images/2027images/ISRAEL.png', 'bio' => 'Leads TechMind Africa and supports learning programmes that help learners and educators build practical digital skills.'],
         ['name' => 'Joseph Amos', 'role' => 'Executive Member', 'image' => 'images/Joseph amos.jpeg', 'bio' => 'Contributes to HLTS education services and partnership work with schools and institutions.'],
         ['name' => 'Chike', 'role' => 'Executive Member', 'image' => 'images/chike.jpg', 'bio' => 'Supports HLTS\'s work connecting education with practical technology.'],
     ];
