@@ -398,6 +398,7 @@
 
 .partners {
   padding-block: 36px 56px;
+  background: var(--night-950);
 }
 
 .partners__label {
@@ -406,7 +407,17 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--on-dark-muted);
+}
+
+.partners .marquee__item {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line-dark);
+  color: var(--white);
+}
+
+.partners .marquee__item i {
+  color: var(--lavender-300);
 }
 
 /* ---- Ecosystem tabs ----------------------------------------------------- */

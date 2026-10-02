@@ -28,8 +28,8 @@ AddDefaultCharset UTF-8
     RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
     # Pages are PHP files but keep their public .html addresses.
-    # /about.html quietly serves about.php, so existing links keep working.
-    RewriteCond %{REQUEST_FILENAME} !-f
+    # /about.html quietly serves about.php, so existing links keep working. The PHP page
+    # wins even if an old static .html file of the same name is still on the server.
     RewriteCond %{REQUEST_FILENAME} ^(.+)\.html$
     RewriteCond %1.php -f
     RewriteRule ^(.+)\.html$ $1.php [L]
