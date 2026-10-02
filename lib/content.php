@@ -239,7 +239,7 @@ function team(): array
     return [
         ['name' => 'Christopher Oyeh', 'role' => 'Founder & CEO · Full-stack Developer', 'image' => 'images/CEO.jpeg', 'bio' => 'Visionary leader with 10+ years in EdTech, driving innovation and digital transformation in education, and a hands-on full-stack developer behind HLTS platforms.'],
         ['name' => 'Israel Akinola', 'role' => 'Community Leader, TechMind Africa · Full-stack Developer', 'image' => 'images/2027images/ISRAEL.png', 'bio' => 'Leads TechMind Africa and supports learning programmes that help learners and educators build practical digital skills, while building web solutions as a full-stack developer.'],
-        ['name' => 'Chike Ukem', 'role' => 'Head of HR', 'image' => 'images/chike-ukem.jpg', 'bio' => 'Leads people and welfare at HLTS, from recruitment and onboarding to supporting the staff deployed in our partner schools.'],
+        ['name' => 'Chike Ukem', 'role' => 'HR', 'image' => 'images/chike-ukem.jpg', 'bio' => 'Leads people and welfare at HLTS, from recruitment and onboarding to supporting the staff deployed in our partner schools.'],
         ['name' => 'Osi Emmanuel', 'role' => 'Lead Supervisor', 'image' => 'images/OSI.jpeg', 'bio' => 'Leads the supervision of HLTS staff in partner schools, keeping teaching, lab work and reporting on track.'],
     ];
 }
