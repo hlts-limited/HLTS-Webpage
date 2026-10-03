@@ -189,9 +189,10 @@ function render_text(string $text): string
     return $html;
 }
 
-function send_security_headers(): void
+/** The site's Content-Security-Policy (sent as a header and repeated in a <meta> tag on every page). */
+function csp_policy(bool $forMeta = false): string
 {
-    $csp = implode('; ', [
+    $directives = [
         "default-src 'self'",
         // Only the exact Bootstrap files the site uses, not everything on the jsDelivr CDN.
         "script-src 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js",
@@ -203,14 +204,19 @@ function send_security_headers(): void
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'self' https://checkout.paystack.com",
-        "frame-ancestors 'self'",
-    ]);
+    ];
+    // frame-ancestors only works as a header; framing is also refused by X-Frame-Options.
+    if (!$forMeta) {
+        $directives[] = "frame-ancestors 'self'";
+    }
+    return implode('; ', $directives);
+}
+
+function send_security_headers(): void
+{
+    $csp = csp_policy();
 
     header('Content-Security-Policy: ' . $csp);
-    // Browsers that have visited over HTTPS refuse plain HTTP to this site for a year.
-    if (is_https()) {
-        header('Strict-Transport-Security: max-age=31536000');
-    }
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');

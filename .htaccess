@@ -72,9 +72,10 @@ ErrorDocument 500 /error.php?code=500
 # These cover static files too.
 # ============================================
 <IfModule mod_headers.c>
-    Header always setifempty X-Content-Type-Options "nosniff"
-    Header always setifempty X-Frame-Options "SAMEORIGIN"
-    Header always setifempty Referrer-Policy "strict-origin-when-cross-origin"
+    # "set" (not "setifempty", which Hostinger's LiteSpeed doesn't support and leaks as a bogus header).
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
     Header unset X-Powered-By
     Header unset ETag

@@ -40,6 +40,8 @@ $stylesheets = [
     <meta property="og:url" content="<?= h($canonical) ?>">
     <meta name="twitter:card" content="summary_large_image">
 
+    <!-- Hostinger's server replaces the policy header with its own, so the policy is repeated here; browsers enforce both. -->
+    <meta http-equiv="Content-Security-Policy" content="<?= h(csp_policy(true)) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
