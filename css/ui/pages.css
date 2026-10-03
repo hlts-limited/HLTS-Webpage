@@ -1282,6 +1282,219 @@
   color: var(--muted);
 }
 
+/* ---- Pricing ------------------------------------------------------------ */
+
+.container--narrow {
+  max-width: 920px;
+}
+
+.package__price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 18px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.package__price strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.package--featured .package__price {
+  border-top-color: var(--line-dark);
+  color: var(--on-dark-muted);
+}
+
+.package--featured .package__price strong {
+  color: var(--white);
+}
+
+/* Hero: the three starting prices as a short ledger. */
+.price-peek {
+  display: grid;
+  gap: 10px;
+  padding: 22px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.price-peek__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: 16px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.price-peek__row span {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.price-peek__row strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--ink);
+}
+
+.price-peek__row small {
+  grid-column: 2;
+  justify-self: end;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.price-peek__row.is-featured {
+  background: var(--grad-night);
+}
+
+.price-peek__row.is-featured span,
+.price-peek__row.is-featured strong {
+  color: var(--white);
+}
+
+.price-peek__row.is-featured small {
+  color: var(--on-dark-muted);
+}
+
+/* Comparison table: fits a phone without scrolling sideways. */
+.compare {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.compare__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.compare__table th,
+.compare__table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.compare__table tbody tr:last-child th,
+.compare__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.compare__table thead th {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  background: var(--surface-2);
+  text-align: center;
+}
+
+.compare__table thead th:first-child,
+.compare__table tbody th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.compare__table td {
+  width: 18%;
+  text-align: center;
+}
+
+.compare__table .is-featured {
+  background: color-mix(in srgb, var(--lavender-100) 55%, transparent);
+}
+
+.compare__yes {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--indigo-600);
+  color: var(--white);
+  font-size: 0.85rem;
+}
+
+.compare__no {
+  color: var(--line-strong);
+  font-weight: 700;
+}
+
+.compare__level {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@media (max-width: 575.98px) {
+  .compare__table th,
+  .compare__table td {
+    padding: 10px 6px;
+  }
+
+  .compare__table thead th {
+    font-size: var(--fs-xs);
+  }
+
+  .compare__table tbody th {
+    padding-left: 12px;
+  }
+
+  .compare__level {
+    font-size: var(--fs-xs);
+  }
+}
+
+/* Add-ons: a two-column price list. */
+.add-ons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 0 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.add-ons li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.add-ons strong {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  text-align: right;
+}
+
+.add-ons small {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* Quotes and other multi-line thank-you messages keep their line breaks. */
+.form-success__text,
+.message-card p {
+  white-space: pre-line;
+}
+
 /* ---- Print: results and certificates ---------------------------------- */
 
 @media print {

@@ -5,7 +5,7 @@ require __DIR__ . '/lib/app.php';
 
 header('Content-Type: application/xml; charset=UTF-8');
 
-$pages = ['index', 'services', 'school-management', 'cbt', 'staff-deployment', 'school-form', 'book-demo', 'results',
+$pages = ['index', 'services', 'school-management', 'pricing', 'cbt', 'staff-deployment', 'school-form', 'book-demo', 'results',
     'online-institution', 'course', 'registration-form', 'verify-certificate',
     'digital-solutions', 'portfolio', 'request-quote',
     'community', 'events', 'join-techmind',

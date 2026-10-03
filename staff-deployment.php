@@ -51,7 +51,33 @@ echo page_hero([
     <div class="grid grid--3" data-reveal-group>
       <div class="card-hl" data-reveal><span class="icon-tile"><?= icon('shield-check') ?></span><h3>Vetted professionals</h3><p>Every placement is checked, interviewed and assessed before they meet your students.</p></div>
       <div class="card-hl" data-reveal><span class="icon-tile"><?= icon('journal-check') ?></span><h3>Ongoing development</h3><p>Our staff keep learning through HLTS training, so their skills stay current.</p></div>
-      <div class="card-hl" data-reveal><span class="icon-tile"><?= icon('receipt') ?></span><h3>One simple invoice</h3><p>HLTS handles payroll and administration; you get one clear monthly invoice.</p></div>
+      <div class="card-hl" data-reveal><span class="icon-tile"><?= icon('receipt') ?></span><h3>One simple invoice</h3><p>HLTS handles payroll and administration; you get one clear invoice each term.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="teacher-pricing">
+  <div class="container">
+    <?= section_head('Teacher pricing', 'Pay by the teacher, per term.', 'Choose full-time teachers for every school day, or part-time teachers 2 days a week. Your quote shows the exact price for the number you need.') ?>
+    <div class="grid grid--3" data-reveal-group>
+      <a class="card-hl" href="<?= h(page_url('pricing', ['basis' => 'fulltime']) . '#quote') ?>" data-reveal>
+        <span class="icon-tile"><?= icon('person-workspace') ?></span>
+        <h3>Full-time teachers</h3>
+        <p>Monday to Friday, on the Basic, Professional or Premium package.</p>
+        <span class="card-hl__foot text-link">From <?= h(naira(min(array_map('min', full_time_prices())))) ?> per term <?= icon('arrow-right') ?></span>
+      </a>
+      <a class="card-hl" href="<?= h(page_url('pricing', ['basis' => 'parttime']) . '#quote') ?>" data-reveal>
+        <span class="icon-tile"><?= icon('calendar-week') ?></span>
+        <h3>Part-time teachers</h3>
+        <p>2 days a week, with a defined workload and timetable.</p>
+        <span class="card-hl__foot text-link">From <?= h(naira(min(part_time_prices()))) ?> per term <?= icon('arrow-right') ?></span>
+      </a>
+      <a class="card-hl" href="<?= h(page_url('pricing') . '#packages') ?>" data-reveal>
+        <span class="icon-tile"><?= icon('people') ?></span>
+        <h3>Or pay per pupil</h3>
+        <p>A base fee plus a fee for each participating pupil, with a minimum per term.</p>
+        <span class="card-hl__foot text-link">See packages <?= icon('arrow-right') ?></span>
+      </a>
     </div>
   </div>
 </section>

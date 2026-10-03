@@ -88,6 +88,11 @@ foreach ($definition['fields'] as $name => $field) {
     }
 }
 
+// Forms that work out a price (the school price quote) add it to the thank-you message and email.
+if (isset($definition['quote'])) {
+    $definition['success'] = ($definition['quote'])($data) . "\n\n" . $definition['success'];
+}
+
 // Proof of consent: when, and to which version of the privacy policy.
 $consent = !empty($data['terms']) ? ['at' => date(DATE_ATOM), 'version' => PRIVACY_VERSION] : null;
 

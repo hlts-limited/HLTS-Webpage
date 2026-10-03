@@ -26,7 +26,7 @@ echo page_hero([
     'eyebrow' => 'Full school management',
     'title' => 'Run your whole school <span class="grad-text">from one plan.</span>',
     'lead' => 'Pick the modules you need today and add more as you grow. HLTS sets everything up, trains your staff and supports you every term.',
-    'actions' => button('Book a demo', page_url('book-demo'), 'primary', 'calendar-check') . button('Compare packages', '#packages', 'ghost-light', 'arrow-down'),
+    'actions' => button('Book a demo', page_url('book-demo'), 'primary', 'calendar-check') . button('See packages', '#packages', 'ghost-light', 'arrow-down'),
     'visual' => $sheet,
 ]);
 ?>
@@ -49,24 +49,26 @@ echo page_hero([
 
 <section class="section section--alt" id="packages">
   <div class="container">
-    <?= section_head('Packages', 'Three ways to work with HLTS.', 'Pricing depends on school size and the modules you choose. Book a demo and we will send a clear quote within two working days.') ?>
+    <?= section_head('Packages', 'Three ways to work with HLTS.', 'Every package is priced per term, by the number of pupils or teachers. See exactly what each one includes on our pricing page.') ?>
     <div class="packages" data-reveal-group>
-<?php foreach (school_packages() as $package): $featured = !empty($package['featured']); ?>
+<?php foreach (school_packages() as $key => $package): $featured = !empty($package['featured']); ?>
       <article class="package<?= $featured ? ' package--featured' : '' ?>" data-reveal>
 <?php if ($featured): ?>
-        <span class="package__badge">Most popular</span>
+        <span class="package__badge">Recommended</span>
 <?php endif; ?>
         <h3><?= h($package['name']) ?></h3>
         <p class="package__for"><?= h($package['for']) ?></p>
+        <p class="package__price"><small>From</small> <strong><?= h(naira($package['minimum'])) ?></strong> <small>per term</small></p>
         <ul class="check-list">
 <?php foreach ($package['items'] as $item): ?>
           <li><?= h($item) ?></li>
 <?php endforeach; ?>
         </ul>
-        <?= button('Get a quote', page_url('book-demo'), $featured ? 'light' : 'secondary', 'arrow-right') ?>
+        <?= button('Get my price', page_url('pricing', ['basis' => 'pupils', 'package' => $key]) . '#quote', $featured ? 'light' : 'secondary', 'arrow-right') ?>
       </article>
 <?php endforeach; ?>
     </div>
+    <p class="text-center mt-4" data-reveal><?= button('Compare packages and add-ons', page_url('pricing') . '#compare', 'ghost', 'arrow-right') ?></p>
   </div>
 </section>
 

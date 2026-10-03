@@ -26,6 +26,28 @@ function module_options(): array
     return $options;
 }
 
+function package_options(): array
+{
+    return array_map(fn ($p) => $p['name'], school_packages());
+}
+
+/** "From ₦400,000 per term" under each package option. */
+function package_meta(): array
+{
+    return array_map(fn ($p) => 'From ' . naira($p['minimum']) . ' per term', school_packages());
+}
+
+/** Is a conditional field ("show_when") in play for these answers? */
+function field_applies(array $field, array $input): bool
+{
+    foreach ($field['show_when'] ?? [] as $other => $values) {
+        if (!in_array((string) ($input[$other] ?? ''), $values, true)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 function module_icons(): array
 {
     return array_map(fn ($m) => $m['icon'], school_modules());
@@ -125,6 +147,7 @@ function form_definitions(): array
             'success' => 'Thank you for registering your school. We have emailed a confirmation and will contact you to plan the next step.',
             'fields' => [
                 'modules' => ['type' => 'checkbox-cards', 'label' => 'Which services do you need?', 'required' => true, 'options' => module_options(), 'icons' => module_icons()],
+                'package' => ['type' => 'radio', 'label' => 'Preferred package', 'required' => false, 'options' => package_options() + ['unsure' => 'Not sure yet']],
                 'school' => ['type' => 'text', 'label' => 'School name', 'required' => true, 'autocomplete' => 'organization', 'max' => 160],
                 'level' => ['type' => 'radio', 'label' => 'School level', 'required' => true, 'options' => ['primary' => 'Primary', 'secondary' => 'Secondary', 'both' => 'Primary & secondary']],
                 'students' => ['type' => 'select', 'label' => 'Number of students', 'required' => true, 'options' => ['under-200' => 'Under 200', '200-500' => '200–500', '500-1000' => '500–1,000', '1000-plus' => 'Over 1,000']],
@@ -177,6 +200,29 @@ function form_definitions(): array
             ],
             'lead' => ['name' => 'name', 'email' => 'email', 'phone' => 'phone', 'organisation' => 'school'],
             'summary' => fn ($d) => strtoupper($d['urgency']) . ' · ' . ($d['category'] ?? ''),
+        ],
+
+        'pricing' => [
+            'title' => 'School price quote',
+            'subject' => 'New school price quote',
+            'success' => 'Thank you. We have emailed you a copy and will call within one working day to answer questions and plan a start date.',
+            'fields' => [
+                'basis' => ['type' => 'radio', 'label' => 'How would you like to pay?', 'required' => true, 'options' => ['pupils' => 'Per pupil', 'fulltime' => 'Full-time teachers', 'parttime' => 'Part-time teachers']],
+                'package' => ['type' => 'choice-cards', 'label' => 'Package', 'required' => true, 'options' => package_options(), 'meta' => package_meta(), 'show_when' => ['basis' => ['pupils', 'fulltime']]],
+                'pupils' => ['type' => 'text', 'label' => 'Number of participating pupils', 'required' => true, 'numeric' => true, 'placeholder' => 'e.g. 150', 'max' => 5, 'show_when' => ['basis' => ['pupils']]],
+                'add_ons' => ['type' => 'checkbox-cards', 'label' => 'Add-ons (optional)', 'required' => false, 'options' => array_map(fn ($a) => $a['name'], pricing_add_ons()), 'meta' => array_map(fn ($a) => $a['from'] === null ? 'Ask us' : 'From ' . naira($a['from']) . ' ' . $a['unit'], pricing_add_ons())],
+                'teachers' => ['type' => 'select', 'label' => 'Number of teachers', 'required' => true, 'options' => ['1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6 or more'], 'show_when' => ['basis' => ['fulltime', 'parttime']], 'help' => 'Part-time teachers work 2 days a week.'],
+                'school' => ['type' => 'text', 'label' => 'School name', 'required' => true, 'autocomplete' => 'organization', 'max' => 160],
+                'location' => ['type' => 'text', 'label' => 'School location', 'required' => true, 'placeholder' => 'Area and state', 'max' => 160],
+                'name' => $name,
+                'role' => ['type' => 'text', 'label' => 'Your role', 'required' => true, 'placeholder' => 'e.g. Principal, Proprietor, Admin', 'max' => 80],
+                'email' => ['type' => 'email', 'label' => 'Official email', 'required' => true, 'autocomplete' => 'email', 'help' => 'We send your quote here.'],
+                'phone' => $phone,
+                'terms' => $consent,
+            ],
+            'lead' => ['name' => 'name', 'email' => 'email', 'phone' => 'phone', 'organisation' => 'school'],
+            'summary' => fn ($d) => pricing_quote_text($d),
+            'quote' => fn ($d) => pricing_quote_text($d),
         ],
 
         'quote' => [
@@ -332,6 +378,12 @@ function validate_form(array $definition, array $input, array $files = []): arra
         $label = strip_tags($field['label']);
         $required = !empty($field['required']);
 
+        // A field that only shows for some answers (e.g. pupils for per-pupil pricing) is ignored otherwise.
+        if (!field_applies($field, $input)) {
+            $data[$name] = '';
+            continue;
+        }
+
         if ($field['type'] === 'file') {
             [$data[$name], $error] = validate_upload($files[$name] ?? null, $field);
             if ($error !== null) {
@@ -380,6 +432,13 @@ function validate_form(array $definition, array $input, array $files = []): arra
         $max = $field['max'] ?? 255;
         if (mb_strlen($value) > $max) {
             $errors[$name] = "Keep this under $max characters.";
+        }
+
+        if (!empty($field['numeric'])) {
+            $value = str_replace([',', ' '], '', $value);
+            if (!preg_match('/^\d{1,5}$/', $value) || (int) $value < 1) {
+                $errors[$name] = 'Enter a whole number, like 150.';
+            }
         }
 
         switch ($field['type']) {

@@ -275,9 +275,30 @@
     });
   }
 
+  /* Fields that only apply to some answers (data-show-when="basis=pupils|fulltime") appear and disappear with them. */
+  function initShowWhen(form) {
+    const fields = $$('[data-show-when]', form);
+    if (!fields.length) return;
+    const update = () => {
+      fields.forEach((field) => {
+        const show = field.dataset.showWhen.split('&').every((rule) => {
+          const [name, values] = rule.split('=');
+          const checked = $(`[name="${name}"]:checked`, form) || $(`select[name="${name}"]`, form);
+          return values.split('|').includes(checked ? checked.value : '');
+        });
+        field.hidden = !show;
+        if (!show) showFieldError(field, '');
+      });
+    };
+    form.addEventListener('change', update);
+    form.addEventListener('reset', () => setTimeout(update));
+    update();
+  }
+
   function initForm(form) {
     if (form.dataset.stepped) initStepped(form);
     initSameAs(form);
+    initShowWhen(form);
 
     // Live validation: check a field once it has been touched.
     form.addEventListener('focusout', (event) => {

@@ -271,7 +271,18 @@ function form_field(string $formKey, string $name, array $extra = []): string
         return '<input type="hidden" name="' . h($name) . '" value="' . h($old) . '">';
     }
 
-    $html = '<div class="field field--' . h($type) . '" data-field="' . h($name) . '">';
+    $showWhen = '';
+    $hiddenAttr = '';
+    if (!empty($field['show_when'])) {
+        $pairs = [];
+        foreach ($field['show_when'] as $other => $values) {
+            $pairs[] = $other . '=' . implode('|', $values);
+        }
+        $showWhen = ' data-show-when="' . h(implode('&', $pairs)) . '"';
+        $answers = ($state['old'] ?? []) + $_GET;
+        $hiddenAttr = field_applies($field, $answers) ? '' : ' hidden';
+    }
+    $html = '<div class="field field--' . h($type) . '" data-field="' . h($name) . '"' . $showWhen . $hiddenAttr . '>';
 
     if (in_array($type, ['radio', 'choice-cards', 'checkbox-cards'], true)) {
         $isCheckbox = $type === 'checkbox-cards';
@@ -326,7 +337,7 @@ function form_field(string $formKey, string $name, array $extra = []): string
         } else {
             $inputType = ['tel' => 'tel', 'email' => 'email', 'url' => 'url', 'date' => 'date'][$type] ?? 'text';
             $min = !empty($field['min_today']) ? ' min="' . date('Y-m-d') . '"' : '';
-            $mode = $type === 'tel' ? ' inputmode="tel"' : '';
+            $mode = $type === 'tel' ? ' inputmode="tel"' : (!empty($field['numeric']) ? ' inputmode="numeric" pattern="[0-9,]*"' : '');
             $html .= '<div class="input-wrap"><input type="' . $inputType . '"' . $common . $min . $mode . ' value="' . h($old) . '"' . (!empty($field['same_as']) ? ' data-same-target="' . h($field['same_as']) . '"' : '') . '><span class="input-ok" aria-hidden="true">' . icon('check-circle-fill') . '</span></div>';
             if (!empty($field['same_as'])) {
                 $same = !empty($state['old'][$name . '_same']);

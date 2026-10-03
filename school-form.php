@@ -8,7 +8,7 @@ page_start([
 ]);
 
 $form = stepped_form('school', [
-    ['title' => 'Services', 'heading' => 'Which services does your school need?', 'fields' => ['modules']],
+    ['title' => 'Services', 'heading' => 'Which services does your school need?', 'fields' => ['modules', 'package']],
     ['title' => 'Your school', 'heading' => 'Tell us about your school', 'fields' => ['school', 'level', 'students', 'location']],
     ['title' => 'Contact', 'heading' => 'Who should we speak to?', 'fields' => ['name', 'role', 'email', 'phone', 'message', 'terms']],
 ], 'Register school');

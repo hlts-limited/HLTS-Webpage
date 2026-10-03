@@ -153,26 +153,147 @@ function school_modules(): array
 }
 
 /** Engagement levels. Prices are agreed per school, so none are shown. */
+/*
+ * Official price list for schools. All amounts are in kobo, per term.
+ * The public pages show "from" prices only; exact prices are worked out on the server when a
+ * school asks for a quote (see the "pricing" form). The staff app has the same list in
+ * lib/pricing.ts: change both together.
+ */
 function school_packages(): array
 {
     return [
-        [
-            'name' => 'Essentials',
-            'for' => 'Schools starting their digital journey',
-            'items' => ['Result management and report cards', 'Online result checking for parents', 'Staff training', 'Email support'],
+        'basic' => [
+            'name' => 'Basic',
+            'for' => 'We provide and manage your technology education.',
+            'base' => 25000000, 'per_pupil' => 400000, 'minimum' => 40000000,
+            'items' => ['A dedicated technology teacher', 'Curriculum, scheme of work and lesson notes', 'Practical ICT activities and assessment', 'Teacher supervision and a termly academic report'],
         ],
-        [
-            'name' => 'Growth',
-            'for' => 'Schools ready to run exams and operations digitally',
+        'professional' => [
+            'name' => 'Professional',
+            'for' => 'We manage your technology education, assessment and academic reporting.',
             'featured' => true,
-            'items' => ['Everything in Essentials', 'CBT exams and question banks', 'Daily operations tools', 'IT support visits', 'Priority support'],
+            'base' => 35000000, 'per_pupil' => 650000, 'minimum' => 60000000,
+            'items' => ['Everything in Basic', 'CBT and examination management', 'Result processing and academic analytics', 'Teacher digital training and technology projects'],
         ],
-        [
-            'name' => 'Full Management',
-            'for' => 'Schools that want HLTS to run their technology',
-            'items' => ['Everything in Growth', 'Deployed ICT staff', 'Lab setup and maintenance', 'Curriculum support', 'A dedicated account manager'],
+        'premium' => [
+            'name' => 'Premium',
+            'for' => 'We become your school’s complete technology and digital transformation partner.',
+            'base' => 50000000, 'per_pupil' => 1000000, 'minimum' => 100000000,
+            'items' => ['Everything in Professional', 'School website and online admission', 'Student and parent portal, digital records', 'Priority support and technology and AI programmes'],
         ],
     ];
+}
+
+/** Full-time teachers per term, by package. Counts not listed (4, or 6 and more) are a custom quote. */
+function full_time_prices(): array
+{
+    return [
+        1 => ['basic' => 90000000, 'professional' => 120000000, 'premium' => 165000000],
+        2 => ['basic' => 170000000, 'professional' => 225000000, 'premium' => 300000000],
+        3 => ['basic' => 245000000, 'professional' => 320000000, 'premium' => 420000000],
+        5 => ['basic' => 395000000, 'professional' => 520000000, 'premium' => 650000000],
+    ];
+}
+
+/** Part-time teachers (2 days a week) per term. */
+function part_time_prices(): array
+{
+    return [1 => 40000000, 2 => 75000000, 3 => 105000000, 5 => 165000000];
+}
+
+/** What each package includes: [service, basic, professional, premium]; true = included, false = not, text = level. */
+function package_comparison(): array
+{
+    return [
+        ['Technology teacher', true, true, true],
+        ['Curriculum and scheme of work', true, true, true],
+        ['Lesson notes', true, true, true],
+        ['Practical ICT activities', true, true, true],
+        ['Student assessment', true, true, true],
+        ['Teacher supervision', true, true, true],
+        ['Termly academic report', true, true, true],
+        ['CBT', false, true, true],
+        ['Examination management', false, true, true],
+        ['Result processing', false, true, true],
+        ['Academic analytics', false, true, true],
+        ['Teacher digital training', false, true, true],
+        ['Technology projects', false, true, true],
+        ['School website', false, false, true],
+        ['Online admission', false, false, true],
+        ['Student and parent portal', false, false, true],
+        ['Digital school records', false, false, true],
+        ['Technical support', 'Basic', 'Standard', 'Priority'],
+        ['Technology and AI programmes', false, 'Selected', true],
+    ];
+}
+
+/** Optional extras, never included automatically. Prices in kobo; null = custom quote. */
+function pricing_add_ons(): array
+{
+    return [
+        'website' => ['name' => 'School website development', 'from' => 25000000, 'to' => 50000000, 'unit' => 'once'],
+        'maintenance' => ['name' => 'Website annual maintenance', 'from' => 10000000, 'to' => 20000000, 'unit' => 'a year'],
+        'admission' => ['name' => 'Online admission system', 'from' => 10000000, 'to' => 25000000, 'unit' => 'once'],
+        'cbt' => ['name' => 'CBT setup', 'from' => 10000000, 'to' => 20000000, 'unit' => 'per term'],
+        'results' => ['name' => 'Result management', 'from' => 10000000, 'to' => 20000000, 'unit' => 'per term'],
+        'training' => ['name' => 'Teacher digital training', 'from' => 5000000, 'to' => 15000000, 'unit' => 'per session'],
+        'club' => ['name' => 'Technology club', 'from' => 10000000, 'to' => 25000000, 'unit' => 'per month'],
+        'ai' => ['name' => 'AI training for teachers', 'from' => 5000000, 'to' => 15000000, 'unit' => 'per session'],
+        'robotics' => ['name' => 'Robotics programme', 'from' => null, 'to' => null, 'unit' => 'custom'],
+        'lab' => ['name' => 'Computer lab setup', 'from' => null, 'to' => null, 'unit' => 'custom'],
+        'software' => ['name' => 'School management software', 'from' => null, 'to' => null, 'unit' => 'subscription or custom'],
+    ];
+}
+
+/** "₦250,000 to ₦500,000 once", or "custom quote". */
+function add_on_range(array $a): string
+{
+    return $a['from'] === null ? ($a['unit'] === 'custom' ? 'custom quote' : $a['unit']) : naira($a['from']) . ' to ' . naira($a['to']) . ' ' . $a['unit'];
+}
+
+/**
+ * Exact quote for the pricing form. Returns [total in kobo or null for a custom quote, explanation].
+ * Per pupil: base fee + pupils x per-pupil fee, never below the package minimum.
+ */
+function pricing_quote(array $d): array
+{
+    $packages = school_packages();
+    $basis = $d['basis'] ?? '';
+    if ($basis === 'pupils') {
+        $p = $packages[$d['package']];
+        $n = (int) $d['pupils'];
+        $raw = $p['base'] + $n * $p['per_pupil'];
+        $total = max($raw, $p['minimum']);
+        $how = $p['name'] . ', ' . $n . ' pupils: ' . naira($p['base']) . ' + ' . $n . ' × ' . naira($p['per_pupil']) . ' = ' . naira($raw)
+            . ($raw < $p['minimum'] ? ', so the ' . naira($p['minimum']) . ' minimum applies' : '');
+        return [$total, $how];
+    }
+    $n = (int) $d['teachers'];
+    $plural = $n === 1 ? '' : 's';
+    if ($basis === 'fulltime') {
+        $name = $packages[$d['package']]['name'];
+        $price = full_time_prices()[$n][$d['package']] ?? null;
+        return [$price, "$name, $n full-time teacher$plural"];
+    }
+    $price = part_time_prices()[$n] ?? null;
+    return [$price, "$n part-time teacher$plural, 2 days a week"];
+}
+
+/** The sentence added to the thank-you message and confirmation email for a pricing request. */
+function pricing_quote_text(array $d): string
+{
+    [$total, $how] = pricing_quote($d);
+    $text = $total === null
+        ? "$how: we will prepare a custom quote for you."
+        : "Your price: " . naira($total) . " per term ($how).";
+    $extras = array_intersect_key(pricing_add_ons(), array_flip((array) ($d['add_ons'] ?? [])));
+    if ($extras) {
+        $text .= "\n\nAdd-ons you chose (priced separately, we confirm the exact figure with you):";
+        foreach ($extras as $a) {
+            $text .= "\n• " . $a['name'] . ': ' . add_on_range($a);
+        }
+    }
+    return $text;
 }
 
 /** Roles HLTS places in schools. */
@@ -279,10 +400,11 @@ function nav_groups(): array
         'schools' => [
             'label' => 'For Schools',
             'icon' => 'building',
-            'match' => ['services', 'school-management', 'cbt', 'staff-deployment', 'school-form', 'book-demo', 'it-support', 'results'],
+            'match' => ['services', 'school-management', 'pricing', 'cbt', 'staff-deployment', 'school-form', 'book-demo', 'it-support', 'results'],
             'items' => [
                 ['services', 'School Solutions', 'Everything HLTS does for schools', 'grid-1x2'],
                 ['school-management', 'School Management', 'Pick the modules your school needs', 'diagram-3'],
+                ['pricing', 'Pricing', 'Packages and prices per term', 'tags'],
                 ['cbt', 'CBT & Assessments', 'Secure computer-based exams', 'ui-checks-grid'],
                 ['staff-deployment', 'Staff Deployment', 'Vetted staff placed in your school', 'person-workspace'],
                 ['results', 'Check Results', 'For parents and students', 'clipboard-data'],
