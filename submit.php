@@ -24,9 +24,7 @@ if (!is_post()) {
 
 $key = is_string($_POST['form'] ?? null) ? $_POST['form'] : '';
 $definition = form_definition($key);
-$returnTo = is_string($_POST['return_to'] ?? null) && str_starts_with($_POST['return_to'], '/') && !str_starts_with($_POST['return_to'], '//')
-    ? $_POST['return_to']
-    : '/';
+$returnTo = safe_local_path($_POST['return_to'] ?? null);
 
 if (!$definition) {
     http_response_code(400);

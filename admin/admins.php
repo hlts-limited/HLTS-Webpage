@@ -34,6 +34,16 @@ if (is_post()) {
         admin_notice('Your password has been changed.', '/admin/admins.php');
     }
 
+    if ($action === 'reset2fa') {
+        $id = (int) ($_POST['id'] ?? 0);
+        if ($id === (int) $me['id']) {
+            admin_error('Ask another admin to reset your two-step sign-in.', '/admin/admins.php');
+        }
+        db_run('UPDATE admins SET totp_secret = NULL, totp_last_step = NULL WHERE id = ?', [$id]);
+        log_event('ADMIN_2FA_RESET', $id . ' by ' . $me['email']);
+        admin_notice('Two-step sign-in reset. They set it up again at their next sign-in.', '/admin/admins.php');
+    }
+
     if ($action === 'remove') {
         $id = (int) ($_POST['id'] ?? 0);
         if ($id === (int) $me['id']) {
@@ -58,14 +68,15 @@ admin_start('Staff accounts', 'admins');
   <section class="panel">
     <h2>People who can sign in</h2>
     <div class="table-wrap"><table class="table-hl">
-      <thead><tr><th>Name</th><th>Email</th><th>Last sign-in</th><th></th></tr></thead>
+      <thead><tr><th>Name</th><th>Email</th><th>Two-step</th><th>Last sign-in</th><th></th></tr></thead>
       <tbody>
 <?php foreach ($admins as $a): ?>
         <tr>
           <td><strong><?= h($a['name']) ?></strong><?= (int) $a['id'] === (int) $me['id'] ? ' <span class="chip">You</span>' : '' ?></td>
           <td><?= h($a['email']) ?></td>
+          <td class="small"><?= !empty($a['totp_secret']) ? 'On' : 'Not set up' ?></td>
           <td class="small"><?= h($a['last_login'] ? format_date($a['last_login'], 'j M Y, g:ia') : 'Never') ?></td>
-          <td><?php if ((int) $a['id'] !== (int) $me['id']): ?><form method="post" data-confirm="Remove <?= h($a['name']) ?>'s access?"><?= csrf_field() ?><input type="hidden" name="action" value="remove"><input type="hidden" name="id" value="<?= (int) $a['id'] ?>"><button class="icon-btn" aria-label="Remove" title="Remove"><?= icon('person-x') ?></button></form><?php endif; ?></td>
+          <td><?php if ((int) $a['id'] !== (int) $me['id']): ?><?php if (!empty($a['totp_secret'])): ?><form method="post" class="d-inline" data-confirm="Reset <?= h($a['name']) ?>'s two-step sign-in? They set it up again with a new phone at their next sign-in."><?= csrf_field() ?><input type="hidden" name="action" value="reset2fa"><input type="hidden" name="id" value="<?= (int) $a['id'] ?>"><button class="icon-btn" aria-label="Reset two-step sign-in" title="Reset two-step sign-in"><?= icon('phone') ?></button></form><?php endif; ?><form method="post" data-confirm="Remove <?= h($a['name']) ?>'s access?"><?= csrf_field() ?><input type="hidden" name="action" value="remove"><input type="hidden" name="id" value="<?= (int) $a['id'] ?>"><button class="icon-btn" aria-label="Remove" title="Remove"><?= icon('person-x') ?></button></form><?php endif; ?></td>
         </tr>
 <?php endforeach; ?>
       </tbody>

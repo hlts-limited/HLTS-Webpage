@@ -14,8 +14,9 @@ if (is_post()) {
     csrf_require();
     $email = trim((string) ($_POST['email'] ?? ''));
     try {
-        if (auth_attempt('admin', $email, (string) ($_POST['password'] ?? ''))) {
-            redirect('/admin/');
+        $user = auth_attempt('admin', $email, (string) ($_POST['password'] ?? ''));
+        if ($user) {
+            redirect(!empty($user['pending_2fa']) ? '/admin/two-factor.php' : '/admin/');
         }
         $error = 'Email or password is incorrect.';
     } catch (RuntimeException $e) {

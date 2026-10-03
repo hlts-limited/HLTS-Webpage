@@ -33,9 +33,45 @@ function auth_attempt(string $kind, string $identifier, string $password): ?arra
 
     rate_limit_clear($limitKey);
     session_regenerate_id(true);
+    // Admins with two-step sign-in: the password is only the first step.
+    if ($kind === 'admin' && !empty($user['totp_secret'])) {
+        $_SESSION['admin_2fa_pending'] = ['id' => (int) $user['id'], 'at' => time()];
+        return $user + ['pending_2fa' => true];
+    }
     $_SESSION["auth_$kind"] = ['id' => (int) $user['id'], 'seen' => time()];
     db_run("UPDATE " . ($kind === 'admin' ? 'admins' : 'students') . ' SET last_login = ? WHERE id = ?', [now(), $user['id']]);
 
+    return $user;
+}
+
+/** Second step of admin sign-in: the 6-digit code. Returns the admin, or null with $error set. */
+function auth_admin_code(string $code, ?string &$error = null): ?array
+{
+    $pending = $_SESSION['admin_2fa_pending'] ?? null;
+    if (!$pending || time() - (int) $pending['at'] > 600) {
+        unset($_SESSION['admin_2fa_pending']);
+        $error = 'Your sign-in timed out. Enter your email and password again.';
+        return null;
+    }
+    $limitKey = 'login:admin-2fa:' . $pending['id'];
+    if (!rate_limit($limitKey, 5, 900)) {
+        log_event('LOGIN_2FA_RATE_LIMITED', (string) $pending['id']);
+        $error = 'Too many wrong codes. Wait 15 minutes and try again.';
+        return null;
+    }
+    $user = db_one('SELECT * FROM admins WHERE id = ?', [$pending['id']]);
+    $secret = $user ? secret_decrypt($user['totp_secret']) : null;
+    $step = $secret ? totp_verify($secret, $code, isset($user['totp_last_step']) ? (int) $user['totp_last_step'] : null) : null;
+    if ($step === null) {
+        log_event('LOGIN_2FA_FAILED', (string) $pending['id']);
+        $error = 'That code didn’t match. Codes change every 30 seconds: use the current one.';
+        return null;
+    }
+    rate_limit_clear($limitKey);
+    unset($_SESSION['admin_2fa_pending']);
+    session_regenerate_id(true);
+    $_SESSION['auth_admin'] = ['id' => (int) $user['id'], 'seen' => time()];
+    db_run('UPDATE admins SET totp_last_step = ?, last_login = ? WHERE id = ?', [$step, now(), $user['id']]);
     return $user;
 }
 
@@ -65,11 +101,15 @@ function auth_logout(string $kind): void
     session_regenerate_id(true);
 }
 
-function require_admin(): array
+function require_admin(bool $allowWithout2fa = false): array
 {
     $user = auth_user('admin');
     if (!$user) {
         redirect('/admin/login.php');
+    }
+    // Every admin must have two-step sign-in; until they do, the only page they can use is its setup.
+    if (!$allowWithout2fa && empty($user['totp_secret'])) {
+        redirect('/admin/two-factor-setup.php');
     }
     return $user;
 }

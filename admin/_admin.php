@@ -43,9 +43,16 @@ function admin_nav(): array
     ];
 }
 
-function admin_start(string $title, string $active = ''): void
+/** Signed in AND past two-step sign-in: gets the full admin layout. Otherwise the plain sign-in card. */
+function admin_full(): ?array
 {
     $admin = auth_user('admin');
+    return $admin && !empty($admin['totp_secret']) ? $admin : null;
+}
+
+function admin_start(string $title, string $active = ''): void
+{
+    $admin = admin_full();
     $newLeads = $admin ? (int) db_value("SELECT COUNT(*) FROM leads WHERE status = 'new'") : 0;
     ?>
 <!DOCTYPE html>
@@ -101,7 +108,7 @@ function admin_start(string $title, string $active = ''): void
 
 function admin_end(): void
 {
-    if (auth_user('admin')) {
+    if (admin_full()) {
         echo '</main></div>';
     } else {
         echo '</div>';

@@ -21,6 +21,7 @@ require __DIR__ . '/csrf.php';
 require __DIR__ . '/ratelimit.php';
 require __DIR__ . '/mailer.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/totp.php';
 require __DIR__ . '/content.php';
 require __DIR__ . '/forms.php';
 require __DIR__ . '/app_sync.php';

@@ -71,6 +71,18 @@ function asset(string $path): string
     return $path . '?v=' . $version;
 }
 
+/** A path on this site to go back to, or $fallback. Rejects other sites ("//x", "/\\x"), schemes and control characters. */
+function safe_local_path($path, string $fallback = '/'): string
+{
+    if (!is_string($path) || $path === '' || strlen($path) > 512) {
+        return $fallback;
+    }
+    if ($path[0] !== '/' || str_starts_with($path, '//') || str_contains($path, '\\') || preg_match('/[\x00-\x1F\x7F]/', $path)) {
+        return $fallback;
+    }
+    return $path;
+}
+
 function redirect(string $to, int $status = 303): never
 {
     header('Location: ' . $to, true, $status);
@@ -181,9 +193,10 @@ function send_security_headers(): void
 {
     $csp = implode('; ', [
         "default-src 'self'",
-        "script-src 'self' https://cdn.jsdelivr.net",
-        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com",
-        "font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com",
+        // Only the exact Bootstrap files the site uses, not everything on the jsDelivr CDN.
+        "script-src 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js",
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/ https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/ https://fonts.googleapis.com",
+        "font-src 'self' https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/ https://fonts.gstatic.com",
         "img-src 'self' data: https:",
         "connect-src 'self'",
         "frame-src https://www.google.com",
@@ -194,6 +207,10 @@ function send_security_headers(): void
     ]);
 
     header('Content-Security-Policy: ' . $csp);
+    // Browsers that have visited over HTTPS refuse plain HTTP to this site for a year.
+    if (is_https()) {
+        header('Strict-Transport-Security: max-age=31536000');
+    }
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');

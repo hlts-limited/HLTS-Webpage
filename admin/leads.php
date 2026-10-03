@@ -29,7 +29,7 @@ if (($_GET['export'] ?? '') === 'csv') {
         $details = $definition ? describe_submission($definition, json_decode($lead['payload'], true) ?: []) : [];
         $detailText = implode('; ', array_map(fn ($k, $v) => "$k: $v", array_keys($details), $details));
         // Prefix cells that spreadsheet apps would treat as formulas.
-        $row = array_map(fn ($v) => preg_match('/^[=+\-@]/', (string) $v) ? "'" . $v : $v, [
+        $row = array_map(fn ($v) => preg_match('/^[\s]*[=+\-@\t\r]/', (string) $v) ? "'" . $v : $v, [
             $lead['created_at'], $types[$lead['type']] ?? $lead['type'], $lead['status'], $lead['name'], $lead['email'], $lead['phone'], $lead['organisation'], $lead['summary'], $detailText, $lead['notes'],
         ]);
         fputcsv($out, $row);

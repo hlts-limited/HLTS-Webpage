@@ -96,7 +96,7 @@ function db_update(string $table, int $id, array $row): void
 
 function migrate(PDO $pdo): void
 {
-    $version = 2;
+    $version = 3;
     $marker = STORAGE_DIR . '/.schema-' . db_driver() . '-' . md5((string) config('db.name') . (string) config('db.sqlite_path'));
     if (is_file($marker) && (int) file_get_contents($marker) >= $version) {
         return;
@@ -275,6 +275,15 @@ function migrate(PDO $pdo): void
 
     foreach ($tables as $table) {
         $pdo->exec('CREATE TABLE IF NOT EXISTS ' . $table . $suffix);
+    }
+
+    // Version 3: two-step sign-in for admins. Adding a column that already exists just fails quietly.
+    foreach (['totp_secret VARCHAR(255) NULL', 'totp_last_step BIGINT NULL'] as $column) {
+        try {
+            $pdo->exec("ALTER TABLE admins ADD COLUMN $column");
+        } catch (PDOException $e) {
+            // Already there.
+        }
     }
 
     $indexes = [
