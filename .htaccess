@@ -66,6 +66,16 @@ ErrorDocument 500 /error.php?code=500
     Require all denied
 </FilesMatch>
 
+# Staff app download (staff-app.php): Android installs need the right type, and a download, not a page.
+<IfModule mod_mime.c>
+    AddType application/vnd.android.package-archive .apk
+</IfModule>
+<IfModule mod_headers.c>
+    <FilesMatch "\.apk$">
+        Header set Content-Disposition "attachment"
+    </FilesMatch>
+</IfModule>
+
 # ============================================
 # Security headers
 # Pages get their full Content-Security-Policy from PHP (lib/helpers.php).
