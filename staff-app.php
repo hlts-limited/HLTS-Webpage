@@ -6,7 +6,8 @@
 require __DIR__ . '/lib/app.php';
 
 const STAFF_APP_URL = 'https://hlts-hr.vercel.app/login';
-const STAFF_APK = 'downloads/hlts-ops.apk';
+const STAFF_APK = 'downloads/hlts-ops-1.0.1.apk';
+const STAFF_APK_VERSION = '1.0.1';
 $apk = is_file(__DIR__ . '/' . STAFF_APK);
 $apkSize = $apk ? round(filesize(__DIR__ . '/' . STAFF_APK) / 1048576, 1) : 0;
 
@@ -32,7 +33,8 @@ echo page_hero([
         <h3>Android</h3>
 <?php if ($apk): ?>
         <p>Download the app and open the file to install it.</p>
-        <p><a class="btn-hl btn-hl--primary" href="/<?= h(STAFF_APK) ?>" download><?= icon('download') ?> <span>Download for Android (<?= h((string) $apkSize) ?> MB)</span></a></p>
+        <p class="small"><strong>Already have HLTS Ops?</strong> Download this version (<?= h(STAFF_APK_VERSION) ?>) and tap <strong>Update</strong>. You need it to clock in, because it can use your phone’s location. You stay signed in.</p>
+        <p><a class="btn-hl btn-hl--primary" href="/<?= h(STAFF_APK) ?>" download><?= icon('download') ?> <span>Download for Android, version <?= h(STAFF_APK_VERSION) ?> (<?= h((string) $apkSize) ?> MB)</span></a></p>
         <p class="small muted">The first time, your phone may ask you to allow installing apps from your browser. Tap <strong>Settings</strong>, turn on <strong>Allow from this source</strong>, then go back and tap <strong>Install</strong>.</p>
         <p class="small muted">Or, in Chrome: open the <a href="<?= h(STAFF_APP_URL) ?>">staff app</a>, tap the ⋮ menu, then <strong>Install app</strong>.</p>
 <?php else: ?>
