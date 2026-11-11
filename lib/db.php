@@ -96,7 +96,7 @@ function db_update(string $table, int $id, array $row): void
 
 function migrate(PDO $pdo): void
 {
-    $version = 4;
+    $version = 5;
     $marker = STORAGE_DIR . '/.schema-' . db_driver() . '-' . md5((string) config('db.name') . (string) config('db.sqlite_path'));
     if (is_file($marker) && (int) file_get_contents($marker) >= $version) {
         return;
@@ -290,6 +290,13 @@ function migrate(PDO $pdo): void
     // Version 4: a YouTube video on a blog post.
     try {
         $pdo->exec("ALTER TABLE posts ADD COLUMN video_url VARCHAR(255) NOT NULL DEFAULT ''");
+    } catch (PDOException $e) {
+        // Already there.
+    }
+
+    // Version 5: course payments are sent to the staff app too; "ref" is the Paystack reference.
+    try {
+        $pdo->exec("ALTER TABLE app_sync ADD COLUMN ref VARCHAR(80) NOT NULL DEFAULT ''");
     } catch (PDOException $e) {
         // Already there.
     }

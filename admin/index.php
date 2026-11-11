@@ -2,14 +2,20 @@
 require __DIR__ . '/_admin.php';
 $admin = require_admin();
 
+$synced = app_sync_enabled();
+$waiting = $synced ? (int) db_value("SELECT COUNT(*) FROM app_sync WHERE status IN ('pending', 'failed')") : 0;
+$delivery = [];
 $counts = [
-    ['New leads', (int) db_value("SELECT COUNT(*) FROM leads WHERE status = 'new'"), 'inbox', '/admin/leads.php?status=new'],
-    ['Leads this month', (int) db_value('SELECT COUNT(*) FROM leads WHERE created_at >= ?', [date('Y-m-01')]), 'graph-up-arrow', '/admin/leads.php'],
+    $synced
+        ? ['Waiting to reach the staff app', $waiting, 'arrow-repeat', '/admin/app-sync.php']
+        : ['New leads', (int) db_value("SELECT COUNT(*) FROM leads WHERE status = 'new'"), 'inbox', '/admin/leads.php?status=new'],
+    ['Form submissions this month', (int) db_value('SELECT COUNT(*) FROM leads WHERE created_at >= ?', [date('Y-m-01')]), 'graph-up-arrow', '/admin/leads.php'],
     ['Active students', (int) db_value("SELECT COUNT(*) FROM students WHERE status = 'active'"), 'person-badge', '/admin/students.php'],
     ['Paid this month', (int) db_value("SELECT COALESCE(SUM(amount_kobo), 0) FROM payments WHERE status = 'paid' AND paid_at >= ?", [date('Y-m-01')]), 'credit-card', '/admin/payments.php'],
 ];
 $byType = db_all("SELECT type, COUNT(*) AS total, SUM(CASE WHEN status = 'new' THEN 1 ELSE 0 END) AS fresh FROM leads GROUP BY type ORDER BY total DESC");
 $latest = db_all('SELECT * FROM leads ORDER BY created_at DESC LIMIT 8');
+$delivery = $synced ? app_sync_statuses(array_column($latest, 'id')) : [];
 $types = lead_types();
 
 admin_start('Dashboard', 'dashboard');
@@ -28,10 +34,10 @@ admin_start('Dashboard', 'dashboard');
 
 <div class="admin-grid">
   <section class="panel">
-    <div class="panel__head"><h2>Latest enquiries</h2><a class="text-link" href="/admin/leads.php">All leads <?= icon('arrow-right') ?></a></div>
+    <div class="panel__head"><h2>Latest from the website</h2><?php if ($synced): ?><a class="text-link" href="<?= h(app_base_url()) ?>/inbox" target="_blank" rel="noopener">Work on them in the staff app <?= icon('box-arrow-up-right') ?></a><?php else: ?><a class="text-link" href="/admin/leads.php">All submissions <?= icon('arrow-right') ?></a><?php endif; ?></div>
 <?php if ($latest): ?>
     <div class="table-wrap"><table class="table-hl">
-      <thead><tr><th>When</th><th>Type</th><th>Name</th><th>Summary</th><th>Status</th></tr></thead>
+      <thead><tr><th>When</th><th>Type</th><th>Name</th><th>Summary</th><th><?= $synced ? 'Staff app' : 'Status' ?></th></tr></thead>
       <tbody>
 <?php foreach ($latest as $lead): ?>
         <tr class="row-link" data-href="/admin/lead.php?id=<?= (int) $lead['id'] ?>">
@@ -39,7 +45,7 @@ admin_start('Dashboard', 'dashboard');
           <td><?= h($types[$lead['type']] ?? $lead['type']) ?></td>
           <td><a href="/admin/lead.php?id=<?= (int) $lead['id'] ?>"><?= h($lead['name'] ?: $lead['email']) ?></a><br><small class="muted"><?= h($lead['organisation']) ?></small></td>
           <td><?= h($lead['summary']) ?></td>
-          <td><?= status_chip($lead['status']) ?></td>
+          <td><?= $synced ? app_sync_chip($delivery[$lead['id']] ?? null) : status_chip($lead['status']) ?></td>
         </tr>
 <?php endforeach; ?>
       </tbody>
@@ -55,7 +61,7 @@ admin_start('Dashboard', 'dashboard');
     <ul class="admin-bars">
 <?php $max = max(array_column($byType, 'total')); foreach ($byType as $row): ?>
       <li>
-        <a href="/admin/leads.php?type=<?= h($row['type']) ?>"><span><?= h($types[$row['type']] ?? $row['type']) ?></span><strong><?= (int) $row['total'] ?><?= $row['fresh'] ? ' <small class="chip chip--magenta">' . (int) $row['fresh'] . ' new</small>' : '' ?></strong></a>
+        <a href="/admin/leads.php?type=<?= h($row['type']) ?>"><span><?= h($types[$row['type']] ?? $row['type']) ?></span><strong><?= (int) $row['total'] ?><?= !$synced && $row['fresh'] ? ' <small class="chip chip--magenta">' . (int) $row['fresh'] . ' new</small>' : '' ?></strong></a>
         <span class="admin-bars__bar" style="--w: <?= round($row['total'] / $max * 100) ?>%"></span>
       </li>
 <?php endforeach; ?>

@@ -26,20 +26,21 @@ function lead_types(): array
 
 function admin_nav(): array
 {
+    // [label, icon, link, section]. A heading is printed where the section changes.
     return [
-        'dashboard' => ['Dashboard', 'speedometer2', '/admin/'],
-        'leads' => ['Leads & enquiries', 'inbox', '/admin/leads.php'],
-        'app-sync' => ['Staff app sync', 'arrow-repeat', '/admin/app-sync.php'],
-        'students' => ['Students', 'person-badge', '/admin/students.php'],
-        'payments' => ['Payments', 'credit-card', '/admin/payments.php'],
-        'results' => ['Results', 'clipboard-data', '/admin/results.php'],
-        'certificates' => ['Certificates', 'patch-check', '/admin/certificates.php'],
-        'posts' => ['Blog', 'newspaper', '/admin/content.php?type=posts'],
-        'events' => ['Events', 'calendar-event', '/admin/content.php?type=events'],
-        'projects' => ['Portfolio', 'collection', '/admin/content.php?type=projects'],
-        'jobs' => ['Jobs', 'briefcase', '/admin/content.php?type=jobs'],
-        'materials' => ['Course materials', 'journal-text', '/admin/content.php?type=materials'],
-        'admins' => ['Staff accounts', 'people', '/admin/admins.php'],
+        'dashboard' => ['Dashboard', 'speedometer2', '/admin/', ''],
+        'leads' => ['Form submissions', 'inbox', '/admin/leads.php', 'From the website'],
+        'app-sync' => ['Staff app sync', 'arrow-repeat', '/admin/app-sync.php', 'From the website'],
+        'students' => ['Students', 'person-badge', '/admin/students.php', 'Online Institution'],
+        'payments' => ['Payments', 'credit-card', '/admin/payments.php', 'Online Institution'],
+        'results' => ['Results', 'clipboard-data', '/admin/results.php', 'Online Institution'],
+        'certificates' => ['Certificates', 'patch-check', '/admin/certificates.php', 'Online Institution'],
+        'materials' => ['Course materials', 'journal-text', '/admin/content.php?type=materials', 'Online Institution'],
+        'posts' => ['Blog', 'newspaper', '/admin/content.php?type=posts', 'Website content'],
+        'events' => ['Events', 'calendar-event', '/admin/content.php?type=events', 'Website content'],
+        'projects' => ['Portfolio', 'collection', '/admin/content.php?type=projects', 'Website content'],
+        'jobs' => ['Jobs', 'briefcase', '/admin/content.php?type=jobs', 'Website content'],
+        'admins' => ['Staff accounts', 'people', '/admin/admins.php', 'Access'],
     ];
 }
 
@@ -53,7 +54,10 @@ function admin_full(): ?array
 function admin_start(string $title, string $active = ''): void
 {
     $admin = admin_full();
-    $newLeads = $admin ? (int) db_value("SELECT COUNT(*) FROM leads WHERE status = 'new'") : 0;
+    // The badge shows what needs a person: undelivered submissions when the staff app is connected, new leads otherwise.
+    $badgeOn = app_sync_enabled() ? 'app-sync' : 'leads';
+    $badge = !$admin ? 0 : (int) ($badgeOn === 'app-sync' ? db_value("SELECT COUNT(*) FROM app_sync WHERE status = 'failed'") : db_value("SELECT COUNT(*) FROM leads WHERE status = 'new'"));
+    $section = '';
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,8 +84,11 @@ function admin_start(string $title, string $active = ''): void
   <aside class="admin-side" id="adminSide">
     <a class="brand" href="/admin/"><img src="/images/brand/logo-192.png" alt="" width="40" height="40"><span class="brand__text"><span class="brand__name">HLTS</span><span class="brand__tag">ADMIN</span></span></a>
     <nav aria-label="Admin">
-<?php foreach (admin_nav() as $key => [$label, $iconName, $href]): ?>
-      <a href="<?= h($href) ?>" class="<?= $key === $active ? 'is-active' : '' ?>"<?= $key === $active ? ' aria-current="page"' : '' ?>><?= icon($iconName) ?> <span><?= h($label) ?></span><?php if ($key === 'leads' && $newLeads): ?><b class="badge-count"><?= $newLeads ?></b><?php endif; ?></a>
+<?php foreach (admin_nav() as $key => [$label, $iconName, $href, $group]): ?>
+<?php if ($group !== $section): $section = $group; ?>
+      <p class="admin-side__group"><?= h($group) ?></p>
+<?php endif; ?>
+      <a href="<?= h($href) ?>" class="<?= $key === $active ? 'is-active' : '' ?>"<?= $key === $active ? ' aria-current="page"' : '' ?>><?= icon($iconName) ?> <span><?= h($label) ?></span><?php if ($key === $badgeOn && $badge): ?><b class="badge-count"><?= $badge ?></b><?php endif; ?></a>
 <?php endforeach; ?>
     </nav>
     <div class="admin-side__foot">

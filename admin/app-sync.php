@@ -21,6 +21,11 @@ if (is_post()) {
         $r = app_sync_run(25);
         admin_notice("$n failed submission(s) put back in the queue. Sent {$r['sent']} now.", '/admin/app-sync.php');
     }
+    if ($action === 'payments') {
+        $n = app_sync_backfill_payments();
+        $r = app_sync_run(25);
+        admin_notice("$n course payment(s) queued for Finance in the staff app. Sent {$r['sent']} now; the rest go out automatically.", '/admin/app-sync.php');
+    }
     if ($action === 'backfill') {
         $n = app_sync_backfill();
         $r = app_sync_run(25);
@@ -28,13 +33,14 @@ if (is_post()) {
     }
 }
 
+app_prices(APP_PRICES_REFRESH_SECONDS);
 $counts = app_sync_counts();
 $problems = db_all("SELECT s.*, l.type, l.created_at AS lead_at FROM app_sync s LEFT JOIN leads l ON l.id = s.lead_id WHERE s.status IN ('pending', 'failed') ORDER BY s.id DESC LIMIT 100");
-$types = lead_types();
+$types = lead_types() + ['payment' => 'Course payment'];
 
 admin_start('Staff app sync', 'app-sync');
 ?>
-<p class="muted">Every form submission is sent to the HLTS staff app (<?= h((string) config('app_sync.url')) ?>), where the team works on it. If the app can’t be reached, the website keeps trying with growing gaps. Job seekers’ details and CVs are removed from the website once they arrive in the app.</p>
+<p class="muted">Every form submission is sent to the HLTS staff app (<?= h((string) config('app_sync.url')) ?>), where the team works on it. Paid course fees are sent too, and appear as income in the app’s Finance page. If the app can’t be reached, the website keeps trying with growing gaps. Job seekers’ details and CVs are removed from the website once they arrive in the app.</p>
 
 <?php if (!app_sync_enabled()): ?>
 <div class="notice notice--error mb-4" role="alert"><?= icon('exclamation-triangle') ?><p>Sending is <strong>off</strong>. Add the shared secret to <code>config/config.local.php</code> as <code>'app_sync' => ['secret' => '…']</code>, using the same value as <code>WEBSITE_WEBHOOK_SECRET</code> in Vercel.</p></div>
@@ -55,10 +61,15 @@ admin_start('Staff app sync', 'app-sync');
 <?php if ($counts['failed']): ?>
   <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="retry"><button class="btn-hl btn-hl--ghost" type="submit"><?= icon('arrow-repeat') ?> <span>Retry failed</span></button></form>
 <?php endif; ?>
+<?php if ($counts['payments_never']): ?>
+  <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="payments"><button class="btn-hl btn-hl--ghost" type="submit"><?= icon('cash-coin') ?> <span>Send <?= $counts['payments_never'] ?> earlier course payment(s) to Finance</span></button></form>
+<?php endif; ?>
 <?php if ($counts['never']): ?>
   <form method="post"><?= csrf_field() ?><input type="hidden" name="action" value="backfill"><button class="btn-hl btn-hl--ghost" type="submit"><?= icon('cloud-upload') ?> <span>Send <?= $counts['never'] ?> older submission(s) to the app</span></button></form>
 <?php endif; ?>
 </div>
+
+<div class="notice mb-4"><?= icon('tags') ?><p><strong>School prices.</strong> <?= h(app_prices_status()) ?> To change a price, edit it in the staff app; this website follows within the hour.</p></div>
 
 <?php if ($problems): ?>
 <div class="table-wrap">

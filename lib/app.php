@@ -25,6 +25,7 @@ require __DIR__ . '/totp.php';
 require __DIR__ . '/content.php';
 require __DIR__ . '/forms.php';
 require __DIR__ . '/app_sync.php';
+require __DIR__ . '/prices.php';
 require __DIR__ . '/paystack.php';
 require __DIR__ . '/results.php';
 require __DIR__ . '/ui.php';

@@ -80,16 +80,19 @@ Then open `http://localhost:8000`. Local preview uses SQLite (`storage/hlts.sqli
 - Output is escaped everywhere. Admin-written articles use a safe text format, not raw HTML.
 - There is a strict Content-Security-Policy with no inline scripts.
 
+## Working with the staff app
+
+The website and the HLTS staff app (hlts-hr.vercel.app) are separate codebases joined by one shared secret (`app_sync.secret` here, `WEBSITE_WEBHOOK_SECRET` in the app):
+
+- **Form submissions** are sent to the app, where the team follows them up. `admin/leads.php` is the record of what came in and whether it was delivered; status and notes are kept in the app.
+- **Course payments** confirmed by Paystack are sent to the app and recorded as income in Finance.
+- **School prices** are changed in the app (`lib/pricing.ts`). The website reads that list (`lib/prices.php`) and falls back to the amounts in `lib/content.php` only until the app has been reached once.
+
+`bin/app-sync.php` (cron, every 15 minutes) retries anything undelivered and refreshes the price copy. `admin/app-sync.php` shows the state of all three.
+
 ## Retired files
 
-The rebuilt site no longer uses these. `.htaccess` blocks them, and they can be deleted:
-
-- `admin_dashboard.html`, `portal_interface.html`, `security-dashboard.html` (replaced by `admin/` and `student.php`)
-- `send-registration.php` (replaced by `submit.php`)
-- `hlts-bundle.js` (replaced by `js/`)
-- `css/base.css`, `css/components.css`, `css/pages.css`, `css/pages-extra.css`, `css/design-layer.css`, `css/dashboard-admin.css`, `css/dashboard-student.css`, `css/responsive.css`, `css/theme.css` (replaced by `css/tokens.css` and `css/ui/`)
-- `bootstrap-5.3.8-dist/` (Bootstrap now loads from the jsDelivr CDN)
-- `DEVELOPMENT_GUIDE.md`, `FEATURE_SUMMARY.md`, `SECURITY_*.md` and `TESTING_CHECKLIST.md` describe the old site
+The old static site (`*.html` pages, `hlts-bundle.*`, the old `css/*.css` files, the bundled `bootstrap-5.3.8-dist/` and the old guide documents) was removed from the repository in November 2026. `.htaccess` still blocks the old addresses in case copies remain on the server. Everything is in the git history if it is ever needed.
 
 ## Contact
 

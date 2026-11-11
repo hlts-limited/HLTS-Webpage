@@ -78,6 +78,6 @@ $onBlog = in_array($current, ['blog', 'post'], true);
       <a href="/"<?= $current === 'index' ? ' class="is-active" aria-current="page"' : '' ?>><?= icon('house') ?><span>Home</span></a>
       <a href="<?= h(page_url('services')) ?>"<?= $isIn($groups['schools']) ? ' class="is-active"' : '' ?>><?= icon('building') ?><span>Schools</span></a>
       <a href="<?= h(page_url('course')) ?>"<?= $isIn($groups['learn']) ? ' class="is-active"' : '' ?>><?= icon('mortarboard') ?><span>Courses</span></a>
-      <a href="https://wa.me/<?= h(config('whatsapp')) ?>" target="_blank" rel="noopener"><?= icon('whatsapp') ?><span>WhatsApp</span></a>
+      <a href="<?= h(page_url('blog')) ?>"<?= $onBlog ? ' class="is-active"' : '' ?><?= $current === 'blog' ? ' aria-current="page"' : '' ?>><?= icon('newspaper') ?><span>Blog</span></a>
       <a class="mobile-bar__cta" href="<?= h(page_url('contact')) ?>"><?= icon('chat-dots') ?><span>Talk to us</span></a>
     </nav>

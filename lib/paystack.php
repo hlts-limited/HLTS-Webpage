@@ -137,6 +137,15 @@ function paystack_record(array $payment, array $tx): void
                 'paid', (string) ($tx['channel'] ?? ''), now(), json_encode($tx), $payment['id'],
             ]);
             notify_payment($payment);
+            try {
+                $paid = db_one('SELECT * FROM payments WHERE id = ?', [$payment['id']]);
+                if ($paid && app_sync_queue_payment($paid) && app_sync_enabled()) {
+                    app_sync_run(3);
+                }
+            } catch (Throwable $e) {
+                // Telling the staff app must never get in the way of recording the payment.
+                log_event('APP_SYNC_PAYMENT_ERROR', $payment['reference'] . ': ' . $e->getMessage());
+            }
         }
         return;
     }

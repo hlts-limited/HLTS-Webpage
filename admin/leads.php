@@ -4,7 +4,9 @@ require_admin();
 
 $types = lead_types();
 $type = isset($types[$_GET['type'] ?? '']) ? $_GET['type'] : '';
-$status = isset(LEAD_STATUSES[$_GET['status'] ?? '']) ? $_GET['status'] : '';
+// With the staff app connected, follow-up status lives there; this page shows delivery instead.
+$synced = app_sync_enabled();
+$status = !$synced && isset(LEAD_STATUSES[$_GET['status'] ?? '']) ? $_GET['status'] : '';
 $q = trim((string) ($_GET['q'] ?? ''));
 
 $where = [];
@@ -39,13 +41,19 @@ if (($_GET['export'] ?? '') === 'csv') {
 }
 
 $leads = db_all($sql . ' LIMIT 500', $params);
+$delivery = $synced ? app_sync_statuses(array_column($leads, 'id')) : [];
 
-admin_start('Leads & enquiries', 'leads');
+admin_start('Form submissions', 'leads');
 ?>
+<?php if ($synced): ?>
+<div class="notice mb-4"><?= icon('info-circle') ?><p>This is the record of what came in through the website. <strong>Follow-up happens in the staff app</strong> (<a href="<?= h(app_base_url()) ?>/inbox" target="_blank" rel="noopener">open All messages</a>), where each one has a stage, notes and an owner.</p></div>
+<?php endif; ?>
 <form class="admin-filters" method="get">
   <div class="field"><label class="field-label" for="q">Search</label><input id="q" name="q" value="<?= h($q) ?>" placeholder="Name, email, phone, school"></div>
   <div class="field"><label class="field-label" for="type">Form</label><div class="select-wrap"><select id="type" name="type"><option value="">All forms</option><?php foreach ($types as $k => $label): ?><option value="<?= h($k) ?>"<?= $type === $k ? ' selected' : '' ?>><?= h($label) ?></option><?php endforeach; ?></select><?= icon('chevron-down') ?></div></div>
+<?php if (!$synced): ?>
   <div class="field"><label class="field-label" for="status">Status</label><div class="select-wrap"><select id="status" name="status"><option value="">Any status</option><?php foreach (LEAD_STATUSES as $k => $label): ?><option value="<?= h($k) ?>"<?= $status === $k ? ' selected' : '' ?>><?= h($label) ?></option><?php endforeach; ?></select><?= icon('chevron-down') ?></div></div>
+<?php endif; ?>
   <div class="admin-filters__actions">
     <button class="btn-hl btn-hl--primary" type="submit"><?= icon('funnel') ?> <span>Filter</span></button>
     <a class="btn-hl btn-hl--ghost" href="?<?= h(http_build_query(['type' => $type, 'status' => $status, 'q' => $q, 'export' => 'csv'])) ?>"><?= icon('download') ?> <span>Export CSV</span></a>
@@ -55,7 +63,7 @@ admin_start('Leads & enquiries', 'leads');
 <?php if ($leads): ?>
 <div class="table-wrap">
   <table class="table-hl">
-    <thead><tr><th>When</th><th>Form</th><th>Name</th><th>Contact</th><th>Summary</th><th>Status</th></tr></thead>
+    <thead><tr><th>When</th><th>Form</th><th>Name</th><th>Contact</th><th>Summary</th><th><?= $synced ? 'Staff app' : 'Status' ?></th></tr></thead>
     <tbody>
 <?php foreach ($leads as $lead): ?>
       <tr class="row-link" data-href="/admin/lead.php?id=<?= (int) $lead['id'] ?>">
@@ -64,7 +72,7 @@ admin_start('Leads & enquiries', 'leads');
         <td><a href="/admin/lead.php?id=<?= (int) $lead['id'] ?>"><strong><?= h($lead['name'] ?: '—') ?></strong></a><br><small class="muted"><?= h($lead['organisation']) ?></small></td>
         <td><small><?= h($lead['email']) ?><br><?= h($lead['phone']) ?></small></td>
         <td><?= h($lead['summary']) ?></td>
-        <td><?= status_chip($lead['status']) ?></td>
+        <td><?= $synced ? app_sync_chip($delivery[$lead['id']] ?? null) : status_chip($lead['status']) ?></td>
       </tr>
 <?php endforeach; ?>
     </tbody>
@@ -72,6 +80,6 @@ admin_start('Leads & enquiries', 'leads');
 </div>
 <p class="small muted mt-3">Showing <?= count($leads) ?> <?= count($leads) === 500 ? '(most recent 500; use filters or export)' : '' ?></p>
 <?php else: ?>
-<?= empty_state('inbox', 'No leads match', 'Try a different filter, or wait for the next enquiry from the website.') ?>
+<?= empty_state('inbox', 'No submissions match', 'Try a different filter, or wait for the next enquiry from the website.') ?>
 <?php endif; ?>
 <?php admin_end(); ?>

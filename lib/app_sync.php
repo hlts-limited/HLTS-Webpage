@@ -1,7 +1,8 @@
 <?php
 /**
  * Sends every website form submission to the HLTS Operation Suite (the staff
- * app at hlts-hr.vercel.app), where the team works on it.
+ * app at hlts-hr.vercel.app), where the team works on it. Course payments are
+ * sent the same way and land in the app's Finance ledger as income.
  *
  * Each submission is queued in the app_sync table first, so nothing is lost if
  * the app is briefly unreachable: it is retried with growing gaps, and the
@@ -63,6 +64,91 @@ function app_payload(int $leadId, string $key, array $definition, array $data, s
         'consent' => $consent,
         'file' => $fileName !== null ? ['name' => $fileName, 'field' => 'cv'] : null,
     ];
+}
+
+/** The staff app's address (taken from the delivery address), e.g. https://hlts-hr.vercel.app */
+function app_base_url(): string
+{
+    $parts = parse_url((string) config('app_sync.url'));
+    return isset($parts['scheme'], $parts['host']) ? $parts['scheme'] . '://' . $parts['host'] . (isset($parts['port']) ? ':' . $parts['port'] : '') : '';
+}
+
+/** Where a form submission is worked on in the staff app. */
+function app_lead_url(int $leadId): string
+{
+    return app_base_url() . '/website/lead/' . $leadId;
+}
+
+/** Delivery of each given lead to the staff app: [lead id => 'sent' | 'pending' | 'failed']; missing = never queued. */
+function app_sync_statuses(array $leadIds): array
+{
+    $leadIds = array_values(array_unique(array_map('intval', $leadIds)));
+    if (!$leadIds) {
+        return [];
+    }
+    $rows = db_all('SELECT lead_id, status FROM app_sync WHERE lead_id IN (' . implode(',', $leadIds) . ") AND form <> 'payment' ORDER BY id");
+    return array_column($rows, 'status', 'lead_id');
+}
+
+/** Chip for the admin tables: has this reached the staff app? */
+function app_sync_chip(?string $status): string
+{
+    return match ($status) {
+        'sent' => '<span class="chip chip--violet">In staff app</span>',
+        'pending' => '<span class="chip">Sending…</span>',
+        'failed' => '<span class="chip chip--magenta">Not delivered</span>',
+        default => '<span class="chip">Website only</span>',
+    };
+}
+
+/**
+ * Queue a course payment that Paystack has confirmed, so it is recorded as income in the staff
+ * app's Finance ledger. Safe to call twice: one Paystack reference is only ever queued once.
+ */
+function app_sync_queue_payment(array $payment): bool
+{
+    if ($payment['status'] !== 'paid' || db_value("SELECT COUNT(*) FROM app_sync WHERE form = 'payment' AND ref = ?", [$payment['reference']])) {
+        return false;
+    }
+    $planTotal = course($payment['course_slug'])['fees'][$payment['plan']] ?? null;
+    $paidAt = $payment['paid_at'] ?: $payment['created_at'];
+    db_insert('app_sync', [
+        'lead_id' => (int) ($payment['lead_id'] ?? 0),
+        'form' => 'payment',
+        'ref' => $payment['reference'],
+        'payload' => json_encode([
+            'v' => 1,
+            'kind' => 'payment',
+            'reference' => $payment['reference'],
+            'amountKobo' => (int) $payment['amount_kobo'],
+            'paidAt' => (new DateTimeImmutable($paidAt, new DateTimeZone(config('timezone'))))->format(DATE_ATOM),
+            'name' => mb_substr((string) $payment['name'], 0, 160),
+            'email' => mb_substr((string) $payment['email'], 0, 200),
+            'course' => mb_substr((string) (course($payment['course_slug'])['title'] ?? $payment['course_slug']), 0, 160),
+            'plan' => mb_substr((fee_plans()[$payment['plan']] ?? $payment['plan']) . ($planTotal ? ', ' . instalment_label($planTotal, $payment['plan']) : ''), 0, 80),
+            'channel' => mb_substr((string) ($payment['channel'] ?? ''), 0, 40),
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+        'file_path' => '',
+        'file_name' => '',
+        'file_mime' => '',
+        'status' => 'pending',
+        'attempts' => 0,
+        'last_error' => '',
+        'next_attempt_at' => now(),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+    return true;
+}
+
+/** Queue every paid course payment the staff app has not been told about. Returns how many. */
+function app_sync_backfill_payments(): int
+{
+    $count = 0;
+    foreach (db_all("SELECT * FROM payments WHERE status = 'paid' AND reference NOT IN (SELECT ref FROM app_sync WHERE form = 'payment') ORDER BY id") as $payment) {
+        $count += app_sync_queue_payment($payment) ? 1 : 0;
+    }
+    return $count;
 }
 
 /** Queue a saved submission for delivery. $file is ['path' => relative to storage, 'name', 'mime']. */
@@ -186,7 +272,7 @@ function app_sync_retry_failed(): int
 /** Queue every older submission that was never sent to the app. Returns how many were queued. */
 function app_sync_backfill(): int
 {
-    $leads = db_all('SELECT * FROM leads WHERE id NOT IN (SELECT lead_id FROM app_sync) ORDER BY id');
+    $leads = db_all("SELECT * FROM leads WHERE id NOT IN (SELECT lead_id FROM app_sync WHERE form <> 'payment') ORDER BY id");
     $count = 0;
     foreach ($leads as $lead) {
         $definition = form_definition($lead['type']);
@@ -209,7 +295,8 @@ function app_sync_counts(): array
     foreach (db_all('SELECT status, COUNT(*) AS n FROM app_sync GROUP BY status') as $r) {
         $counts[$r['status']] = (int) $r['n'];
     }
-    $counts['never'] = (int) db_value('SELECT COUNT(*) FROM leads WHERE id NOT IN (SELECT lead_id FROM app_sync)');
+    $counts['never'] = (int) db_value("SELECT COUNT(*) FROM leads WHERE id NOT IN (SELECT lead_id FROM app_sync WHERE form <> 'payment')");
+    $counts['payments_never'] = (int) db_value("SELECT COUNT(*) FROM payments WHERE status = 'paid' AND reference NOT IN (SELECT ref FROM app_sync WHERE form = 'payment')");
     return $counts;
 }
 

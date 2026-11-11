@@ -27,6 +27,20 @@
   gap: 2px;
 }
 
+.admin-side__group {
+  margin: 14px 0 4px;
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.admin-side__group:empty {
+  display: none;
+}
+
 .admin-side nav a,
 .admin-side__foot a,
 .admin-side__foot button {

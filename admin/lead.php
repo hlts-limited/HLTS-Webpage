@@ -13,12 +13,15 @@ $definition = form_definition($lead['type']);
 $details = $definition ? describe_submission($definition, $payload) : $payload;
 $student = $lead['type'] === 'student' ? db_one('SELECT * FROM students WHERE lead_id = ? OR email = ?', [$lead['id'], $lead['email']]) : null;
 $payments = $lead['email'] ? db_all('SELECT * FROM payments WHERE email = ? ORDER BY created_at DESC', [$lead['email']]) : [];
+// Once a submission is in the staff app, its status, notes and owner are kept there only.
+$delivery = app_sync_statuses([$id])[$id] ?? null;
+$inApp = app_sync_enabled() && $delivery === 'sent';
 
 if (is_post()) {
     csrf_require();
     $action = $_POST['action'] ?? '';
 
-    if ($action === 'update') {
+    if ($action === 'update' && !$inApp) {
         $status = isset(LEAD_STATUSES[$_POST['status'] ?? '']) ? $_POST['status'] : $lead['status'];
         db_run('UPDATE leads SET status = ?, notes = ?, updated_at = ? WHERE id = ?', [$status, trim((string) ($_POST['notes'] ?? '')), now(), $id]);
         admin_notice('Lead updated.', "/admin/lead.php?id=$id");
@@ -60,7 +63,7 @@ if (is_post()) {
 $newPassword = flash('new_password');
 admin_start(($definition['title'] ?? 'Lead') . ' #' . $id, 'leads');
 ?>
-<a class="text-link mb-3 d-inline-flex" href="/admin/leads.php"><?= icon('arrow-left') ?> All leads</a>
+<a class="text-link mb-3 d-inline-flex" href="/admin/leads.php"><?= icon('arrow-left') ?> All form submissions</a>
 
 <?php if ($newPassword): ?>
 <div class="notice mb-4"><?= icon('key') ?><div><p><strong>Share these login details with the student</strong> (shown once):<br>Student ID <code><?= h($newPassword['student_no']) ?></code> · Temporary password <code><?= h($newPassword['password']) ?></code></p><p class="small"><?= $newPassword['emailed'] ? 'Also emailed to the student.' : 'Not emailed.' ?></p></div></div>
@@ -68,7 +71,7 @@ admin_start(($definition['title'] ?? 'Lead') . ' #' . $id, 'leads');
 
 <div class="admin-grid">
   <section class="panel">
-    <div class="panel__head"><h2><?= h($lead['name'] ?: $lead['email']) ?></h2><?= status_chip($lead['status']) ?></div>
+    <div class="panel__head"><h2><?= h($lead['name'] ?: $lead['email']) ?></h2><?= app_sync_enabled() ? app_sync_chip($delivery) : status_chip($lead['status']) ?></div>
     <p class="muted small mb-3">Received <?= h(format_date($lead['created_at'], 'l j F Y, g:ia')) ?> · IP <?= h($lead['ip']) ?></p>
     <div class="actions mb-4">
 <?php if ($lead['phone']): ?>
@@ -87,8 +90,22 @@ admin_start(($definition['title'] ?? 'Lead') . ' #' . $id, 'leads');
   </section>
 
   <div class="admin-stack">
+<?php if ($inApp): ?>
     <section class="panel">
       <h2>Follow-up</h2>
+      <p class="small">This submission is in the HLTS staff app. Its stage, notes and the person handling it are kept there, so the whole team sees the same thing.</p>
+      <a class="btn-hl btn-hl--primary" href="<?= h(app_lead_url($id)) ?>" target="_blank" rel="noopener"><?= icon('box-arrow-up-right') ?> <span>Open in the staff app</span></a>
+<?php if (trim((string) $lead['notes']) !== ''): ?>
+      <p class="small muted mt-3 mb-1">Notes written here before the move:</p>
+      <p class="small"><?= nl2br(h($lead['notes'])) ?></p>
+<?php endif; ?>
+    </section>
+<?php else: ?>
+    <section class="panel">
+      <h2>Follow-up</h2>
+<?php if (app_sync_enabled()): ?>
+      <div class="notice notice--error mb-3" role="alert"><?= icon('exclamation-triangle') ?><p>This submission has not reached the staff app yet. <a href="/admin/app-sync.php">See Staff app sync</a>. Until it does, you can follow it up here.</p></div>
+<?php endif; ?>
       <form method="post">
         <?= csrf_field() ?><input type="hidden" name="action" value="update">
         <div class="field mb-3"><label class="field-label" for="status">Status</label><div class="select-wrap"><select id="status" name="status"><?php foreach (LEAD_STATUSES as $k => $label): ?><option value="<?= h($k) ?>"<?= $lead['status'] === $k ? ' selected' : '' ?>><?= h($label) ?></option><?php endforeach; ?></select><?= icon('chevron-down') ?></div></div>
@@ -96,6 +113,7 @@ admin_start(($definition['title'] ?? 'Lead') . ' #' . $id, 'leads');
         <button class="btn-hl btn-hl--primary" type="submit"><span>Save</span></button>
       </form>
     </section>
+<?php endif; ?>
 
 <?php if ($lead['type'] === 'student'): ?>
     <section class="panel">

@@ -156,12 +156,15 @@ function school_modules(): array
 /*
  * Official price list for schools. All amounts are in kobo, per term.
  * The public pages show "from" prices only; exact prices are worked out on the server when a
- * school asks for a quote (see the "pricing" form). The staff app has the same list in
- * lib/pricing.ts: change both together.
+ * school asks for a quote (see the "pricing" form).
+ *
+ * To change a price, edit lib/pricing.ts in the STAFF APP: the website reads that list (see
+ * lib/prices.php) and follows within the hour. The amounts below are only used until the app has
+ * been reached for the first time. The wording (names, descriptions, what's included) lives here.
  */
 function school_packages(): array
 {
-    return [
+    $packages = [
         'basic' => [
             'name' => 'Basic',
             'for' => 'We provide and manage your technology education.',
@@ -182,12 +185,18 @@ function school_packages(): array
             'items' => ['Everything in Professional', 'School website and online admission', 'Student and parent portal, digital records', 'Priority support and technology and AI programmes'],
         ],
     ];
+    foreach (app_prices()['packages'] ?? [] as $key => $amounts) {
+        if (isset($packages[$key])) {
+            $packages[$key] = array_merge($packages[$key], $amounts);
+        }
+    }
+    return $packages;
 }
 
 /** Full-time teachers per term, by package. Counts not listed (4, or 6 and more) are a custom quote. */
 function full_time_prices(): array
 {
-    return [
+    return app_prices()['full_time'] ?? [
         1 => ['basic' => 90000000, 'professional' => 120000000, 'premium' => 165000000],
         2 => ['basic' => 170000000, 'professional' => 225000000, 'premium' => 300000000],
         3 => ['basic' => 245000000, 'professional' => 320000000, 'premium' => 420000000],
@@ -198,7 +207,7 @@ function full_time_prices(): array
 /** Part-time teachers (2 days a week) per term. */
 function part_time_prices(): array
 {
-    return [1 => 40000000, 2 => 75000000, 3 => 105000000, 5 => 165000000];
+    return app_prices()['part_time'] ?? [1 => 40000000, 2 => 75000000, 3 => 105000000, 5 => 165000000];
 }
 
 /** What each package includes: [service, basic, professional, premium]; true = included, false = not, text = level. */
@@ -230,7 +239,7 @@ function package_comparison(): array
 /** Optional extras, never included automatically. Prices in kobo; null = custom quote. */
 function pricing_add_ons(): array
 {
-    return [
+    $addOns = [
         'website' => ['name' => 'School website development', 'from' => 25000000, 'to' => 50000000, 'unit' => 'once'],
         'maintenance' => ['name' => 'Website annual maintenance', 'from' => 10000000, 'to' => 20000000, 'unit' => 'a year'],
         'admission' => ['name' => 'Online admission system', 'from' => 10000000, 'to' => 25000000, 'unit' => 'once'],
@@ -243,6 +252,13 @@ function pricing_add_ons(): array
         'lab' => ['name' => 'Computer lab setup', 'from' => null, 'to' => null, 'unit' => 'custom'],
         'software' => ['name' => 'School management software', 'from' => null, 'to' => null, 'unit' => 'subscription or custom'],
     ];
+    $fromApp = app_prices()['add_ons'] ?? [];
+    foreach ($addOns as $key => $addOn) {
+        if (isset($fromApp[$addOn['name']])) {
+            $addOns[$key] = array_merge($addOn, $fromApp[$addOn['name']]);
+        }
+    }
+    return $addOns;
 }
 
 /** "₦250,000 to ₦500,000 once", or "custom quote". */
@@ -359,7 +375,7 @@ function team(): array
 {
     return [
         ['name' => 'Christopher Oyeh', 'role' => 'Founder & CEO · Full-stack Developer', 'image' => 'images/CEO.jpeg', 'bio' => 'Visionary leader with 10+ years in EdTech, driving innovation and digital transformation in education, and a hands-on full-stack developer behind HLTS platforms.'],
-        ['name' => 'Israel Akinola', 'role' => 'Community Leader, TechMind Africa · Full-stack Developer', 'image' => 'images/2027images/ISRAEL.png', 'bio' => 'Leads TechMind Africa and supports learning programmes that help learners and educators build practical digital skills, while building web solutions as a full-stack developer.'],
+        ['name' => 'Israel Akinola', 'role' => 'Community Leader, TechMind Africa · Full-stack Developer', 'image' => 'images/2027images/ISRAEL.jpg', 'bio' => 'Leads TechMind Africa and supports learning programmes that help learners and educators build practical digital skills, while building web solutions as a full-stack developer.'],
         ['name' => 'Chike Ukem', 'role' => 'HR', 'image' => 'images/chike-ukem.jpg', 'bio' => 'Leads people and welfare at HLTS, from recruitment and onboarding to supporting the staff deployed in our partner schools.'],
         ['name' => 'Osi Emmanuel', 'role' => 'Lead Supervisor', 'image' => 'images/OSI.jpeg', 'bio' => 'Leads the supervision of HLTS staff in partner schools, keeping teaching, lab work and reporting on track.'],
     ];
