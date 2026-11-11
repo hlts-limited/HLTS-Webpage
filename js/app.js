@@ -574,8 +574,39 @@
     }, true);
   }
 
+  /* ---- Blog hero: background video, only when it won't cost the reader -- */
+
+  function initBlogVideo() {
+    const video = $('[data-blog-video]');
+    if (!video) return;
+    const conn = navigator.connection || {};
+    // No video for data saver, slow connections or reduced motion: the blueprint background stays.
+    if (conn.saveData || /(^|-)2g|3g/.test(conn.effectiveType || '') || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    video.src = video.dataset.blogVideo;
+    video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
+    video.play().catch(() => {});
+  }
+
+  /* ---- YouTube: the player loads only when someone presses play ------- */
+
+  function initYouTube() {
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-youtube]');
+      if (!button || !/^[\w-]{11}$/.test(button.dataset.youtube)) return;
+      const frame = document.createElement('iframe');
+      frame.src = 'https://www.youtube-nocookie.com/embed/' + button.dataset.youtube + '?autoplay=1&rel=0';
+      frame.title = button.dataset.title || 'YouTube video';
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      frame.allowFullscreen = true;
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      button.replaceWith(frame);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    initYouTube();
     initHeader();
+    initBlogVideo();
     initHoverMenus();
     $$('form.smart-form').forEach(initForm);
     initRegistration();

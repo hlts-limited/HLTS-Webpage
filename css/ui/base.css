@@ -30,7 +30,7 @@ h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4 {
   font-family: var(--font-display);
   color: var(--ink);
-  font-weight: 700;
+  font-weight: calc(700 * var(--weight-scale));
   letter-spacing: -0.02em;
   line-height: 1.12;
   margin: 0 0 0.6em;
@@ -41,7 +41,7 @@ h1, .h1 { font-size: var(--fs-h1); letter-spacing: -0.035em; line-height: 1.04; 
 h2, .h2 { font-size: var(--fs-h2); letter-spacing: -0.03em; }
 h3, .h3 { font-size: var(--fs-h3); }
 h4, .h4 { font-size: var(--fs-h4); }
-h5 { font-size: 1.05rem; }
+h5 { font-size: calc(1.05rem * var(--type-scale)); }
 
 p {
   margin: 0 0 1em;
@@ -100,7 +100,7 @@ video {
   background: var(--white);
   color: var(--ink);
   border-radius: var(--radius-sm);
-  font-weight: 700;
+  font-weight: calc(700 * var(--weight-scale));
   box-shadow: var(--shadow-md);
   transition: top var(--dur-2) var(--ease-out);
 }
@@ -199,7 +199,7 @@ video {
   gap: 8px;
   font-family: var(--font-display);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: calc(700 * var(--weight-scale));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--indigo-600);

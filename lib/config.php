@@ -30,6 +30,10 @@ function config(string $key, $default = null)
             'address' => '8 Assembly Close, Folagoro, Somolu, Lagos, Nigeria',
             'office_hours' => 'Monday to Friday, 8am to 5pm',
 
+            // The YouTube channel whose videos show on the blog and home page.
+            'youtube_channel_id' => 'UC9yB0lRVNqZ0fSuF1fvISSw',
+            'youtube_url' => 'https://www.youtube.com/@HLTSLIMITEDBLOG',
+
             // Where new enquiries are emailed. Per-form overrides use the form key.
             'notify_to' => 'CEO@hltsltd.com',
             'notify_to_by_form' => [],

@@ -34,7 +34,7 @@ function admin_nav(): array
         'payments' => ['Payments', 'credit-card', '/admin/payments.php'],
         'results' => ['Results', 'clipboard-data', '/admin/results.php'],
         'certificates' => ['Certificates', 'patch-check', '/admin/certificates.php'],
-        'posts' => ['Insights', 'newspaper', '/admin/content.php?type=posts'],
+        'posts' => ['Blog', 'newspaper', '/admin/content.php?type=posts'],
         'events' => ['Events', 'calendar-event', '/admin/content.php?type=events'],
         'projects' => ['Portfolio', 'collection', '/admin/content.php?type=projects'],
         'jobs' => ['Jobs', 'briefcase', '/admin/content.php?type=jobs'],
@@ -63,7 +63,7 @@ function admin_start(string $title, string $active = ''): void
   <meta name="robots" content="noindex, nofollow">
   <meta http-equiv="Content-Security-Policy" content="<?= h(csp_policy(true)) ?>">
   <title><?= h($title) ?> – HLTS Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="<?= h(asset('css/tokens.css')) ?>">
@@ -153,6 +153,94 @@ function image_choices(): array
     }
     ksort($choices);
     return $choices;
+}
+
+const IMAGE_UPLOAD_MAX_BYTES = 10 * 1024 * 1024;
+const IMAGE_MAX_SIDE = 2000;
+
+/** The largest picture that can be uploaded: 10 MB, or less if the server's PHP limits are lower. */
+function image_upload_limit(): int
+{
+    $bytes = static function (string $v): int {
+        $n = (int) $v;
+        return match (strtolower(substr(trim($v), -1))) { 'g' => $n << 30, 'm' => $n << 20, 'k' => $n << 10, default => $n };
+    };
+    $limits = array_filter([IMAGE_UPLOAD_MAX_BYTES, $bytes((string) ini_get('upload_max_filesize')), $bytes((string) ini_get('post_max_size'))]);
+    return min($limits);
+}
+
+/** "4 MB", for messages. */
+function megabytes(int $bytes): string
+{
+    return rtrim(rtrim(number_format($bytes / 1048576, 1), '0'), '.') . ' MB';
+}
+
+/**
+ * Save a cover image uploaded from the admin's device into images/uploads/YYYY-MM/ under a random
+ * name. Only real JPEG, PNG or WebP files are accepted (checked from the file's bytes, not its
+ * name). Where the server has GD, the picture is re-saved at no more than 2000px on its longest
+ * side, which also strips anything hidden inside it. Returns [path|null, error|null].
+ */
+function save_uploaded_image(?array $file): array
+{
+    $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
+    if ($error === UPLOAD_ERR_NO_FILE) {
+        return [null, null];
+    }
+    if (in_array($error, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) || (int) ($file['size'] ?? 0) > image_upload_limit()) {
+        return [null, 'The image must be ' . megabytes(image_upload_limit()) . ' or smaller.'];
+    }
+    if ($error !== UPLOAD_ERR_OK || !is_uploaded_file((string) ($file['tmp_name'] ?? ''))) {
+        return [null, 'The upload did not finish. Please try again.'];
+    }
+    $tmp = $file['tmp_name'];
+    $info = @getimagesize($tmp);
+    $types = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp'];
+    if (!$info || !isset($types[$info[2]]) || $info[0] < 1 || $info[1] < 1) {
+        return [null, 'Upload a photo in JPG, PNG or WebP format.'];
+    }
+    $ext = $types[$info[2]];
+    $dir = APP_ROOT . '/images/uploads/' . date('Y-m');
+    if (!is_dir($dir) && !mkdir($dir, 0755, true)) {
+        return [null, 'The image could not be saved on the server. Please try again.'];
+    }
+    $name = bin2hex(random_bytes(12)) . '.' . $ext;
+    $dest = "$dir/$name";
+
+    $saved = false;
+    $loaders = ['jpg' => 'imagecreatefromjpeg', 'png' => 'imagecreatefrompng', 'webp' => 'imagecreatefromwebp'];
+    if (function_exists($loaders[$ext]) && function_exists('imagecreatetruecolor')) {
+        $src = @$loaders[$ext]($tmp);
+        if ($src) {
+            [$w, $h] = [$info[0], $info[1]];
+            $scale = min(1, IMAGE_MAX_SIDE / max($w, $h));
+            $nw = max(1, (int) round($w * $scale));
+            $nh = max(1, (int) round($h * $scale));
+            $out = imagecreatetruecolor($nw, $nh);
+            if ($ext !== 'jpg') {
+                imagealphablending($out, false);
+                imagesavealpha($out, true);
+            }
+            imagecopyresampled($out, $src, 0, 0, 0, 0, $nw, $nh, $w, $h);
+            $saved = match ($ext) {
+                'jpg' => imagejpeg($out, $dest, 82),
+                'png' => imagepng($out, $dest, 7),
+                'webp' => imagewebp($out, $dest, 82),
+            };
+        }
+    }
+    if (!$saved) {
+        // No GD on this server: keep the original, which must then be small enough to show.
+        if ((int) $file['size'] > 3 * 1024 * 1024) {
+            return [null, 'This server can’t shrink images. Upload a photo under 3 MB.'];
+        }
+        $saved = move_uploaded_file($tmp, $dest);
+    }
+    if (!$saved) {
+        return [null, 'The image could not be saved on the server. Please try again.'];
+    }
+    @chmod($dest, 0644);
+    return ['images/uploads/' . date('Y-m') . '/' . $name, null];
 }
 
 function next_student_no(): string

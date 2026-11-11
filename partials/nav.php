@@ -7,6 +7,7 @@
 $current = current_page();
 $groups = nav_groups();
 $isIn = fn (array $group) => in_array($current, $group['match'], true);
+$onBlog = in_array($current, ['blog', 'post'], true);
 ?>
     <header class="site-header<?= !empty($GLOBALS['page']['solid_header']) ? ' is-solid' : '' ?>" data-header>
       <div class="container">
@@ -33,6 +34,9 @@ $isIn = fn (array $group) => in_array($current, $group['match'], true);
                 </div>
               </li>
 <?php endforeach; ?>
+              <li class="main-nav__item">
+                <a class="main-nav__link main-nav__link--blog<?= $onBlog ? ' is-active' : '' ?>" href="<?= h(page_url('blog')) ?>"<?= $current === 'blog' ? ' aria-current="page"' : '' ?>><?= icon('newspaper') ?> Blog</a>
+              </li>
             </ul>
           </nav>
 
@@ -52,6 +56,7 @@ $isIn = fn (array $group) => in_array($current, $group['match'], true);
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
       </div>
       <div class="offcanvas-body">
+        <a class="mobile-blog-link<?= $onBlog ? ' is-active' : '' ?>" href="<?= h(page_url('blog')) ?>"><?= icon('newspaper') ?> Blog <span>Ideas on education and technology</span></a>
 <?php foreach ($groups as $group): ?>
         <details class="mobile-group"<?= $isIn($group) ? ' open' : '' ?>>
           <summary><?= icon($group['icon']) ?> <?= h($group['label']) ?> <?= icon('chevron-down') ?></summary>

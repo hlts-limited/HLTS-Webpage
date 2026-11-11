@@ -67,7 +67,7 @@ admin_start('Dashboard', 'dashboard');
     <div class="admin-quick">
       <a href="/admin/results.php"><?= icon('upload') ?> Upload results</a>
       <a href="/admin/certificates.php"><?= icon('patch-plus') ?> Issue certificate</a>
-      <a href="/admin/content.php?type=posts&amp;action=new"><?= icon('pencil-square') ?> Write an article</a>
+      <a href="/admin/content.php?type=posts&amp;action=new"><?= icon('pencil-square') ?> Write a blog post</a>
       <a href="/admin/content.php?type=events&amp;action=new"><?= icon('calendar-plus') ?> Add an event</a>
     </div>
 <?php if (!paystack_enabled()): ?>

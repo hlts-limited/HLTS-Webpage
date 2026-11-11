@@ -15,13 +15,14 @@ function content_types(): array
 
     return [
         'posts' => [
-            'label' => 'Insights', 'single' => 'article', 'nav' => 'posts', 'public' => fn ($r) => page_url('post', ['p' => $r['slug']]),
+            'label' => 'Blog', 'single' => 'post', 'nav' => 'posts', 'public' => fn ($r) => page_url('post', ['p' => $r['slug']]),
             'list' => ['title', 'category', 'status', 'published_at'], 'order' => 'created_at DESC',
             'fields' => [
                 'title' => ['type' => 'text', 'label' => 'Title', 'required' => true],
                 'category' => ['type' => 'text', 'label' => 'Category', 'placeholder' => 'Teaching, Assessment, Technology…'],
                 'excerpt' => ['type' => 'textarea', 'label' => 'Short summary', 'rows' => 2, 'help' => 'Shown on cards and in search results. One or two sentences.'],
-                'body' => ['type' => 'textarea', 'label' => 'Article', 'rows' => 16, 'required' => true, 'help' => 'Leave a blank line between paragraphs. Start a line with "## " for a heading and "- " for a bullet.'],
+                'video_url' => ['type' => 'url', 'label' => 'YouTube video link (optional)', 'placeholder' => 'https://www.youtube.com/watch?v=…', 'help' => 'Paste the link of a video on our YouTube channel; it plays at the top of the post.'],
+                'body' => ['type' => 'textarea', 'label' => 'Post', 'rows' => 16, 'required' => true, 'help' => 'Leave a blank line between paragraphs. Start a line with "## " for a heading and "- " for a bullet.'],
                 'cover' => $cover,
                 'status' => $status,
             ],
@@ -106,6 +107,18 @@ if (is_post()) {
         admin_notice(ucfirst($type['single']) . ' deleted.', $base);
     }
 
+    // A cover uploaded from the device replaces whatever was picked from the list.
+    if (isset($type['fields']['cover'])) {
+        [$uploaded, $uploadError] = save_uploaded_image($_FILES['cover_upload'] ?? null);
+        if ($uploaded) {
+            $_POST['cover'] = $uploaded;
+            log_event('ADMIN_IMAGE_UPLOADED', $uploaded);
+        }
+        if ($uploadError) {
+            $errors['cover'] = $uploadError;
+        }
+    }
+
     $values = [];
     foreach ($type['fields'] as $name => $field) {
         $value = trim((string) ($_POST[$name] ?? ''));
@@ -121,10 +134,13 @@ if (is_post()) {
         if ($field['type'] === 'url' && $value !== '' && !safe_url($value)) {
             $errors[$name] = 'Enter a full link starting with https://';
         }
+        if ($name === 'video_url' && $value !== '' && !youtube_id($value)) {
+            $errors[$name] = 'Paste a YouTube video link, for example https://www.youtube.com/watch?v=…';
+        }
         if ($field['type'] === 'select' && $value !== '' && !isset($field['options'][$value])) {
             $errors[$name] = 'Choose one of the options.';
         }
-        if ($field['type'] === 'image' && $value !== '' && !isset(image_choices()[$value])) {
+        if ($field['type'] === 'image' && $value !== '' && !isset(image_choices()[$value]) && empty($errors[$name])) {
             $errors[$name] = 'Choose an image from the list.';
         }
         $values[$name] = $value;
@@ -198,7 +214,7 @@ if ($action === 'list'):
 
 <?php else: ?>
 <a class="text-link mb-3 d-inline-flex" href="<?= h($base) ?>"><?= icon('arrow-left') ?> All <?= h(strtolower($type['label'])) ?></a>
-<form method="post" class="admin-grid admin-grid--editor">
+<form method="post" class="admin-grid admin-grid--editor" enctype="multipart/form-data">
   <?= csrf_field() ?>
   <section class="panel admin-form">
 <?php if ($errors): ?>
@@ -243,9 +259,11 @@ if ($action === 'list'):
 <?php if (isset($type['fields']['cover'])): $cover = (string) ($values['cover'] ?? ''); ?>
     <section class="panel admin-form">
       <div class="field">
-        <label class="field-label" for="f-cover">Cover image</label>
+        <label class="field-label" for="f-cover-upload">Cover image</label>
+        <input class="form-control" id="f-cover-upload" name="cover_upload" type="file" accept="image/jpeg,image/png,image/webp" data-upload-preview="#cover-preview" data-max-bytes="<?= image_upload_limit() ?>">
+        <p class="field-help">Upload a photo from your device (JPG, PNG or WebP, up to <?= h(megabytes(image_upload_limit())) ?>). It’s saved when you press Save.</p>
+        <label class="field-label mt-3" for="f-cover">Or choose one already on the website</label>
         <div class="select-wrap"><select id="f-cover" name="cover" data-image-preview="#cover-preview"><option value="">No image</option><?php foreach (image_choices() as $path): ?><option value="<?= h($path) ?>"<?= $cover === $path ? ' selected' : '' ?>><?= h(substr($path, 7)) ?></option><?php endforeach; ?></select><?= icon('chevron-down') ?></div>
-        <p class="field-help">To use a new image, add it to the website's images folder first.</p>
 <?php if (!empty($errors['cover'])): ?><p class="field-error"><?= icon('exclamation-circle') ?><span><?= h($errors['cover']) ?></span></p><?php endif; ?>
       </div>
       <img id="cover-preview" class="cover-preview" src="<?= $cover ? h(img($cover)) : '' ?>" alt=""<?= $cover ? '' : ' hidden' ?>>

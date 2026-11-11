@@ -42,6 +42,28 @@
       });
     });
 
+    // Preview a cover photo picked from the device before it's uploaded.
+    document.querySelectorAll('input[type=file][data-upload-preview]').forEach((input) => {
+      const preview = document.querySelector(input.dataset.uploadPreview);
+      input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+        if (!preview || !file) return;
+        const max = Number(input.dataset.maxBytes) || 10 * 1024 * 1024;
+        if (file.size > max) {
+          window.alert('That image is too large. The limit is ' + Math.round(max / 1048576) + ' MB.');
+          input.value = '';
+          return;
+        }
+        // Read as a data: URL, which the site's security policy allows for images (blob: isn't).
+        const reader = new FileReader();
+        reader.onload = () => {
+          preview.src = reader.result;
+          preview.hidden = false;
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
     // Fill the certificate form from a chosen student.
     const studentSelect = document.querySelector('[data-fill-certificate]');
     if (studentSelect) {

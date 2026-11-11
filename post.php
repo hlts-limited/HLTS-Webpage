@@ -6,7 +6,7 @@ $post = db_one("SELECT * FROM posts WHERE slug = ? AND status = 'published'", [$
 
 if (!$post) {
     http_response_code(404);
-    render_message_page('Article not found', 'This article may have moved or is not published yet.', false, page_url('blog'), 'See all insights');
+    render_message_page('Post not found', 'This post may have moved or is not published yet.', false, page_url('blog'), 'See the blog');
     exit;
 }
 
@@ -14,16 +14,17 @@ $more = db_all("SELECT * FROM posts WHERE status = 'published' AND id <> ? ORDER
 $words = str_word_count(strip_tags($post['body']));
 
 page_start([
-    'title' => $post['title'] . ' – HLTS Insights',
+    'title' => $post['title'] . ' – HLTS Blog',
     'description' => $post['excerpt'],
     'canonical' => 'post.html?p=' . $post['slug'],
     'image' => $post['cover'] ?: 'images/logoh.png',
     'page' => 'post',
+    'body_class' => 'blog-dark',
 ]);
 
 echo page_hero([
-    'crumbs' => [['Insights', page_url('blog')], [$post['title']]],
-    'eyebrow' => $post['category'] ?: 'Insights',
+    'crumbs' => [['Blog', page_url('blog')], [$post['title']]],
+    'eyebrow' => $post['category'] ?: 'Blog',
     'title' => h($post['title']),
     'lead' => $post['excerpt'],
     'note' => icon('calendar3') . ' ' . h(format_date($post['published_at'])) . ' &nbsp;·&nbsp; ' . icon('clock') . ' ' . max(1, (int) round($words / 200)) . ' min read',
@@ -32,7 +33,9 @@ echo page_hero([
 
 <section class="section">
   <div class="container" style="max-width: 900px">
-<?php if ($post['cover']): ?>
+<?php if ($video = youtube_id((string) ($post['video_url'] ?? ''))): ?>
+    <div class="post-video" data-reveal="zoom"><?= youtube_player($video, $post['title']) ?></div>
+<?php elseif ($post['cover']): ?>
     <figure class="post-cover" data-reveal="zoom"><img src="<?= h(img($post['cover'])) ?>" alt=""></figure>
 <?php endif; ?>
     <article class="prose" data-reveal><?= render_text($post['body']) ?></article>
@@ -44,15 +47,12 @@ echo page_hero([
 </section>
 
 <?php if ($more): ?>
-<section class="section section--alt">
+<section class="section blog-section">
   <div class="container">
-    <?= section_head('Keep reading', 'More insights') ?>
-    <div class="grid grid--3" data-reveal-group>
+    <h2 class="blog-section__title">More from the blog</h2>
+    <div class="blog-grid" data-reveal-group>
 <?php foreach ($more as $item): ?>
-      <a class="post-card" href="<?= h(page_url('post', ['p' => $item['slug']])) ?>" data-reveal>
-        <div class="post-card__media"><?php if ($item['cover']): ?><img src="<?= h(img($item['cover'])) ?>" alt="" loading="lazy"><?php endif; ?></div>
-        <div class="post-card__body"><h3><?= h($item['title']) ?></h3><p><?= h($item['excerpt']) ?></p></div>
-      </a>
+      <?= blog_card($item) ?>
 <?php endforeach; ?>
     </div>
   </div>

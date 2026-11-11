@@ -115,3 +115,8 @@ FileETag None
     ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
+
+# The blog hero video rarely changes; let browsers keep it.
+<IfModule mod_expires.c>
+    ExpiresByType video/mp4 "access plus 1 month"
+</IfModule>

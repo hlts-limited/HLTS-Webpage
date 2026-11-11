@@ -34,6 +34,9 @@ $footerColumns = ['schools', 'learn', 'build', 'company'];
 <?php foreach ($groups[$key]['items'] as [$page, $label]): ?>
               <li><a href="<?= h(page_url($page)) ?>"<?= link_target($page) ?>><?= h($label) ?></a></li>
 <?php endforeach; ?>
+<?php if ($key === 'company'): ?>
+              <li><a href="<?= h(page_url('blog')) ?>">Blog</a></li>
+<?php endif; ?>
 <?php if ($key === 'build'): ?>
               <li><a href="<?= h(page_url('community')) ?>">TechMind Africa</a></li>
               <li><a href="<?= h(page_url('events')) ?>">Events</a></li>

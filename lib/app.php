@@ -28,6 +28,7 @@ require __DIR__ . '/app_sync.php';
 require __DIR__ . '/paystack.php';
 require __DIR__ . '/results.php';
 require __DIR__ . '/ui.php';
+require __DIR__ . '/youtube.php';
 
 date_default_timezone_set(config('timezone'));
 

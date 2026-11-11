@@ -200,7 +200,7 @@ function csp_policy(bool $forMeta = false): string
         "font-src 'self' https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/ https://fonts.gstatic.com",
         "img-src 'self' data: https:",
         "connect-src 'self'",
-        "frame-src https://www.google.com",
+        "frame-src https://www.google.com https://www.youtube-nocookie.com",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'self' https://checkout.paystack.com",

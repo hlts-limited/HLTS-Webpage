@@ -65,14 +65,14 @@
 
 .brand__name {
   font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.15rem;
+  font-weight: calc(800 * var(--weight-scale));
+  font-size: calc(1.15rem * var(--type-scale));
   letter-spacing: 0.08em;
   color: var(--white);
 }
 
 .brand__tag {
-  font-size: 0.62rem;
+  font-size: calc(0.62rem * var(--type-scale));
   letter-spacing: 0.32em;
   color: var(--lavender-300);
   margin-top: 4px;
@@ -101,8 +101,8 @@
   background: transparent;
   border-radius: var(--radius-pill);
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: calc(0.9rem * var(--type-scale));
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--on-dark);
   text-decoration: none;
   cursor: pointer;
@@ -121,7 +121,7 @@
 }
 
 .main-nav__link .bi-chevron-down {
-  font-size: 0.7rem;
+  font-size: calc(0.7rem * var(--type-scale));
   transition: transform var(--dur-2) var(--ease-out);
 }
 
@@ -215,7 +215,7 @@
   border-radius: 12px;
   background: var(--grad-brand-soft);
   color: var(--indigo-600);
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--type-scale));
   transition: transform var(--dur-2) var(--ease-spring), background var(--dur-2) ease, color var(--dur-2) ease;
 }
 
@@ -228,14 +228,14 @@
 .mega__item strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 0.92rem;
-  font-weight: 600;
+  font-size: calc(0.92rem * var(--type-scale));
+  font-weight: calc(600 * var(--weight-scale));
 }
 
 .mega__item small {
   display: block;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--type-scale));
   line-height: 1.35;
 }
 
@@ -253,7 +253,7 @@
   border-radius: 14px;
   background: rgba(201, 162, 255, 0.08);
   color: var(--white);
-  font-size: 1.4rem;
+  font-size: calc(1.4rem * var(--type-scale));
 }
 
 .mobile-menu.offcanvas {
@@ -290,7 +290,7 @@
   gap: 12px;
   padding: 14px 6px;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--white);
   cursor: pointer;
   list-style: none;
@@ -366,14 +366,14 @@
   padding: 8px 2px;
   border-radius: 14px;
   color: var(--on-dark-muted);
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-size: calc(0.68rem * var(--type-scale));
+  font-weight: calc(600 * var(--weight-scale));
   text-decoration: none;
   min-height: 48px;
 }
 
 .mobile-bar a i {
-  font-size: 1.15rem;
+  font-size: calc(1.15rem * var(--type-scale));
 }
 
 .mobile-bar a.is-active,
@@ -414,8 +414,8 @@
   background: var(--btn-bg);
   color: var(--btn-fg);
   font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: calc(0.95rem * var(--type-scale));
+  font-weight: calc(600 * var(--weight-scale));
   line-height: 1.1;
   text-decoration: none;
   white-space: nowrap;
@@ -500,13 +500,13 @@
 .btn-hl--sm {
   min-height: 40px;
   padding: 8px 16px;
-  font-size: 0.85rem;
+  font-size: calc(0.85rem * var(--type-scale));
 }
 
 .btn-hl--lg {
   min-height: 56px;
   padding: 14px 28px;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--type-scale));
 }
 
 .btn-hl--block {
@@ -537,7 +537,7 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   text-decoration: none;
   color: var(--indigo-600);
 }
@@ -638,7 +638,7 @@ a.card-hl:focus-visible {
   border-radius: 16px;
   background: var(--grad-brand-soft);
   color: var(--indigo-600);
-  font-size: 1.4rem;
+  font-size: calc(1.4rem * var(--type-scale));
   transition: transform var(--dur-3) var(--ease-spring), background var(--dur-2) ease, color var(--dur-2) ease;
 }
 
@@ -684,7 +684,7 @@ a.card-hl:focus-visible {
   border-radius: 50%;
   background: var(--indigo-50);
   color: var(--indigo-600);
-  font-size: 0.85rem;
+  font-size: calc(0.85rem * var(--type-scale));
   margin-top: 2px;
 }
 
@@ -703,7 +703,7 @@ a.card-hl:focus-visible {
   background: var(--indigo-50);
   color: var(--indigo-700);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: calc(700 * var(--weight-scale));
   letter-spacing: 0.02em;
 }
 
@@ -874,7 +874,7 @@ a.card-hl:focus-visible {
 
 .photo-frame figcaption strong {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
 }
 
 /* ---- Stats -------------------------------------------------------------- */
@@ -901,8 +901,8 @@ a.card-hl:focus-visible {
 .stat__value {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 1.6rem + 2vw, 3.2rem);
-  font-weight: 800;
+  font-size: calc(clamp(2.2rem, 1.6rem + 2vw, 3.2rem) * var(--type-scale));
+  font-weight: calc(800 * var(--weight-scale));
   line-height: 1;
   letter-spacing: -0.04em;
   background: var(--grad-text);
@@ -947,7 +947,7 @@ a.card-hl:focus-visible {
   border: 1px solid var(--line);
   background: var(--surface);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--ink);
   white-space: nowrap;
 }
@@ -990,7 +990,7 @@ a.card-hl:focus-visible {
 }
 
 .quote-card__mark {
-  font-size: 2rem;
+  font-size: calc(2rem * var(--type-scale));
   line-height: 1;
   background: var(--grad-brand);
   -webkit-background-clip: text;
@@ -1001,7 +1001,7 @@ a.card-hl:focus-visible {
 .quote-card blockquote {
   margin: 0;
   color: var(--ink);
-  font-size: 1.02rem;
+  font-size: calc(1.02rem * var(--type-scale));
   line-height: 1.6;
 }
 
@@ -1022,15 +1022,15 @@ a.card-hl:focus-visible {
   background: var(--grad-brand);
   color: var(--white);
   font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: calc(0.85rem * var(--type-scale));
+  font-weight: calc(700 * var(--weight-scale));
 }
 
 .quote-card footer strong {
   display: block;
   color: var(--ink);
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: calc(0.95rem * var(--type-scale));
 }
 
 .quote-card footer small {
@@ -1115,7 +1115,7 @@ a.card-hl:focus-visible {
   border: 2px solid var(--line-strong);
   color: var(--muted);
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: calc(700 * var(--weight-scale));
   transition: all var(--dur-3) var(--ease-spring);
 }
 
@@ -1242,7 +1242,7 @@ a.card-hl:focus-visible {
   border-radius: 20px;
   background: var(--grad-brand-soft);
   color: var(--violet-600);
-  font-size: 1.6rem;
+  font-size: calc(1.6rem * var(--type-scale));
 }
 
 .empty-state h3 {
@@ -1262,7 +1262,7 @@ a.card-hl:focus-visible {
 
 .notice > i {
   color: var(--indigo-600);
-  font-size: 1.2rem;
+  font-size: calc(1.2rem * var(--type-scale));
   margin-top: 1px;
 }
 
@@ -1306,7 +1306,7 @@ a.card-hl:focus-visible {
 
 .toast-hl i {
   color: var(--lavender-300);
-  font-size: 1.2rem;
+  font-size: calc(1.2rem * var(--type-scale));
 }
 
 @media (max-width: 991.98px) {
@@ -1327,7 +1327,7 @@ a.card-hl:focus-visible {
   border-radius: 50%;
   background: var(--grad-brand);
   color: var(--white);
-  font-size: 1.6rem;
+  font-size: calc(1.6rem * var(--type-scale));
   box-shadow: var(--glow-magenta);
   text-decoration: none;
   transition: transform var(--dur-3) var(--ease-spring);
@@ -1382,7 +1382,7 @@ a.card-hl:focus-visible {
 }
 
 .site-footer h2 {
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--type-scale));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--white);
@@ -1451,7 +1451,7 @@ a.card-hl:focus-visible {
 
 .footer-news h2 {
   margin: 0 0 4px;
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--type-scale));
   letter-spacing: 0;
   text-transform: none;
 }
@@ -1564,7 +1564,7 @@ a.card-hl:focus-visible {
   border-radius: 50%;
   background: var(--danger-soft);
   color: var(--danger);
-  font-size: 2rem;
+  font-size: calc(2rem * var(--type-scale));
 }
 
 .message-card .tick-anim {
@@ -1607,7 +1607,7 @@ a.card-hl:focus-visible {
   gap: 16px;
   padding: 18px 20px;
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--ink);
   cursor: pointer;
   list-style: none;
@@ -1666,7 +1666,7 @@ a.card-hl:focus-visible {
   border: 1px solid var(--line-dark);
   background: rgba(255, 255, 255, 0.96);
   color: var(--ink);
-  font-size: 1rem;
+  font-size: calc(1rem * var(--type-scale));
   box-shadow: var(--shadow-md);
 }
 
@@ -1690,7 +1690,7 @@ a.card-hl:focus-visible {
   background: var(--surface-2);
   color: var(--muted);
   font-size: var(--fs-xs);
-  font-weight: 700;
+  font-weight: calc(700 * var(--weight-scale));
   letter-spacing: 0.06em;
   text-transform: uppercase;
   border-bottom: 1px solid var(--line);

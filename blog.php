@@ -1,39 +1,59 @@
 <?php
 require __DIR__ . '/lib/app.php';
 
-$posts = db_all("SELECT * FROM posts WHERE status = 'published' ORDER BY published_at DESC, id DESC");
+$categories = array_column(db_all("SELECT DISTINCT category FROM posts WHERE status = 'published' AND category IS NOT NULL AND category <> '' ORDER BY category"), 'category');
+$category = is_string($_GET['category'] ?? null) && in_array($_GET['category'], $categories, true) ? $_GET['category'] : '';
+$posts = $category !== ''
+    ? db_all("SELECT * FROM posts WHERE status = 'published' AND category = ? ORDER BY published_at DESC, id DESC", [$category])
+    : db_all("SELECT * FROM posts WHERE status = 'published' ORDER BY published_at DESC, id DESC");
+$featured = $posts ? array_shift($posts) : null;
+$videos = $category === '' ? youtube_videos(6) : [];
 
 page_start([
-    'title' => 'Insights – Education and technology | HLTS',
-    'description' => 'Practical ideas from HLTS on digital learning, CBT, school operations and technology skills.',
-]);
-
-echo page_hero([
-    'crumbs' => [['Company'], ['Insights']],
-    'eyebrow' => 'Insights',
-    'title' => 'Ideas for schools, <span class="grad-text">learners and builders.</span>',
-    'lead' => 'Practical advice on digital learning, assessments, school operations and technology skills.',
+    'title' => 'Blog – Education and technology | HLTS',
+    'description' => 'The HLTS blog: practical ideas on digital learning, CBT, school operations and technology skills.',
+    'body_class' => 'blog-dark',
 ]);
 ?>
 
-<section class="section">
+<section class="blog-hero">
+  <!-- The video loads from js/app.js, and not at all on slow connections, data saver or reduced motion. -->
+  <video class="blog-hero__video" data-blog-video="/media/blog-hero.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="blog-hero__shade" aria-hidden="true"></div>
+  <div class="container blog-hero__copy">
+    <?= breadcrumbs([['Blog']]) ?>
+    <p class="blog-label" data-reveal>// HLTS Blog</p>
+    <h1 data-reveal data-reveal-delay="1">Ideas for schools, learners and builders.</h1>
+    <p class="blog-hero__lead" data-reveal data-reveal-delay="2">Practical advice on digital learning, assessments, school operations and technology skills, from the HLTS team.</p>
+<?php if ($categories): ?>
+    <nav class="blog-filters" aria-label="Blog categories" data-reveal data-reveal-delay="3">
+      <a href="<?= h(page_url('blog')) ?>"<?= $category === '' ? ' class="is-active" aria-current="page"' : '' ?>>All</a>
+<?php foreach ($categories as $c): ?>
+      <a href="<?= h(page_url('blog', ['category' => $c])) ?>"<?= $category === $c ? ' class="is-active" aria-current="page"' : '' ?>><?= h($c) ?></a>
+<?php endforeach; ?>
+    </nav>
+<?php endif; ?>
+  </div>
+  <a class="blog-hero__credit" href="https://www.vecteezy.com/free-videos/news" target="_blank" rel="noopener">Video: Vecteezy</a>
+</section>
+
+<section class="section blog-section">
   <div class="container">
+<?php if ($featured): ?>
+    <?= blog_card($featured, true) ?>
 <?php if ($posts): ?>
-    <div class="grid grid--3" data-reveal-group>
+    <h2 class="blog-section__title"><?= $category !== '' ? h($category) : 'Latest posts' ?></h2>
+    <div class="blog-grid" data-reveal-group>
 <?php foreach ($posts as $post): ?>
-      <a class="post-card" href="<?= h(page_url('post', ['p' => $post['slug']])) ?>" data-reveal>
-        <div class="post-card__media"><?php if ($post['cover']): ?><img src="<?= h(img($post['cover'])) ?>" alt="" loading="lazy"><?php endif; ?></div>
-        <div class="post-card__body">
-          <div class="post-card__meta"><?php if ($post['category']): ?><span class="chip chip--violet"><?= h($post['category']) ?></span><?php endif; ?><span><?= h(format_date($post['published_at'])) ?></span></div>
-          <h3><?= h($post['title']) ?></h3>
-          <p><?= h($post['excerpt']) ?></p>
-          <span class="text-link mt-auto">Read article <?= icon('arrow-right') ?></span>
-        </div>
-      </a>
+      <?= blog_card($post) ?>
 <?php endforeach; ?>
     </div>
+<?php endif; ?>
 <?php else: ?>
-    <?= empty_state('newspaper', 'First articles coming soon', 'Subscribe at the bottom of the page and we will email you when we publish.') ?>
+    <?= empty_state('newspaper', 'First posts coming soon', 'Subscribe at the bottom of the page and we will email you when we publish.') ?>
+<?php endif; ?>
+<?php if ($category === ''): ?>
+    <?= videos_section($videos, 'Latest videos', true) ?>
 <?php endif; ?>
   </div>
 </section>

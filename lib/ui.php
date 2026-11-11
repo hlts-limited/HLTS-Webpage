@@ -434,3 +434,57 @@ function render_message_page(string $title, string $message, bool $success, stri
     echo '</div></div></section>';
     page_end();
 }
+
+/**
+ * A blog post card in the dark blog style (blog page, article page, home page).
+ * The featured card is wider, with the picture beside the text.
+ */
+function blog_card(array $post, bool $featured = false): string
+{
+    $html = '<a class="blog-card' . ($featured ? ' blog-card--featured' : '') . '" href="' . h(page_url('post', ['p' => $post['slug']])) . '" data-reveal>';
+    $html .= '<div class="blog-card__media">';
+    $video = youtube_id((string) ($post['video_url'] ?? ''));
+    $picture = !empty($post['cover']) ? img($post['cover']) : ($video ? youtube_thumb($video) : '');
+    if ($picture !== '') {
+        $html .= '<img src="' . h($picture) . '" alt="" loading="' . ($featured ? 'eager' : 'lazy') . '">';
+    }
+    if ($video) {
+        $html .= '<span class="blog-card__play" aria-label="Has a video">' . icon('play-fill') . '</span>';
+    }
+    $html .= '</div><div class="blog-card__body"><p class="blog-card__meta">';
+    if (!empty($post['category'])) {
+        $html .= '<span class="blog-card__category">' . h($post['category']) . '</span>';
+    }
+    $html .= '<span>' . h(format_date($post['published_at'])) . '</span></p>';
+    $html .= '<h3>' . h($post['title']) . '</h3>';
+    if (!empty($post['excerpt'])) {
+        $html .= '<p>' . h($post['excerpt']) . '</p>';
+    }
+    return $html . '<span class="blog-card__more">Read more <span aria-hidden="true">→</span></span></div></a>';
+}
+
+/** A video from the YouTube channel: plays in place, with its title and date. */
+function video_card(array $video): string
+{
+    return '<article class="video-card" data-reveal>' . youtube_player($video['id'], $video['title'])
+        . '<div class="video-card__body"><p class="blog-card__meta"><span class="blog-card__category">Video</span><span>' . h(format_date($video['published'])) . '</span></p>'
+        . '<h3><a href="' . h($video['url']) . '" target="_blank" rel="noopener">' . h($video['title']) . '</a></h3></div></article>';
+}
+
+/** The channel's latest videos, with a Subscribe button; on the blog page an invitation when there are none yet. */
+function videos_section(array $videos, string $title, bool $showWhenEmpty): string
+{
+    if (!$videos && !$showWhenEmpty) {
+        return '';
+    }
+    $html = '<div class="videos-block"><div class="blog-band__head"><div><p class="blog-label">// On YouTube</p><h2 class="blog-section__title m-0">' . h($title) . '</h2></div>'
+        . '<a class="blog-band__all" href="' . h(config('youtube_url')) . '" target="_blank" rel="noopener">' . icon('youtube') . ' Subscribe on YouTube <span aria-hidden="true">→</span></a></div>';
+    if ($videos) {
+        $html .= '<div class="blog-grid" data-reveal-group>';
+        foreach ($videos as $video) {
+            $html .= video_card($video);
+        }
+        return $html . '</div></div>';
+    }
+    return $html . '<p class="videos-block__empty">Our first videos are on the way. Subscribe to the channel to see them first.</p></div>';
+}

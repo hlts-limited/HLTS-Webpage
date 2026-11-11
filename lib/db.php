@@ -96,7 +96,7 @@ function db_update(string $table, int $id, array $row): void
 
 function migrate(PDO $pdo): void
 {
-    $version = 3;
+    $version = 4;
     $marker = STORAGE_DIR . '/.schema-' . db_driver() . '-' . md5((string) config('db.name') . (string) config('db.sqlite_path'));
     if (is_file($marker) && (int) file_get_contents($marker) >= $version) {
         return;
@@ -200,6 +200,7 @@ function migrate(PDO $pdo): void
             excerpt VARCHAR(400) NOT NULL DEFAULT '',
             body $text NOT NULL,
             cover VARCHAR(255) NOT NULL DEFAULT '',
+            video_url VARCHAR(255) NOT NULL DEFAULT '',
             status VARCHAR(20) NOT NULL DEFAULT 'draft',
             published_at VARCHAR(19) NULL,
             created_at VARCHAR(19) NOT NULL
@@ -284,6 +285,13 @@ function migrate(PDO $pdo): void
         } catch (PDOException $e) {
             // Already there.
         }
+    }
+
+    // Version 4: a YouTube video on a blog post.
+    try {
+        $pdo->exec("ALTER TABLE posts ADD COLUMN video_url VARCHAR(255) NOT NULL DEFAULT ''");
+    } catch (PDOException $e) {
+        // Already there.
     }
 
     $indexes = [

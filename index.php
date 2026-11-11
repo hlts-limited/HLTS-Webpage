@@ -77,7 +77,10 @@ $cbtQuestions = [
 ];
 
 $events = [];
+$latestPosts = [];
+$latestVideos = youtube_videos(3);
 try {
+    $latestPosts = db_all("SELECT * FROM posts WHERE status = 'published' ORDER BY published_at DESC, id DESC LIMIT 3");
     $events = db_all("SELECT * FROM events WHERE status = 'published' AND starts_at >= ? ORDER BY starts_at LIMIT 3", [now()]);
 } catch (Throwable $e) {
     // The home page still works if the database is unavailable.
@@ -308,6 +311,26 @@ try {
     </div>
   </div>
 </section>
+
+<?php if ($latestPosts || $latestVideos): ?>
+<section class="section blog-band blog-dark" aria-labelledby="home-blog-title">
+  <div class="container">
+    <div class="blog-band__head">
+      <div>
+        <p class="blog-label" data-reveal>// From the blog</p>
+        <h2 id="home-blog-title" data-reveal>Ideas for schools, learners and builders</h2>
+      </div>
+      <a class="blog-band__all" href="<?= h(page_url('blog')) ?>" data-reveal>View all posts <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="blog-grid" data-reveal-group>
+<?php foreach ($latestPosts as $post): ?>
+      <?= blog_card($post) ?>
+<?php endforeach; ?>
+    </div>
+    <?= videos_section($latestVideos, 'Latest videos', false) ?>
+  </div>
+</section>
+<?php endif; ?>
 
 <?php if ($events): ?>
 <section class="section">

@@ -2,3 +2,7 @@
 config/config.local.php
 storage/*
 !storage/.htaccess
+
+# Pictures uploaded from the admin area live only on the server
+images/uploads/*
+!images/uploads/.htaccess

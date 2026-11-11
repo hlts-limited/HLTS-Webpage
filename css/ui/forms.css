@@ -72,8 +72,8 @@
 
 .field-label {
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: calc(0.9rem * var(--type-scale));
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--ink);
   padding: 0;
   margin: 0 0 8px;
@@ -90,9 +90,9 @@
 }
 
 .optional {
-  font-weight: 500;
+  font-weight: calc(500 * var(--weight-scale));
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--type-scale));
 }
 
 .field-help {
@@ -107,7 +107,7 @@
   gap: 6px;
   margin: 0;
   font-size: var(--fs-sm);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--danger);
   animation: field-shake 0.4s var(--ease-out);
 }
@@ -132,7 +132,7 @@
   background: var(--surface);
   color: var(--ink);
   font: inherit;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--type-scale));
   transition: border-color var(--dur-1) ease, box-shadow var(--dur-2) ease, background var(--dur-1) ease;
   -webkit-appearance: none;
   appearance: none;
@@ -233,8 +233,8 @@ input[type="date"] {
   border-radius: var(--radius-pill);
   border: 1.5px solid var(--line-strong);
   background: var(--surface);
-  font-weight: 600;
-  font-size: 0.92rem;
+  font-weight: calc(600 * var(--weight-scale));
+  font-size: calc(0.92rem * var(--type-scale));
   color: var(--ink);
   transition: all var(--dur-2) var(--ease-out);
 }
@@ -255,7 +255,7 @@ input[type="date"] {
 }
 
 .segmented .option__meta {
-  font-weight: 500;
+  font-weight: calc(500 * var(--weight-scale));
   opacity: 0.85;
 }
 
@@ -299,14 +299,14 @@ input[type="date"] {
 
 .option__icon {
   color: var(--violet-500);
-  font-size: 1.2rem;
+  font-size: calc(1.2rem * var(--type-scale));
   margin-bottom: 4px;
 }
 
 .option__label {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.93rem;
+  font-weight: calc(600 * var(--weight-scale));
+  font-size: calc(0.93rem * var(--type-scale));
   color: var(--ink);
 }
 
@@ -326,7 +326,7 @@ input[type="date"] {
   border-radius: 50%;
   border: 1.5px solid var(--line-strong);
   color: transparent;
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--type-scale));
   transition: all var(--dur-2) var(--ease-spring);
 }
 
@@ -406,7 +406,7 @@ input[type="date"] {
   gap: 10px;
   min-width: 0;
   font-size: var(--fs-sm);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   color: var(--muted);
 }
 
@@ -420,7 +420,7 @@ input[type="date"] {
   border: 1.5px solid var(--line-strong);
   background: var(--surface);
   font-family: var(--font-display);
-  font-size: 0.85rem;
+  font-size: calc(0.85rem * var(--type-scale));
   transition: all var(--dur-3) var(--ease-spring);
 }
 
@@ -500,7 +500,7 @@ input[type="date"] {
   border-radius: var(--radius-sm);
   background: var(--danger-soft);
   color: var(--danger);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
   font-size: var(--fs-sm);
 }
 
@@ -530,7 +530,7 @@ input[type="date"] {
 
 .review-list dt {
   color: var(--muted);
-  font-weight: 600;
+  font-weight: calc(600 * var(--weight-scale));
 }
 
 .review-list dd {
@@ -633,9 +633,9 @@ input[type="date"] {
 .file-pick:hover,
 .file-pick:focus-within { border-color: var(--indigo-500); }
 .file-pick input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-.file-pick__icon { font-size: 1.4rem; color: var(--indigo-500); }
+.file-pick__icon { font-size: calc(1.4rem * var(--type-scale)); color: var(--indigo-500); }
 .file-pick__text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--body); }
-.file-pick__button { padding: 6px 12px; border-radius: 999px; background: var(--grad-brand); color: var(--white); font-size: var(--fs-sm); font-weight: 600; }
+.file-pick__button { padding: 6px 12px; border-radius: 999px; background: var(--grad-brand); color: var(--white); font-size: var(--fs-sm); font-weight: calc(600 * var(--weight-scale)); }
 .file-pick:has(input[aria-invalid="true"]) { border-color: var(--danger); }
 
 /* "Same as my phone number" */
@@ -645,7 +645,7 @@ input[readonly] { opacity: 0.75; }
 
 /* Consent in the footer newsletter form */
 .footer-news .field--consent { margin-top: 10px; }
-.footer-news .consent { color: inherit; font-size: 0.8rem; opacity: 0.9; }
+.footer-news .consent { color: inherit; font-size: calc(0.8rem * var(--type-scale)); opacity: 0.9; }
 .footer-news .consent a { color: inherit; text-decoration: underline; }
 
 /* Consent on the results and certificate lookups */
