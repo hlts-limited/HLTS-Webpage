@@ -8,15 +8,57 @@
  */
 
 /**
- * Courses offered by HLTS Online Institution. Fees are in kobo (₦1 = 100 kobo).
+ * Courses offered by HLTS Online Institution, as edited in Admin > Courses and fees.
+ * Fees are in kobo (₦1 = 100 kobo).
  *
  * Each fee is the TOTAL for one 8-month session under that payment plan:
  *   session   paid once
  *   semester  paid in 2 instalments (a semester is 4 months)
  *   monthly   paid in 8 instalments
  * e.g. semester 22000000 = ₦220,000 total = ₦110,000 per semester.
+ * A plan with no fee isn't offered; a course with no fees shows "ask us for current fees".
+ *
+ * $includeHidden: also return courses switched off in the admin area. Existing students and past
+ * payments still need their course's name after it stops being offered.
  */
-function courses(): array
+function courses(bool $includeHidden = false): array
+{
+    static $all = null;
+    if ($all === null) {
+        $all = [];
+        try {
+            $rows = db_all('SELECT * FROM courses ORDER BY sort_order, id');
+        } catch (Throwable $e) {
+            $rows = [];
+        }
+        foreach ($rows as $r) {
+            $fees = [];
+            foreach (['session', 'semester', 'monthly'] as $plan) {
+                if ((int) $r['fee_' . $plan] > 0) {
+                    $fees[$plan] = (int) $r['fee_' . $plan] * 100;
+                }
+            }
+            $all[$r['slug']] = [
+                'title' => $r['title'],
+                'icon' => $r['icon'] !== '' ? $r['icon'] : 'mortarboard',
+                'track' => $r['track'],
+                'summary' => $r['summary'],
+                'outcomes' => array_values(array_filter(array_map('trim', preg_split('/\R/', (string) $r['outcomes'])), 'strlen')),
+                'fees' => $fees,
+                'image' => $r['cover'] !== '' ? $r['cover'] : 'images/webdev.jpeg',
+                'hidden' => $r['status'] !== 'published',
+            ];
+        }
+        // Before the table exists or is filled (first run), fall back to the starting list.
+        if (!$all) {
+            $all = array_map(fn ($c) => $c + ['hidden' => false], default_courses());
+        }
+    }
+    return $includeHidden ? $all : array_filter($all, fn ($c) => !$c['hidden']);
+}
+
+/** The courses the website started with. Only used to fill the courses table the first time. */
+function default_courses(): array
 {
     return [
         'frontend' => [
@@ -94,9 +136,21 @@ function courses(): array
     ];
 }
 
+/** One course by its slug, including one that is no longer offered. */
 function course(string $slug): ?array
 {
-    return courses()[$slug] ?? null;
+    return courses(true)[$slug] ?? null;
+}
+
+/** Icons a course can use in the admin area (Bootstrap Icons names => plain description). */
+function course_icon_choices(): array
+{
+    return [
+        'window-stack' => 'Web pages', 'server' => 'Server', 'stack' => 'Layers', 'bar-chart-line' => 'Chart', 'palette' => 'Palette',
+        'camera-reels' => 'Video camera', 'layout-text-window' => 'Page layout', 'puzzle' => 'Puzzle', 'code-slash' => 'Code',
+        'phone' => 'Phone', 'robot' => 'Robot', 'cpu' => 'Chip', 'shield-lock' => 'Security', 'cloud' => 'Cloud', 'database' => 'Database',
+        'pencil' => 'Pencil', 'megaphone' => 'Marketing', 'keyboard' => 'Keyboard', 'mortarboard' => 'Graduation cap',
+    ];
 }
 
 function fee_plans(): array

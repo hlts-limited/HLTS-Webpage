@@ -75,6 +75,36 @@ function auth_admin_code(string $code, ?string &$error = null): ?array
     return $user;
 }
 
+/**
+ * Check a sign-in pass from the staff app (see admin/sso.php). Returns ['email', 'name', 'state']
+ * when the signature is right and the pass is still within its minute; null otherwise.
+ * $now is only passed by tests.
+ */
+function sso_read_pass(string $pass, string $secret, ?int $now = null): ?array
+{
+    $now ??= time();
+    if ($secret === '' || strlen($pass) > 2000 || !preg_match('/^([A-Za-z0-9_-]+)\.([a-f0-9]{64})$/', $pass, $m)) {
+        return null;
+    }
+    if (!hash_equals(hash_hmac('sha256', 'sso.' . $m[1], $secret), $m[2])) {
+        return null;
+    }
+    $claims = json_decode((string) base64_decode(strtr($m[1], '-_', '+/'), true), true);
+    if (!is_array($claims) || ($claims['v'] ?? null) !== 1 || !is_int($claims['exp'] ?? null)) {
+        return null;
+    }
+    // Good for one minute; a little slack for clocks that disagree, never a pass dated far ahead.
+    if ($claims['exp'] < $now - 10 || $claims['exp'] > $now + 180) {
+        return null;
+    }
+    $email = strtolower(trim((string) ($claims['email'] ?? '')));
+    $state = (string) ($claims['state'] ?? '');
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^[a-f0-9]{32,64}$/', $state)) {
+        return null;
+    }
+    return ['email' => $email, 'name' => (string) ($claims['name'] ?? ''), 'state' => $state];
+}
+
 function auth_user(string $kind): ?array
 {
     $session = $_SESSION["auth_$kind"] ?? null;

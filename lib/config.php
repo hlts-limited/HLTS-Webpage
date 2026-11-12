@@ -95,6 +95,15 @@ function config(string $key, $default = null)
                 $config = array_replace_recursive($config, $overrides);
             }
         }
+
+        // tests/run.php (command line only): a throwaway database, and every outside service off.
+        $testDb = PHP_SAPI === 'cli' ? (string) getenv('HLTS_TEST_SQLITE') : '';
+        if ($testDb !== '') {
+            $config['db'] = ['driver' => 'sqlite', 'sqlite_path' => $testDb] + $config['db'];
+            $config['app_sync'] = ['url' => '', 'secret' => ''];
+            $config['paystack'] = ['public_key' => '', 'secret_key' => ''];
+            $config['debug'] = false;
+        }
     }
 
     $value = $config;

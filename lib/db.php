@@ -96,7 +96,7 @@ function db_update(string $table, int $id, array $row): void
 
 function migrate(PDO $pdo): void
 {
-    $version = 5;
+    $version = 6;
     $marker = STORAGE_DIR . '/.schema-' . db_driver() . '-' . md5((string) config('db.name') . (string) config('db.sqlite_path'));
     if (is_file($marker) && (int) file_get_contents($marker) >= $version) {
         return;
@@ -246,6 +246,22 @@ function migrate(PDO $pdo): void
             status VARCHAR(20) NOT NULL DEFAULT 'draft',
             created_at VARCHAR(19) NOT NULL
         )",
+        "courses (
+            id $id,
+            slug $key NOT NULL UNIQUE,
+            title VARCHAR(191) NOT NULL,
+            track VARCHAR(80) NOT NULL DEFAULT '',
+            icon VARCHAR(40) NOT NULL DEFAULT '',
+            summary VARCHAR(400) NOT NULL DEFAULT '',
+            outcomes $text NOT NULL,
+            cover VARCHAR(255) NOT NULL DEFAULT '',
+            fee_session INT NOT NULL DEFAULT 0,
+            fee_semester INT NOT NULL DEFAULT 0,
+            fee_monthly INT NOT NULL DEFAULT 0,
+            sort_order INT NOT NULL DEFAULT 0,
+            status VARCHAR(20) NOT NULL DEFAULT 'published',
+            created_at VARCHAR(19) NOT NULL
+        )",
         "app_sync (
             id $id,
             lead_id INT NOT NULL,
@@ -318,8 +334,40 @@ function migrate(PDO $pdo): void
     }
 
     seed_drafts($pdo);
+    seed_courses($pdo);
 
     @file_put_contents($marker, (string) $version);
+}
+
+/**
+ * Version 6: courses and fees are edited in the admin area. The first time, the table is filled
+ * with the courses the website already had (fees in whole naira), so nothing changes for visitors.
+ */
+function seed_courses(PDO $pdo): void
+{
+    if ((int) $pdo->query('SELECT COUNT(*) FROM courses')->fetchColumn() > 0) {
+        return;
+    }
+    $stmt = $pdo->prepare('INSERT INTO courses (slug, title, track, icon, summary, outcomes, cover, fee_session, fee_semester, fee_monthly, sort_order, status, created_at)
+        VALUES (:slug, :title, :track, :icon, :summary, :outcomes, :cover, :fee_session, :fee_semester, :fee_monthly, :sort_order, :status, :created_at)');
+    $order = 0;
+    foreach (default_courses() as $slug => $c) {
+        $stmt->execute([
+            'slug' => $slug,
+            'title' => $c['title'],
+            'track' => $c['track'],
+            'icon' => $c['icon'],
+            'summary' => $c['summary'],
+            'outcomes' => implode("\n", $c['outcomes']),
+            'cover' => $c['image'],
+            'fee_session' => intdiv((int) ($c['fees']['session'] ?? 0), 100),
+            'fee_semester' => intdiv((int) ($c['fees']['semester'] ?? 0), 100),
+            'fee_monthly' => intdiv((int) ($c['fees']['monthly'] ?? 0), 100),
+            'sort_order' => $order += 10,
+            'status' => 'published',
+            'created_at' => now(),
+        ]);
+    }
 }
 
 /**

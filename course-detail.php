@@ -4,7 +4,7 @@ require __DIR__ . '/lib/app.php';
 $slug = is_string($_GET['c'] ?? null) ? $_GET['c'] : '';
 $course = course($slug);
 
-if (!$course) {
+if (!$course || !empty($course["hidden"])) {
     http_response_code(404);
     render_message_page('Course not found', 'We could not find that course. Browse the full list of courses instead.', false, page_url('course'), 'See all courses');
     exit;

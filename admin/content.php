@@ -1,7 +1,7 @@
 <?php
 /**
  * One editor for every kind of website content: articles, events,
- * portfolio projects, jobs and course materials. Each type is described in
+ * portfolio projects, jobs, courses (with their fees) and course materials. Each type is described in
  * content_types() below; the list and form are built from that.
  */
 
@@ -71,6 +71,23 @@ function content_types(): array
                 'status' => $status,
             ],
         ],
+        'courses' => [
+            'label' => 'Courses and fees', 'single' => 'course', 'nav' => 'courses', 'public' => fn ($r) => page_url('course-detail', ['c' => $r['slug']]),
+            'list' => ['title', 'track', 'fee_session', 'fee_semester', 'fee_monthly', 'status'], 'order' => 'sort_order, id',
+            'fields' => [
+                'title' => ['type' => 'text', 'label' => 'Course name', 'required' => true],
+                'track' => ['type' => 'text', 'label' => 'Track', 'required' => true, 'placeholder' => 'Web Development', 'help' => 'Courses with the same track are grouped together on the Courses page.'],
+                'icon' => ['type' => 'select', 'label' => 'Icon', 'options' => course_icon_choices()],
+                'summary' => ['type' => 'textarea', 'label' => 'Short description', 'rows' => 3, 'required' => true],
+                'outcomes' => ['type' => 'textarea', 'label' => 'What learners will be able to do', 'rows' => 5, 'help' => 'One per line. Four lines look best.'],
+                'fee_session' => ['type' => 'number', 'min' => 0, 'label' => 'Full session fee (₦)', 'help' => 'Paid once for the 8-month session. Whole naira, no commas. Leave 0 if this plan isn’t offered.'],
+                'fee_semester' => ['type' => 'number', 'min' => 0, 'label' => 'Per-semester plan: TOTAL for the session (₦)', 'help' => 'The total across both semesters. Learners pay half of this each semester. 0 = not offered.'],
+                'fee_monthly' => ['type' => 'number', 'min' => 0, 'label' => 'Monthly plan: TOTAL for the session (₦)', 'help' => 'The total across all 8 months. Learners pay one eighth of this each month. 0 = not offered.'],
+                'cover' => $cover,
+                'sort_order' => ['type' => 'number', 'label' => 'Order (lower shows first)'],
+                'status' => ['type' => 'select', 'label' => 'Status', 'options' => ['published' => 'Offered (on the website)', 'draft' => 'Not offered (hidden)']],
+            ],
+        ],
         'materials' => [
             'label' => 'Course materials', 'single' => 'material', 'nav' => 'materials', 'public' => null,
             'list' => ['title', 'course_slug', 'kind', 'status'], 'order' => 'course_slug, sort_order, id',
@@ -103,6 +120,10 @@ if (is_post()) {
     csrf_require();
 
     if (($_POST['action'] ?? '') === 'delete' && $row) {
+        // A course that people enrolled in or paid for is switched off, never deleted, so their records keep its name.
+        if ($typeKey === 'courses' && (db_value('SELECT COUNT(*) FROM students WHERE course_slug = ?', [$row['slug']]) || db_value('SELECT COUNT(*) FROM payments WHERE course_slug = ?', [$row['slug']]))) {
+            admin_error('This course has students or payments, so it can’t be deleted. Set its status to “Not offered” to take it off the website.', "$base&id=" . $row['id']);
+        }
         db_run("DELETE FROM $table WHERE id = ?", [$row['id']]);
         admin_notice(ucfirst($type['single']) . ' deleted.', $base);
     }
@@ -127,6 +148,12 @@ if (is_post()) {
         }
         if ($field['type'] === 'number') {
             $value = (int) $value;
+            if (isset($field['min']) && $value < $field['min']) {
+                $errors[$name] = $field['label'] . ' can’t be below ' . $field['min'] . '.';
+            }
+            if ($value > 100000000) {
+                $errors[$name] = 'That number is too large.';
+            }
         }
         if (!empty($field['required']) && $value === '') {
             $errors[$name] = $field['label'] . ' is required.';
@@ -176,7 +203,7 @@ if (is_post()) {
     $action = $row ? 'edit' : 'new';
 }
 
-$listColumns = ['title' => 'Title', 'category' => 'Category', 'status' => 'Status', 'published_at' => 'Published', 'starts_at' => 'Date', 'location' => 'Location', 'client' => 'Client', 'job_type' => 'Type', 'closes_on' => 'Closes', 'course_slug' => 'Course', 'kind' => 'Type'];
+$listColumns = ['track' => 'Track', 'fee_session' => 'Full session', 'fee_semester' => 'Semester plan total', 'fee_monthly' => 'Monthly plan total', 'title' => 'Title', 'category' => 'Category', 'status' => 'Status', 'published_at' => 'Published', 'starts_at' => 'Date', 'location' => 'Location', 'client' => 'Client', 'job_type' => 'Type', 'closes_on' => 'Closes', 'course_slug' => 'Course', 'kind' => 'Type'];
 
 admin_start($type['label'], $type['nav']);
 
@@ -199,6 +226,7 @@ if ($action === 'list'):
           if ($col === 'status') echo status_chip($v);
           elseif (in_array($col, ['published_at', 'starts_at', 'closes_on'], true)) echo h(format_date($v, $col === 'starts_at' ? 'j M Y, g:ia' : 'j M Y'));
           elseif ($col === 'course_slug') echo h(course($v)['title'] ?? $v);
+          elseif (str_starts_with($col, 'fee_')) echo (int) $v > 0 ? h(naira((int) $v * 100)) : '<span class="muted">not offered</span>';
           elseif ($i === 0) echo '<a href="' . h($base) . '&amp;id=' . (int) $r['id'] . '"><strong>' . h($v) . '</strong></a>' . (str_starts_with((string) ($r['summary'] ?? $r['excerpt'] ?? $r['body'] ?? ''), 'EXAMPLE') ? ' <span class="chip chip--magenta">Example</span>' : '');
           else echo h($v);
         ?></td>

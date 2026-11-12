@@ -88,7 +88,17 @@ The website and the HLTS staff app (hlts-hr.vercel.app) are separate codebases j
 - **Course payments** confirmed by Paystack are sent to the app and recorded as income in Finance.
 - **School prices** are changed in the app (`lib/pricing.ts`). The website reads that list (`lib/prices.php`) and falls back to the amounts in `lib/content.php` only until the app has been reached once.
 
+- **One sign-in.** `admin/sso.php` lets an admin sign in with their staff app account (two-step sign-in must be on there). The app only vouches for who the person is; the email must already be listed under Staff accounts here.
+
 `bin/app-sync.php` (cron, every 15 minutes) retries anything undelivered and refreshes the price copy. `admin/app-sync.php` shows the state of all three.
+
+## Courses and fees
+
+Courses, their descriptions and fees are edited in **Admin > Courses and fees** (table `courses`). The list in `lib/content.php` (`default_courses()`) only fills that table the first time. A course with students or payments can be switched to "Not offered" but not deleted.
+
+## Tests
+
+`php tests/run.php` checks prices and quotes, course fees, form validation, payment records, the price list accepted from the staff app and the sign-in pass. It uses a throwaway database and contacts nothing outside. Run it before publishing changes to money or sign-in code.
 
 ## Retired files
 

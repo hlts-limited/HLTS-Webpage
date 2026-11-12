@@ -37,5 +37,10 @@ admin_start('Sign in');
   <div class="field mb-3"><label class="field-label" for="email">Email</label><input id="email" type="email" name="email" value="<?= h($email) ?>" autocomplete="username" required autofocus></div>
   <div class="field mb-4"><label class="field-label" for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required></div>
   <button class="btn-hl btn-hl--primary btn-hl--block btn-hl--lg" type="submit"><span>Sign in</span> <?= icon('box-arrow-in-right') ?></button>
+<?php if (app_sync_enabled()): ?>
+  <p class="muted small text-center my-3">or</p>
+  <a class="btn-hl btn-hl--ghost btn-hl--block" href="/admin/sso.php"><?= icon('shield-check') ?> <span>Sign in with the HLTS staff app</span></a>
+  <p class="field-help text-center">No second password: uses your staff app sign-in. Your email must be listed under Staff accounts here.</p>
+<?php endif; ?>
 </form>
 <?php admin_end(); ?>

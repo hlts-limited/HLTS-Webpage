@@ -35,6 +35,7 @@ function admin_nav(): array
         'payments' => ['Payments', 'credit-card', '/admin/payments.php', 'Online Institution'],
         'results' => ['Results', 'clipboard-data', '/admin/results.php', 'Online Institution'],
         'certificates' => ['Certificates', 'patch-check', '/admin/certificates.php', 'Online Institution'],
+        'courses' => ['Courses and fees', 'mortarboard', '/admin/content.php?type=courses', 'Online Institution'],
         'materials' => ['Course materials', 'journal-text', '/admin/content.php?type=materials', 'Online Institution'],
         'posts' => ['Blog', 'newspaper', '/admin/content.php?type=posts', 'Website content'],
         'events' => ['Events', 'calendar-event', '/admin/content.php?type=events', 'Website content'],

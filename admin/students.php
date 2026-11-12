@@ -73,7 +73,7 @@ admin_start('Students', 'students');
           <td><strong><?= h($s['name']) ?></strong><br><small class="muted"><?= h($s['student_no']) ?> · <?= h($s['email']) ?></small></td>
           <td>
             <form method="post" class="inline-select"><?= csrf_field() ?><input type="hidden" name="action" value="course"><input type="hidden" name="id" value="<?= (int) $s['id'] ?>">
-              <select name="course" aria-label="Course for <?= h($s['name']) ?>" data-autosubmit><?php foreach (courses() as $slug => $c): ?><option value="<?= h($slug) ?>"<?= $s['course_slug'] === $slug ? ' selected' : '' ?>><?= h($c['title']) ?></option><?php endforeach; ?></select>
+              <select name="course" aria-label="Course for <?= h($s['name']) ?>" data-autosubmit><?php foreach (courses(true) as $slug => $c): if ($c["hidden"] && $s["course_slug"] !== $slug) continue; ?><option value="<?= h($slug) ?>"<?= $s['course_slug'] === $slug ? ' selected' : '' ?>><?= h($c['title']) ?></option><?php endforeach; ?></select>
             </form>
           </td>
           <td class="nowrap small"><?= h($s['last_login'] ? format_date($s['last_login'], 'j M, g:ia') : 'Never') ?></td>

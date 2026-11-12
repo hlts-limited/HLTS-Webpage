@@ -55,7 +55,7 @@ function paystack_request(string $method, string $path, ?array $body = null): ar
  */
 function course_fee(string $courseSlug, string $plan): ?int
 {
-    $total = course($courseSlug)['fees'][$plan] ?? null;
+    $total = courses()[$courseSlug]["fees"][$plan] ?? null; // only courses on offer can be paid for
     return is_int($total) && $total > 0 ? instalment_amount($total, $plan) : null;
 }
 
