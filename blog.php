@@ -10,8 +10,8 @@ $featured = $posts ? array_shift($posts) : null;
 $videos = $category === '' ? youtube_videos(6) : [];
 
 page_start([
-    'title' => 'Blog – Education and technology | HLTS',
-    'description' => 'The HLTS blog: practical ideas on digital learning, CBT, school operations and technology skills.',
+    'title' => 'Blog – Technology news, ideas and know-how | HLTS',
+    'description' => 'The HLTS blog: technology news and practical ideas on software, security, digital skills, education and the work we do across Africa.',
     'body_class' => 'blog-dark',
 ]);
 ?>
@@ -23,8 +23,8 @@ page_start([
   <div class="container blog-hero__copy">
     <?= breadcrumbs([['Blog']]) ?>
     <p class="blog-label" data-reveal>// HLTS Blog</p>
-    <h1 data-reveal data-reveal-delay="1">Ideas for schools, learners and builders.</h1>
-    <p class="blog-hero__lead" data-reveal data-reveal-delay="2">Practical advice on digital learning, assessments, school operations and technology skills, from the HLTS team.</p>
+    <h1 data-reveal data-reveal-delay="1">Technology news, ideas and know-how.</h1>
+    <p class="blog-hero__lead" data-reveal data-reveal-delay="2">What is happening in tech, and what it means for schools, businesses and learners across Africa. Written by the HLTS team.</p>
 <?php if ($categories): ?>
     <nav class="blog-filters" aria-label="Blog categories" data-reveal data-reveal-delay="3">
       <a href="<?= h(page_url('blog')) ?>"<?= $category === '' ? ' class="is-active" aria-current="page"' : '' ?>>All</a>

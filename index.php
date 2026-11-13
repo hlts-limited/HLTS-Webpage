@@ -318,7 +318,7 @@ try {
     <div class="blog-band__head">
       <div>
         <p class="blog-label" data-reveal>// From the blog</p>
-        <h2 id="home-blog-title" data-reveal>Ideas for schools, learners and builders</h2>
+        <h2 id="home-blog-title" data-reveal>Technology news, ideas and know-how</h2>
       </div>
       <a class="blog-band__all" href="<?= h(page_url('blog')) ?>" data-reveal>View all posts <span aria-hidden="true">→</span></a>
     </div>

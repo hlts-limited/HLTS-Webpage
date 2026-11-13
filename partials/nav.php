@@ -56,7 +56,7 @@ $onBlog = in_array($current, ['blog', 'post'], true);
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
       </div>
       <div class="offcanvas-body">
-        <a class="mobile-blog-link<?= $onBlog ? ' is-active' : '' ?>" href="<?= h(page_url('blog')) ?>"><?= icon('newspaper') ?> Blog <span>Ideas on education and technology</span></a>
+        <a class="mobile-blog-link<?= $onBlog ? ' is-active' : '' ?>" href="<?= h(page_url('blog')) ?>"><?= icon('newspaper') ?> Blog <span>Technology news, ideas and know-how</span></a>
 <?php foreach ($groups as $group): ?>
         <details class="mobile-group"<?= $isIn($group) ? ' open' : '' ?>>
           <summary><?= icon($group['icon']) ?> <?= h($group['label']) ?> <?= icon('chevron-down') ?></summary>
