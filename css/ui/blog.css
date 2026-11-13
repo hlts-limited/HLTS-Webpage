@@ -359,13 +359,14 @@ body.blog-dark .prose li {
   color: var(--blog-text);
 }
 
+/* On the dark blog the lighter company purple, so links stay easy to read on black. */
 body.blog-dark .prose a {
-  color: #5b93f5;
+  color: var(--violet-400);
 }
 
 body.blog-dark .prose a:hover,
 body.blog-dark .prose a:focus-visible {
-  color: #8fb5f8;
+  color: var(--lavender-300);
 }
 
 body.blog-dark .prose strong {

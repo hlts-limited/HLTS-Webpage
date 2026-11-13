@@ -303,11 +303,13 @@ video {
 .prose ul { padding-left: 1.2em; margin: 0 0 1.2em; }
 .prose li { margin-bottom: 0.4em; }
 .prose li::marker { color: var(--violet-500); }
+/* Links written in post text: company purple and bold, no underline. */
 .prose a {
   color: var(--violet-600);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  font-weight: calc(700 * var(--weight-scale));
+  text-decoration: none;
 }
 .prose a:hover,
-.prose a:focus-visible { text-decoration-thickness: 2px; }
+.prose a:focus-visible { color: var(--violet-500); }
+.prose a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 2px; }
+.prose strong { font-weight: calc(700 * var(--weight-scale)); }
