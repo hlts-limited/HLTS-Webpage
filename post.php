@@ -11,7 +11,7 @@ if (!$post) {
 }
 
 $more = db_all("SELECT * FROM posts WHERE status = 'published' AND id <> ? ORDER BY published_at DESC LIMIT 3", [$post['id']]);
-$words = str_word_count(strip_tags($post['body']));
+$words = str_word_count(strip_tags(render_text($post['body'])));
 
 page_start([
     'title' => $post['title'] . ' – HLTS Blog',

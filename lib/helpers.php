@@ -142,7 +142,8 @@ function log_event(string $event, string $details = ''): void
 
 /**
  * Turn simple text into safe HTML. Supports paragraphs, "## " headings and
- * "- " bullet lists. Everything is escaped first, so admin-entered text can
+ * "- " bullet lists, and inside them [words](https://address) for a link and
+ * **words** for bold. Everything is escaped first, so admin-entered text can
  * never inject markup.
  */
 function render_text(string $text): string
@@ -153,11 +154,11 @@ function render_text(string $text): string
 
     $flush = function () use (&$html, &$paragraph, &$list) {
         if ($paragraph) {
-            $html .= '<p>' . implode('<br>', array_map('h', $paragraph)) . '</p>';
+            $html .= '<p>' . implode('<br>', array_map('render_inline', $paragraph)) . '</p>';
             $paragraph = [];
         }
         if ($list) {
-            $html .= '<ul>' . implode('', array_map(fn ($item) => '<li>' . h($item) . '</li>', $list)) . '</ul>';
+            $html .= '<ul>' . implode('', array_map(fn ($item) => '<li>' . render_inline($item) . '</li>', $list)) . '</ul>';
             $list = [];
         }
     };
@@ -168,10 +169,10 @@ function render_text(string $text): string
             $flush();
         } elseif (str_starts_with($trimmed, '### ')) {
             $flush();
-            $html .= '<h3>' . h(substr($trimmed, 4)) . '</h3>';
+            $html .= '<h3>' . render_inline(substr($trimmed, 4)) . '</h3>';
         } elseif (str_starts_with($trimmed, '## ')) {
             $flush();
-            $html .= '<h2>' . h(substr($trimmed, 3)) . '</h2>';
+            $html .= '<h2>' . render_inline(substr($trimmed, 3)) . '</h2>';
         } elseif (str_starts_with($trimmed, '- ')) {
             if ($paragraph) {
                 $flush();
@@ -187,6 +188,60 @@ function render_text(string $text): string
     $flush();
 
     return $html;
+}
+
+/**
+ * One line of text with [words](address) links and **bold**, as safe HTML. A link whose address
+ * isn't allowed (see link_href) is left exactly as typed, so the writer can see it didn't work.
+ */
+function render_inline(string $text): string
+{
+    $pattern = '/\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)|\*\*([^*\n]{1,500}?)\*\*/u';
+    $html = '';
+    $pos = 0;
+    if (!preg_match_all($pattern, $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+        return h($text);
+    }
+    foreach ($matches as $m) {
+        [$whole, $at] = $m[0];
+        $html .= h(substr($text, $pos, $at - $pos));
+        $pos = $at + strlen($whole);
+        if (isset($m[3]) && $m[3][1] >= 0) {
+            $html .= '<strong>' . h($m[3][0]) . '</strong>';
+            continue;
+        }
+        $href = link_href($m[2][0]);
+        if ($href === null) {
+            $html .= h($whole);
+            continue;
+        }
+        // Bold inside the link words still works: [**read the guide**](https://…).
+        $label = preg_replace_callback('/\*\*([^*\n]{1,500}?)\*\*/u', fn ($b) => '<strong>' . $b[1] . '</strong>', h($m[1][0]));
+        $external = preg_match('#^https?://#i', $href) && strcasecmp((string) parse_url($href, PHP_URL_HOST), (string) parse_url((string) config('site_url'), PHP_URL_HOST)) !== 0;
+        $html .= '<a href="' . h($href) . '"' . ($external ? ' target="_blank" rel="noopener"' : '') . '>' . $label . '</a>';
+    }
+    return $html . h(substr($text, $pos));
+}
+
+/**
+ * The address a written link may point to, or null. Allowed: full web addresses (https:// or
+ * http://), email (mailto:) and phone (tel:) links, and this site's own pages ("/pricing.html",
+ * "#section"). Anything else, such as "javascript:", is refused.
+ */
+function link_href(string $url): ?string
+{
+    $url = trim($url);
+    if (preg_match('#^https?://#i', $url)) {
+        return filter_var($url, FILTER_VALIDATE_URL) ? $url : null;
+    }
+    if (preg_match('/^mailto:[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/i', $url) || preg_match('/^tel:\+?[0-9][0-9 ()-]{2,20}$/i', $url)) {
+        return $url;
+    }
+    // "/page" but not "//other-site" or "/\other-site", which browsers treat as another website.
+    if (preg_match('#^/(?![/\\\\])[^\s\\\\]*$#', $url) || preg_match('/^#[\w-]+$/', $url)) {
+        return $url;
+    }
+    return null;
 }
 
 /** The site's Content-Security-Policy (sent as a header and repeated in a <meta> tag on every page). */

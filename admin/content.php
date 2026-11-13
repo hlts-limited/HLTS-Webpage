@@ -22,7 +22,7 @@ function content_types(): array
                 'category' => ['type' => 'text', 'label' => 'Category', 'placeholder' => 'Teaching, Assessment, Technology…'],
                 'excerpt' => ['type' => 'textarea', 'label' => 'Short summary', 'rows' => 2, 'help' => 'Shown on cards and in search results. One or two sentences.'],
                 'video_url' => ['type' => 'url', 'label' => 'YouTube video link (optional)', 'placeholder' => 'https://www.youtube.com/watch?v=…', 'help' => 'Paste the link of a video on our YouTube channel; it plays at the top of the post.'],
-                'body' => ['type' => 'textarea', 'label' => 'Post', 'rows' => 16, 'required' => true, 'help' => 'Leave a blank line between paragraphs. Start a line with "## " for a heading and "- " for a bullet.'],
+                'body' => ['type' => 'textarea', 'label' => 'Post', 'rows' => 16, 'required' => true, 'format' => true, 'help' => 'Leave a blank line between paragraphs. Start a line with "## " for a heading and "- " for a bullet. To link words, select them and press Add link (written as [words](https://address)); press Bold for **bold**.'],
                 'cover' => $cover,
                 'status' => $status,
             ],
@@ -36,7 +36,7 @@ function content_types(): array
                 'mode' => ['type' => 'select', 'label' => 'Format', 'options' => ['in-person' => 'In person', 'online' => 'Online', 'hybrid' => 'Hybrid']],
                 'location' => ['type' => 'text', 'label' => 'Location', 'placeholder' => 'HLTS office, Somolu, Lagos'],
                 'summary' => ['type' => 'textarea', 'label' => 'Summary', 'rows' => 2, 'required' => true],
-                'body' => ['type' => 'textarea', 'label' => 'Details', 'rows' => 8],
+                'body' => ['type' => 'textarea', 'label' => 'Details', 'rows' => 8, 'format' => true, 'help' => 'Select words and press Add link or Bold.'],
                 'register_url' => ['type' => 'url', 'label' => 'Registration link (optional)', 'help' => 'Leave empty to send people to the TechMind join form.'],
                 'cover' => $cover,
                 'status' => $status,
@@ -51,7 +51,7 @@ function content_types(): array
                 'category' => ['type' => 'text', 'label' => 'Category', 'placeholder' => 'Website, Portal, App, Design'],
                 'summary' => ['type' => 'textarea', 'label' => 'Summary', 'rows' => 2, 'required' => true],
                 'results' => ['type' => 'text', 'label' => 'Result highlight', 'placeholder' => 'Results published in hours, not weeks'],
-                'body' => ['type' => 'textarea', 'label' => 'Story', 'rows' => 8],
+                'body' => ['type' => 'textarea', 'label' => 'Story', 'rows' => 8, 'format' => true, 'help' => 'Select words and press Add link or Bold.'],
                 'url' => ['type' => 'url', 'label' => 'Live link (optional)'],
                 'cover' => $cover,
                 'sort_order' => ['type' => 'number', 'label' => 'Order (lower shows first)'],
@@ -66,7 +66,7 @@ function content_types(): array
                 'job_type' => ['type' => 'select', 'label' => 'Type', 'options' => ['Full-time' => 'Full-time', 'Part-time' => 'Part-time', 'Contract' => 'Contract', 'Internship' => 'Internship', 'School placement' => 'School placement']],
                 'location' => ['type' => 'text', 'label' => 'Location', 'required' => true],
                 'summary' => ['type' => 'textarea', 'label' => 'Summary', 'rows' => 2, 'required' => true],
-                'body' => ['type' => 'textarea', 'label' => 'Description', 'rows' => 10, 'help' => 'Use "## " for headings and "- " for bullets.'],
+                'body' => ['type' => 'textarea', 'label' => 'Description', 'rows' => 10, 'format' => true, 'help' => 'Use "## " for headings and "- " for bullets. Select words and press Add link or Bold.'],
                 'closes_on' => ['type' => 'date', 'label' => 'Closing date (optional)'],
                 'status' => $status,
             ],
@@ -253,7 +253,7 @@ if ($action === 'list'):
     <div class="field">
       <label class="field-label" for="<?= h($fid) ?>"><?= h($field['label']) ?><?= !empty($field['required']) ? ' <span class="req">*</span>' : '' ?></label>
 <?php if ($field['type'] === 'textarea'): ?>
-      <textarea id="<?= h($fid) ?>" name="<?= h($name) ?>" rows="<?= (int) ($field['rows'] ?? 4) ?>"<?= $err ? ' aria-invalid="true"' : '' ?>><?= h($value) ?></textarea>
+      <textarea id="<?= h($fid) ?>" name="<?= h($name) ?>" rows="<?= (int) ($field['rows'] ?? 4) ?>"<?= !empty($field['format']) ? ' data-format' : '' ?><?= $err ? ' aria-invalid="true"' : '' ?>><?= h($value) ?></textarea>
 <?php elseif ($field['type'] === 'select'): ?>
       <div class="select-wrap"><select id="<?= h($fid) ?>" name="<?= h($name) ?>"><?php foreach ($field['options'] as $k => $label): ?><option value="<?= h($k) ?>"<?= $value === (string) $k ? ' selected' : '' ?>><?= h($label) ?></option><?php endforeach; ?></select><?= icon('chevron-down') ?></div>
 <?php else: $inputType = ['datetime' => 'datetime-local', 'date' => 'date', 'url' => 'url', 'number' => 'number'][$field['type']] ?? 'text';

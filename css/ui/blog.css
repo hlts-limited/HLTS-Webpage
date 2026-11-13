@@ -363,6 +363,15 @@ body.blog-dark .prose a {
   color: #5b93f5;
 }
 
+body.blog-dark .prose a:hover,
+body.blog-dark .prose a:focus-visible {
+  color: #8fb5f8;
+}
+
+body.blog-dark .prose strong {
+  color: #ffffff;
+}
+
 body.blog-dark .prose h2,
 body.blog-dark .prose h3 {
   color: #ffffff;

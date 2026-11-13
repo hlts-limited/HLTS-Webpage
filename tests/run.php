@@ -181,5 +181,24 @@ same('a form-delivery signature is not a pass', sso_read_pass(explode('.', $make
 same('a pass without a valid email is refused', sso_read_pass($make(['email' => 'nope'] + $claims), $secret, $now), null);
 same('no secret, no sign-in', sso_read_pass($make($claims, ''), '', $now), null);
 
+// ---- Links and bold in post text ----------------------------------------------------------------
+$own = rtrim((string) config('site_url'), '/') . '/pricing.html'; // this site, wherever it runs
+same('a link to this site stays in the same tab', render_inline("Read [our pricing]($own) today"), 'Read <a href="' . h($own) . '">our pricing</a> today');
+same('a backslash path to another site is refused', render_inline('[x](/\evil.example)'), '[x](/\evil.example)');
+same('another website opens in a new tab', render_inline('[Paystack](https://paystack.com/pricing)'), '<a href="https://paystack.com/pricing" target="_blank" rel="noopener">Paystack</a>');
+same('one of our pages', render_inline('See [the FAQ](/faq.html#fees).'), 'See <a href="/faq.html#fees">the FAQ</a>.');
+same('email link', render_inline('[Email us](mailto:ceo@hltsltd.com)'), '<a href="mailto:ceo@hltsltd.com">Email us</a>');
+same('bold', render_inline('This is **very** important'), 'This is <strong>very</strong> important');
+same('bold inside a link', render_inline('[**Book now**](/book-demo.html)'), '<a href="/book-demo.html"><strong>Book now</strong></a>');
+same('a javascript: link is left as typed', render_inline('[click](javascript:alert(1))'), '[click](javascript:alert(1))');
+same('a javascript: link without brackets is left as typed', render_inline('[click](javascript:alert`1`)'), '[click](javascript:alert`1`)');
+same('a link to another site written as //host is refused', render_inline('[x](//evil.example)'), '[x](//evil.example)');
+same('a data: link is refused', render_inline('[x](data:text/html,hi)'), '[x](data:text/html,hi)');
+same('link words are escaped', render_inline('[<b>hi</b>](https://example.com)'), '<a href="https://example.com" target="_blank" rel="noopener">&lt;b&gt;hi&lt;/b&gt;</a>');
+same('quotes in an address cannot break out', render_inline('[x](https://example.com/"onmouseover=alert(1))'), '[x](https://example.com/&quot;onmouseover=alert(1))');
+same('text around links is escaped', render_inline('<script> & [a](/b)'), '&lt;script&gt; &amp; <a href="/b">a</a>');
+same('plain text is unchanged', render_inline('Nothing special here'), 'Nothing special here');
+same('links work in bullets and headings', render_text("## See [pricing](/pricing.html)\n\n- **One** and [two](/two.html)"), '<h2>See <a href="/pricing.html">pricing</a></h2><ul><li><strong>One</strong> and <a href="/two.html">two</a></li></ul>');
+
 echo PHP_EOL . ($failures ? "$failures FAILED, " : '') . "$passes passed" . PHP_EOL;
 exit($failures ? 1 : 0);

@@ -303,3 +303,11 @@ video {
 .prose ul { padding-left: 1.2em; margin: 0 0 1.2em; }
 .prose li { margin-bottom: 0.4em; }
 .prose li::marker { color: var(--violet-500); }
+.prose a {
+  color: var(--violet-600);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.prose a:hover,
+.prose a:focus-visible { text-decoration-thickness: 2px; }
