@@ -590,16 +590,103 @@
   /* ---- YouTube: the player loads only when someone presses play ------- */
 
   function initYouTube() {
+    // A video the reader has started keeps playing in a small window pinned near the top of the
+    // screen once its place in the page scrolls away, with a button to stop it.
+    let stuck = null;
+    let closeButton = null;
+    let untransformed = [];
+
+    /** Just under the site header, so the pinned video and the menu never cover each other. */
+    function setTopOffset() {
+      const bar = $('.site-header__bar');
+      const top = bar ? Math.round(bar.getBoundingClientRect().height + 24) : 84;
+      document.documentElement.style.setProperty('--yt-stuck-top', top + 'px');
+    }
+
+    /* A see-through ancestor (mid-animation) would hold a fixed player inside the page, so any
+       leftover transform above the player is switched off while it is pinned, then put back. */
+    function holdTransforms(player, off) {
+      if (off) {
+        untransformed = [];
+        for (let el = player.parentElement; el && el !== document.body; el = el.parentElement) {
+          const value = window.getComputedStyle(el).transform;
+          if (value && value !== 'none') {
+            untransformed.push([el, el.style.transform]);
+            el.style.transform = 'none';
+          }
+        }
+        return;
+      }
+      untransformed.forEach(([el, value]) => { el.style.transform = value; });
+      untransformed = [];
+    }
+
+    function unstick() {
+      if (!stuck) return;
+      stuck.classList.remove('is-stuck');
+      holdTransforms(stuck, false);
+      if (closeButton) closeButton.remove();
+      closeButton = null;
+      stuck = null;
+    }
+
+    function stick(player) {
+      if (stuck === player) return;
+      unstick();
+      stuck = player;
+      setTopOffset();
+      player.classList.add('is-stuck');
+      holdTransforms(player, true);
+      closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.className = 'yt-stuck-close';
+      closeButton.setAttribute('aria-label', 'Stop the video');
+      closeButton.textContent = '×';
+      closeButton.addEventListener('click', () => stop(player));
+      document.body.appendChild(closeButton);
+    }
+
+    /** Stop a video and put its picture and play button back, so it can be started again. */
+    function stop(player) {
+      const frame = player.querySelector('iframe');
+      if (stuck === player) unstick();
+      if (!frame) return;
+      if (player.playButton) frame.replaceWith(player.playButton);
+      else frame.remove();
+    }
+
+    const watcher = 'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const player = entry.target;
+          if (!player.querySelector('iframe')) {
+            if (stuck === player) unstick();
+            return;
+          }
+          // Pin it once its place has scrolled off the top; let it go when it comes back.
+          if (entry.intersectionRatio < 0.35 && entry.boundingClientRect.top < 0) stick(player);
+          else if (entry.intersectionRatio >= 0.35 && stuck === player) unstick();
+        });
+      }, { threshold: [0, 0.35, 0.9] })
+      : null;
+
+    window.addEventListener('resize', () => { if (stuck) setTopOffset(); });
+
     document.addEventListener('click', (event) => {
       const button = event.target.closest('[data-youtube]');
       if (!button || !/^[\w-]{11}$/.test(button.dataset.youtube)) return;
+      const player = button.closest('.yt-player');
+      // One video at a time: starting this one stops any other that is playing.
+      $$('.yt-player').forEach((other) => { if (other !== player) stop(other); });
       const frame = document.createElement('iframe');
       frame.src = 'https://www.youtube-nocookie.com/embed/' + button.dataset.youtube + '?autoplay=1&rel=0';
       frame.title = button.dataset.title || 'YouTube video';
       frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
       frame.allowFullscreen = true;
       frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      if (player) player.playButton = button;
       button.replaceWith(frame);
+      if (player && watcher) watcher.observe(player);
     });
   }
 

@@ -567,10 +567,80 @@ body.blog-dark .empty-state {
   border-radius: var(--radius-lg);
 }
 
+/* ---- A playing video stays on screen while you read on ------------------- */
+
+/* Its box keeps its place in the page, so nothing jumps while the video is pinned. */
+.yt-player.is-stuck {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--blog-line-strong);
+  background: #0d0d0d;
+}
+
+.yt-player.is-stuck::after {
+  content: 'Playing at the top of the screen';
+  padding: 0 16px;
+  color: var(--blog-muted);
+  font-size: calc(14px * var(--type-scale));
+  text-align: center;
+}
+
+/* Pinned just below the site header, so the two never cover each other. */
+.yt-player.is-stuck iframe {
+  position: fixed;
+  inset: auto;
+  top: var(--yt-stuck-top, 84px);
+  right: 16px;
+  width: min(360px, 46vw);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  z-index: 1025;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55);
+}
+
+.yt-stuck-close {
+  position: fixed;
+  top: calc(var(--yt-stuck-top, 84px) - 11px);
+  right: 5px;
+  z-index: 1026;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  background: #000000;
+  color: #ffffff;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur-2) ease;
+}
+
+.yt-stuck-close:hover,
+.yt-stuck-close:focus-visible {
+  background: #ff0033;
+}
+
+@media (max-width: 700px) {
+  .yt-player.is-stuck iframe {
+    right: 10px;
+    left: 10px;
+    width: auto;
+  }
+
+  .yt-stuck-close {
+    right: 1px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .blog-card,
   .blog-card__media img,
-  .blog-hero__video {
+  .blog-hero__video,
+  .yt-stuck-close {
     transition: none;
   }
 }
