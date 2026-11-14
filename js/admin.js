@@ -113,6 +113,8 @@
     if (selectFrom != null) box.setSelectionRange(start + selectFrom, start + selectTo);
   }
 
+  const HINT = 'Select words, then press a button.';
+
   function initFormatting(box) {
     const bar = document.createElement('div');
     bar.className = 'format-bar';
@@ -186,7 +188,13 @@
         }
         // On its own line, with the cursor between the brackets so a caption can be typed.
         replaceSelection(box, '\n\n![](' + result.path + ')\n\n', 4, 4);
-        if (details.open) renderPreview(box.value, previewBody);
+        // Show it straight away, so there is no doubt the picture is in the post.
+        details.open = true;
+        renderPreview(box.value, previewBody);
+        details.scrollIntoView({ block: 'nearest' });
+        box.focus();
+        help.textContent = 'Picture added. Type a caption between the brackets, or leave it empty.';
+        window.setTimeout(() => { help.textContent = HINT; }, 8000);
       } catch (e) {
         window.alert('That picture could not be uploaded. Check your connection and try again.');
       } finally {
@@ -198,7 +206,7 @@
 
     const help = document.createElement('span');
     help.className = 'format-bar__hint';
-    help.textContent = 'Select words, then press a button.';
+    help.textContent = HINT;
     bar.appendChild(help);
     bar.dataset.maxBytes = String(document.querySelector('[data-max-bytes]') ? document.querySelector('[data-max-bytes]').dataset.maxBytes : 10 * 1024 * 1024);
     box.before(bar);
@@ -238,6 +246,13 @@
     image.src = '/' + path.split('/').map(encodeURIComponent).join('/');
     image.alt = caption.trim();
     image.loading = 'lazy';
+    // If the picture can't be found, say so rather than leaving a blank space.
+    image.addEventListener('error', () => {
+      const missing = document.createElement('p');
+      missing.className = 'format-preview__bad';
+      missing.textContent = 'This picture could not be found: ' + path;
+      figure.replaceWith(missing);
+    });
     figure.appendChild(image);
     if (caption.trim()) {
       const text = document.createElement('figcaption');
