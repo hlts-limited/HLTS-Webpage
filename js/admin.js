@@ -126,6 +126,7 @@
       b.title = title;
       b.addEventListener('click', onClick);
       bar.appendChild(b);
+      return b;
     };
 
     button('Bold', 'Make the selected words bold', () => {
@@ -153,29 +154,99 @@
       replaceSelection(box, '[' + label + '](' + address.trim() + ')', words ? null : 1, words ? null : 1 + label.length);
     });
 
+    // A picture is uploaded as soon as it is chosen, then written into the text where the cursor is.
+    const picker = document.createElement('input');
+    picker.type = 'file';
+    picker.accept = 'image/jpeg,image/png,image/webp';
+    picker.hidden = true;
+    const addPicture = button('Add picture', 'Put a picture from your device into the text', () => picker.click());
+    bar.appendChild(picker);
+
+    picker.addEventListener('change', async () => {
+      const file = picker.files && picker.files[0];
+      if (!file) return;
+      const max = Number(bar.dataset.maxBytes) || 10 * 1024 * 1024;
+      if (file.size > max) {
+        window.alert('That picture is too large. The limit is ' + Math.round(max / 1048576) + ' MB.');
+        picker.value = '';
+        return;
+      }
+      const token = document.querySelector('input[name=csrf_token]');
+      const body = new FormData();
+      body.append('csrf_token', token ? token.value : '');
+      body.append('picture', file);
+      addPicture.disabled = true;
+      addPicture.textContent = 'Uploading…';
+      try {
+        const response = await fetch('/admin/upload.php', { method: 'POST', body, headers: { Accept: 'application/json' }, credentials: 'same-origin' });
+        const result = await response.json();
+        if (!result.ok || !result.path) {
+          window.alert(result.message || 'That picture could not be uploaded.');
+          return;
+        }
+        // On its own line, with the cursor between the brackets so a caption can be typed.
+        replaceSelection(box, '\n\n![](' + result.path + ')\n\n', 4, 4);
+        if (details.open) renderPreview(box.value, previewBody);
+      } catch (e) {
+        window.alert('That picture could not be uploaded. Check your connection and try again.');
+      } finally {
+        addPicture.disabled = false;
+        addPicture.textContent = 'Add picture';
+        picker.value = '';
+      }
+    });
+
     const help = document.createElement('span');
     help.className = 'format-bar__hint';
     help.textContent = 'Select words, then press a button.';
     bar.appendChild(help);
+    bar.dataset.maxBytes = String(document.querySelector('[data-max-bytes]') ? document.querySelector('[data-max-bytes]').dataset.maxBytes : 10 * 1024 * 1024);
     box.before(bar);
 
     const details = document.createElement('details');
     details.className = 'format-preview';
     const summary = document.createElement('summary');
     summary.textContent = 'Preview';
-    const body = document.createElement('div');
-    body.className = 'prose';
-    details.append(summary, body);
+    const previewBody = document.createElement('div');
+    previewBody.className = 'prose';
+    details.append(summary, previewBody);
     box.after(details);
 
     const draw = () => {
-      if (details.open) renderPreview(box.value, body);
+      if (details.open) renderPreview(box.value, previewBody);
     };
     details.addEventListener('toggle', draw);
     box.addEventListener('input', draw);
   }
 
   /** The preview, built from DOM nodes (never HTML strings), following render_text() in helpers.php. */
+  /** A picture in the preview. Same rule as post_image_path() in lib/helpers.php: our images only. */
+  function pictureFigure(caption, src) {
+    const path = src.trim().replace(/^\/+/, '');
+    if (path.includes('..') || path.includes('\\') || !/^images\/[\w.\- ]+(\/[\w.\- ]+)*\.(jpe?g|png|webp|gif)$/i.test(path)) {
+      const bad = document.createElement('p');
+      const mark = document.createElement('span');
+      mark.className = 'format-preview__bad';
+      mark.title = 'Only pictures stored on this website can be used, so this will show as typed.';
+      mark.textContent = '![' + caption + '](' + src + ')';
+      bad.appendChild(mark);
+      return bad;
+    }
+    const figure = document.createElement('figure');
+    figure.className = 'prose-figure';
+    const image = document.createElement('img');
+    image.src = '/' + path.split('/').map(encodeURIComponent).join('/');
+    image.alt = caption.trim();
+    image.loading = 'lazy';
+    figure.appendChild(image);
+    if (caption.trim()) {
+      const text = document.createElement('figcaption');
+      text.textContent = caption.trim();
+      figure.appendChild(text);
+    }
+    return figure;
+  }
+
   function renderPreview(text, into) {
     into.replaceChildren();
     let paragraph = [];
@@ -204,8 +275,12 @@
     text.trim().split(/\r?\n/).forEach((raw) => {
       const line = raw.trim();
       if (!line) return flush();
+      const picture = /^!\[([^\]\n]{0,300})\]\(([^()\s]{1,300})\)$/.exec(line);
       const heading = /^(#{2,3}) (.*)$/.exec(line);
-      if (heading) {
+      if (picture) {
+        flush();
+        into.appendChild(pictureFigure(picture[1], picture[2]));
+      } else if (heading) {
         flush();
         const h = document.createElement(heading[1] === '##' ? 'h2' : 'h3');
         inline(heading[2], h);

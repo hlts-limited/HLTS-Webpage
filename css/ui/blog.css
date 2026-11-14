@@ -373,6 +373,14 @@ body.blog-dark .prose strong {
   color: #ffffff;
 }
 
+body.blog-dark .prose-figure img {
+  border: 1px solid var(--blog-line);
+}
+
+body.blog-dark .prose-figure figcaption {
+  color: var(--blog-muted);
+}
+
 body.blog-dark .prose h2,
 body.blog-dark .prose h3 {
   color: #ffffff;

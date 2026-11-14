@@ -313,3 +313,25 @@ video {
 .prose a:focus-visible { color: var(--violet-500); }
 .prose a:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 2px; }
 .prose strong { font-weight: calc(700 * var(--weight-scale)); }
+
+/* Pictures placed inside the text. The block hugs the picture, so a small one sits centred
+   with its caption under it, while a big one fills the column. */
+.prose-figure {
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.8em auto;
+}
+
+/* Fills the column, but a small picture is never blown up and blurred. */
+.prose-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.prose-figure figcaption {
+  margin-top: 10px;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}

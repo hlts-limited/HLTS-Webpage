@@ -167,6 +167,9 @@ function render_text(string $text): string
         $trimmed = trim($line);
         if ($trimmed === '') {
             $flush();
+        } elseif (preg_match('/^!\[([^\]\n]{0,300})\]\(([^()\s]{1,300})\)$/u', $trimmed, $picture)) {
+            $flush();
+            $html .= render_picture($picture[1], $picture[2]);
         } elseif (str_starts_with($trimmed, '### ')) {
             $flush();
             $html .= '<h3>' . render_inline(substr($trimmed, 4)) . '</h3>';
@@ -188,6 +191,38 @@ function render_text(string $text): string
     $flush();
 
     return $html;
+}
+
+/**
+ * A picture inside the text: ![Caption](images/…) on a line of its own. The caption is optional
+ * and is also used as the description for people who can't see the picture. A picture that isn't
+ * stored on this website is left as typed, so no post can pull an image from somewhere else.
+ */
+function render_picture(string $caption, string $src): string
+{
+    $path = post_image_path($src);
+    if ($path === null) {
+        return '<p>' . h('![' . $caption . '](' . $src . ')') . '</p>';
+    }
+    $caption = trim($caption);
+    // The real size is written in, so the page keeps the right space while the picture loads.
+    $size = @getimagesize(APP_ROOT . '/' . $path);
+    $dimensions = $size && $size[0] > 0 ? ' width="' . (int) $size[0] . '" height="' . (int) $size[1] . '"' : '';
+    $html = '<figure class="prose-figure"><img src="' . h(img($path)) . '"' . $dimensions . ' alt="' . h($caption) . '" loading="lazy" decoding="async">';
+    if ($caption !== '') {
+        $html .= '<figcaption>' . h($caption) . '</figcaption>';
+    }
+    return $html . '</figure>';
+}
+
+/** A picture stored on this website (images/…), or null. Nothing that could run as code. */
+function post_image_path(string $src): ?string
+{
+    $src = trim(ltrim(trim($src), '/'));
+    if (str_contains($src, '..') || str_contains($src, '\\')) {
+        return null;
+    }
+    return preg_match('#^images/[\w.\- ]+(/[\w.\- ]+)*\.(jpe?g|png|webp|gif)$#i', $src) ? $src : null;
 }
 
 /**

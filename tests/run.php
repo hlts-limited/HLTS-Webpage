@@ -200,5 +200,26 @@ same('text around links is escaped', render_inline('<script> & [a](/b)'), '&lt;s
 same('plain text is unchanged', render_inline('Nothing special here'), 'Nothing special here');
 same('links work in bullets and headings', render_text("## See [pricing](/pricing.html)\n\n- **One** and [two](/two.html)"), '<h2>See <a href="/pricing.html">pricing</a></h2><ul><li><strong>One</strong> and <a href="/two.html">two</a></li></ul>');
 
+// ---- Pictures inside post text ------------------------------------------------------------------
+check('a picture with a caption', str_contains(render_text('![Our new lab](images/setup.jpeg)'), '<figcaption>Our new lab</figcaption>') && str_contains(render_text('![Our new lab](images/setup.jpeg)'), 'src="/images/setup.jpeg"'), render_text('![Our new lab](images/setup.jpeg)'));
+check('a picture carries its real size, so the page keeps its place', (bool) preg_match('/ width="\d+" height="\d+"/', render_text('![x](images/setup.jpeg)')), render_text('![x](images/setup.jpeg)'));
+same('a picture without a caption', render_text('![](images/uploads/2026-11/abc123.jpg)'), '<figure class="prose-figure"><img src="/images/uploads/2026-11/abc123.jpg" alt="" loading="lazy" decoding="async"></figure>'); // a file that isn't there carries no size
+check('a picture sits between paragraphs', (bool) preg_match('#^<p>One\.</p><figure class="prose-figure"><img .*</figure><p>Two\.</p>$#', render_text("One.
+
+![A photo](images/setup.jpeg)
+
+Two.")), render_text("One.
+
+![A photo](images/setup.jpeg)
+
+Two."));
+same('a picture from another website is left as typed', render_text('![x](https://evil.example/pic.jpg)'), '<p>![x](https://evil.example/pic.jpg)</p>');
+same('a path climbing out of images is refused', render_text('![x](images/../config/config.local.php)'), '<p>![x](images/../config/config.local.php)</p>');
+same('a non-picture file is refused', render_text('![x](images/uploads/evil.php)'), '<p>![x](images/uploads/evil.php)</p>');
+check('a caption cannot inject markup', !str_contains(render_text('![<img onerror=alert(1)>](images/setup.jpeg)'), '<img onerror') && str_contains(render_text('![<img onerror=alert(1)>](images/setup.jpeg)'), 'alt="&lt;img onerror=alert(1)&gt;"'), render_text('![<img onerror=alert(1)>](images/setup.jpeg)'));
+same('spaces in a file name are kept safe', post_image_path('images/2025meeting/team 2.jpg'), 'images/2025meeting/team 2.jpg');
+same('a backslash path is refused', post_image_path('images\evil.jpg'), null);
+same('an image line inside a paragraph stays text', render_text('See ![x](images/setup.jpeg) here'), '<p>See ![x](images/setup.jpeg) here</p>');
+
 echo PHP_EOL . ($failures ? "$failures FAILED, " : '') . "$passes passed" . PHP_EOL;
 exit($failures ? 1 : 0);
