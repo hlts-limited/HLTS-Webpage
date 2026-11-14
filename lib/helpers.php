@@ -269,36 +269,46 @@ function post_image_path(string $src): ?string
 }
 
 /**
- * One line of text with [words](address) links and **bold**, as safe HTML. A link whose address
- * isn't allowed (see link_href) is left exactly as typed, so the writer can see it didn't work.
+ * One line of text with [words](address) links, **bold**, *italic* and ~smaller~, as safe HTML.
+ * A link whose address isn't allowed (see link_href) is left exactly as typed, so the writer can
+ * see it didn't work. Bold, italic and smaller also work inside the words of a link.
  */
 function render_inline(string $text): string
 {
-    $pattern = '/\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)|\*\*([^*\n]{1,500}?)\*\*/u';
     $html = '';
     $pos = 0;
-    if (!preg_match_all($pattern, $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
-        return h($text);
+    if (!preg_match_all('/\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)/u', $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+        return render_emphasis(h($text));
     }
     foreach ($matches as $m) {
         [$whole, $at] = $m[0];
-        $html .= h(substr($text, $pos, $at - $pos));
+        $html .= render_emphasis(h(substr($text, $pos, $at - $pos)));
         $pos = $at + strlen($whole);
-        if (isset($m[3]) && $m[3][1] >= 0) {
-            $html .= '<strong>' . h($m[3][0]) . '</strong>';
-            continue;
-        }
         $href = link_href($m[2][0]);
         if ($href === null) {
-            $html .= h($whole);
+            $html .= render_emphasis(h($whole));
             continue;
         }
-        // Bold inside the link words still works: [**read the guide**](https://…).
-        $label = preg_replace_callback('/\*\*([^*\n]{1,500}?)\*\*/u', fn ($b) => '<strong>' . $b[1] . '</strong>', h($m[1][0]));
         $external = preg_match('#^https?://#i', $href) && strcasecmp((string) parse_url($href, PHP_URL_HOST), (string) parse_url((string) config('site_url'), PHP_URL_HOST)) !== 0;
-        $html .= '<a href="' . h($href) . '"' . ($external ? ' target="_blank" rel="noopener"' : '') . '>' . $label . '</a>';
+        $html .= '<a href="' . h($href) . '"' . ($external ? ' target="_blank" rel="noopener"' : '') . '>' . render_emphasis(h($m[1][0])) . '</a>';
     }
-    return $html . h(substr($text, $pos));
+    return $html . render_emphasis(h(substr($text, $pos)));
+}
+
+/**
+ * **bold**, *italic* and ~smaller~ inside text that has already been made safe. Marks with a
+ * space just inside them (as in "3 * 4 * 5") are left alone, so ordinary writing isn't changed.
+ */
+function render_emphasis(string $safe): string
+{
+    foreach ([['/\*\*([^*\n]{1,500}?)\*\*/u', 'strong'], ['/\*([^*\n]{1,500}?)\*/u', 'em'], ['/~([^~\n]{1,500}?)~/u', 'small']] as [$pattern, $tag]) {
+        $safe = preg_replace_callback(
+            $pattern,
+            fn ($m) => trim($m[1]) === $m[1] && $m[1] !== '' ? "<$tag>{$m[1]}</$tag>" : $m[0],
+            $safe
+        ) ?? $safe;
+    }
+    return $safe;
 }
 
 /**

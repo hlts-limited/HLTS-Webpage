@@ -259,5 +259,22 @@ Some words."));
 same('the picture beside text carries its real size', (bool) preg_match('/prose-beside__picture"><img [^>]*width="\d+" height="\d+"/', render_text("![](images/setup.jpeg)
 Words.")), true);
 
+// ---- Italic and smaller text --------------------------------------------------------------------
+same('italic', render_inline('This is *really* good'), 'This is <em>really</em> good');
+same('smaller', render_inline('Price ~from January~ is fixed'), 'Price <small>from January</small> is fixed');
+same('bold is not mistaken for italic', render_inline('**Galaxy S27**'), '<strong>Galaxy S27</strong>');
+same('bold and italic together', render_inline('**Bold** and *italic* and ~small~'), '<strong>Bold</strong> and <em>italic</em> and <small>small</small>');
+same('italic inside a link', render_inline('[*our pricing*](/pricing.html)'), '<a href="/pricing.html"><em>our pricing</em></a>');
+same('smaller inside a link', render_inline('[~terms apply~](/terms.html)'), '<a href="/terms.html"><small>terms apply</small></a>');
+same('a sum is not turned into italics', render_inline('2 * 3 * 4 = 24'), '2 * 3 * 4 = 24');
+same('a lone asterisk is left alone', render_inline('A footnote marker *'), 'A footnote marker *');
+same('a tilde in ordinary writing is left alone', render_inline('about ~ 50 people'), 'about ~ 50 people');
+same('emphasis cannot inject markup', render_inline('*<script>alert(1)</script>*'), '<em>&lt;script&gt;alert(1)&lt;/script&gt;</em>');
+same('italic works in a heading', render_text('## A *better* way'), '<h2>A <em>better</em> way</h2>');
+same('smaller works in a bullet', render_text('- Fees ~per term~'), '<ul><li>Fees <small>per term</small></li></ul>');
+check('italic works beside a picture', str_contains(render_text("![](images/setup.jpeg)
+*Galaxy S27*"), '<em>Galaxy S27</em>'), render_text("![](images/setup.jpeg)
+*Galaxy S27*"));
+
 echo PHP_EOL . ($failures ? "$failures FAILED, " : '') . "$passes passed" . PHP_EOL;
 exit($failures ? 1 : 0);

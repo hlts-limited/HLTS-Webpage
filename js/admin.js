@@ -140,6 +140,24 @@
       replaceSelection(box, '**' + words.trim() + '**');
     });
 
+    button('Italic', 'Make the selected words italic', () => {
+      const words = box.value.slice(box.selectionStart, box.selectionEnd);
+      if (!words) {
+        replaceSelection(box, '*italic words*', 1, 13);
+        return;
+      }
+      replaceSelection(box, '*' + words.trim() + '*');
+    });
+
+    button('Smaller', 'Make the selected words smaller', () => {
+      const words = box.value.slice(box.selectionStart, box.selectionEnd);
+      if (!words) {
+        replaceSelection(box, '~smaller words~', 1, 14);
+        return;
+      }
+      replaceSelection(box, '~' + words.trim() + '~');
+    });
+
     button('Add link', 'Turn the selected words into a link', () => {
       const words = box.value.slice(box.selectionStart, box.selectionEnd).trim();
       if (words.includes('\n')) {
@@ -350,29 +368,31 @@
     }
   }
 
-  function inline(text, into) {
-    const pattern = /\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)|\*\*([^*\n]{1,500}?)\*\*/g;
+  /** **bold**, *italic* and ~smaller~, following render_emphasis() in lib/helpers.php. */
+  function emphasis(text, into) {
+    const pattern = /\*\*([^*\n]{1,500}?)\*\*|\*([^*\n]{1,500}?)\*|~([^~\n]{1,500}?)~/g;
     let pos = 0;
     let m;
-    const bolded = (t, el) => {
-      t.split(/\*\*([^*\n]{1,500}?)\*\*/).forEach((part, i) => {
-        if (!part) return;
-        if (i % 2) {
-          const b = document.createElement('strong');
-          b.textContent = part;
-          el.appendChild(b);
-        } else el.appendChild(document.createTextNode(part));
-      });
-    };
     while ((m = pattern.exec(text))) {
+      const words = m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : m[3];
+      // A mark with a space just inside it (as in "3 * 4 * 5") is ordinary writing, not emphasis.
+      if (words.trim() !== words || words === '') continue;
       into.appendChild(document.createTextNode(text.slice(pos, m.index)));
       pos = m.index + m[0].length;
-      if (m[3] !== undefined) {
-        const b = document.createElement('strong');
-        b.textContent = m[3];
-        into.appendChild(b);
-        continue;
-      }
+      const el = document.createElement(m[1] !== undefined ? 'strong' : m[2] !== undefined ? 'em' : 'small');
+      el.textContent = words;
+      into.appendChild(el);
+    }
+    into.appendChild(document.createTextNode(text.slice(pos)));
+  }
+
+  function inline(text, into) {
+    const pattern = /\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)/g;
+    let pos = 0;
+    let m;
+    while ((m = pattern.exec(text))) {
+      emphasis(text.slice(pos, m.index), into);
+      pos = m.index + m[0].length;
       const href = linkHref(m[2]);
       if (!href) {
         const bad = document.createElement('span');
@@ -386,9 +406,9 @@
       a.href = href;
       a.target = '_blank';
       a.rel = 'noopener';
-      bolded(m[1], a);
+      emphasis(m[1], a);
       into.appendChild(a);
     }
-    into.appendChild(document.createTextNode(text.slice(pos)));
+    emphasis(text.slice(pos), into);
   }
 })();
