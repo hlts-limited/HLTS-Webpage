@@ -317,6 +317,16 @@ video {
 /* ~smaller~: for notes, sources and small print inside a paragraph. */
 .prose small { font-size: 0.86em; }
 
+/* A quotation set apart from the text */
+.prose-quote {
+  margin: 1.6em 0;
+  padding: 2px 0 2px clamp(14px, 3vw, 22px);
+  border-left: 3px solid var(--violet-500);
+  font-size: var(--fs-lg);
+}
+
+.prose-quote p { margin: 0; }
+
 /* Pictures placed inside the text. The block hugs the picture, so a small one sits centred
    with its caption under it, while a big one fills the column. */
 .prose-figure {

@@ -373,6 +373,11 @@ body.blog-dark .prose strong {
   color: #ffffff;
 }
 
+body.blog-dark .prose-quote {
+  border-left-color: var(--violet-400);
+  color: #ffffff;
+}
+
 body.blog-dark .prose-figure img {
   border: 1px solid var(--blog-line);
 }

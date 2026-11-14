@@ -131,32 +131,72 @@
       return b;
     };
 
-    button('Bold', 'Make the selected words bold', () => {
-      const words = box.value.slice(box.selectionStart, box.selectionEnd);
-      if (!words) {
-        replaceSelection(box, '**bold words**', 2, 12);
+    /**
+     * Put a style on the selected words, or take it off again if they already have it. Styles
+     * sit inside each other, so words can be bold, italic and smaller at the same time.
+     */
+    const style = (mark, sample) => {
+      const start = box.selectionStart;
+      const end = box.selectionEnd;
+      const words = box.value.slice(start, end);
+      if (!words.trim()) {
+        replaceSelection(box, mark + sample + mark, mark.length, mark.length + sample.length);
         return;
       }
-      replaceSelection(box, '**' + words.trim() + '**');
+      const inner = words.trim();
+      // The marks are inside what was selected: take them off.
+      if (inner.length > mark.length * 2 && inner.startsWith(mark) && inner.endsWith(mark) && isOwnMark(inner, mark)) {
+        replaceSelection(box, inner.slice(mark.length, -mark.length));
+        return;
+      }
+      // The marks sit just outside what was selected: take those off instead.
+      const before = box.value.slice(0, start);
+      const after = box.value.slice(end);
+      if (before.endsWith(mark) && after.startsWith(mark) && isOwnMark(before.slice(-mark.length - 1) + after.slice(0, mark.length + 1), mark)) {
+        box.setSelectionRange(start - mark.length, end + mark.length);
+        replaceSelection(box, inner);
+        return;
+      }
+      replaceSelection(box, mark + inner + mark, mark.length, mark.length + inner.length);
+    };
+
+    /** True unless this is really the other asterisk mark (one * inside a **bold** pair). */
+    const isOwnMark = (around, mark) => mark !== '*' || !around.includes('**');
+
+    button('Bold', 'Bold (Ctrl+B)', () => style('**', 'bold words'));
+    button('Italic', 'Italic (Ctrl+I)', () => style('*', 'italic words'));
+    button('Smaller', 'Smaller text', () => style('~', 'smaller words'));
+
+    box.addEventListener('keydown', (event) => {
+      if (!event.ctrlKey && !event.metaKey) return;
+      const key = event.key.toLowerCase();
+      if (key !== 'b' && key !== 'i') return;
+      event.preventDefault();
+      style(key === 'b' ? '**' : '*', key === 'b' ? 'bold words' : 'italic words');
     });
 
-    button('Italic', 'Make the selected words italic', () => {
-      const words = box.value.slice(box.selectionStart, box.selectionEnd);
-      if (!words) {
-        replaceSelection(box, '*italic words*', 1, 13);
+    /** Put a mark at the start of every selected line, or take it off if every line has it. */
+    const lineStyle = (mark, sample) => {
+      const value = box.value;
+      let start = value.lastIndexOf('\n', box.selectionStart - 1) + 1;
+      let end = value.indexOf('\n', box.selectionEnd);
+      if (end === -1) end = value.length;
+      const lines = value.slice(start, end).split('\n');
+      if (lines.length === 1 && lines[0].trim() === '') {
+        replaceSelection(box, mark + sample, mark.length, mark.length + sample.length);
         return;
       }
-      replaceSelection(box, '*' + words.trim() + '*');
-    });
+      const on = lines.every((l) => l.trim() === '' || l.startsWith(mark));
+      // A line only carries one of these at a time, so any other one is taken off first.
+      const bare = (l) => l.replace(/^(#{2,3} |- |> )/, '');
+      const next = lines.map((l) => (l.trim() === '' ? l : on ? l.slice(mark.length) : mark + bare(l))).join('\n');
+      box.setSelectionRange(start, end);
+      replaceSelection(box, next, 0, next.length);
+    };
 
-    button('Smaller', 'Make the selected words smaller', () => {
-      const words = box.value.slice(box.selectionStart, box.selectionEnd);
-      if (!words) {
-        replaceSelection(box, '~smaller words~', 1, 14);
-        return;
-      }
-      replaceSelection(box, '~' + words.trim() + '~');
-    });
+    button('Heading', 'A heading above a section', () => lineStyle('## ', 'Heading'));
+    button('Bullets', 'Turn the lines into a bullet list', () => lineStyle('- ', 'First point'));
+    button('Quote', 'Set the lines apart as a quotation', () => lineStyle('> ', 'A quotation'));
 
     button('Add link', 'Turn the selected words into a link', () => {
       const words = box.value.slice(box.selectionStart, box.selectionEnd).trim();
@@ -292,7 +332,20 @@
     into.replaceChildren();
     let paragraph = [];
     let list = [];
+    let quote = [];
     const flush = () => {
+      if (quote.length) {
+        const block = document.createElement('blockquote');
+        block.className = 'prose-quote';
+        const q = document.createElement('p');
+        quote.forEach((line, i) => {
+          if (i) q.appendChild(document.createElement('br'));
+          inline(line, q);
+        });
+        block.appendChild(q);
+        into.appendChild(block);
+        quote = [];
+      }
       if (paragraph.length) {
         const p = document.createElement('p');
         paragraph.forEach((line, i) => {
@@ -315,7 +368,7 @@
     };
     const lines = text.trim().split(/\r?\n/);
     // A line that starts something of its own, so it never runs beside a picture (is_block_line).
-    const isBlock = (l) => !l || /^(#{2,3} |- |!\[)/.test(l);
+    const isBlock = (l) => !l || /^(#{2,3} |- |> |!\[)/.test(l);
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       if (!line) {
@@ -352,10 +405,13 @@
         inline(heading[2], h);
         into.appendChild(h);
       } else if (line.startsWith('- ')) {
-        if (paragraph.length) flush();
+        if (paragraph.length || quote.length) flush();
         list.push(line.slice(2));
+      } else if (line.startsWith('> ')) {
+        if (paragraph.length || list.length) flush();
+        quote.push(line.slice(2));
       } else {
-        if (list.length) flush();
+        if (list.length || quote.length) flush();
         paragraph.push(line);
       }
     }
@@ -368,47 +424,75 @@
     }
   }
 
-  /** **bold**, *italic* and ~smaller~, following render_emphasis() in lib/helpers.php. */
-  function emphasis(text, into) {
-    const pattern = /\*\*([^*\n]{1,500}?)\*\*|\*([^*\n]{1,500}?)\*|~([^~\n]{1,500}?)~/g;
+  const MARKS = [
+    [/\*\*([^*\n]{1,500}?)\*\*/g, 'strong'],
+    [/\*([^*\n]{1,500}?)\*/g, 'em'],
+    [/~([^~\n]{1,500}?)~/g, 'small'],
+  ];
+
+  /**
+   * **bold**, *italic* and ~smaller~, following render_emphasis() in lib/helpers.php: the
+   * outermost mark is taken first and the same is then done inside it, so styles combine.
+   */
+  function emphasis(text, into, links) {
+    let best = null;
+    MARKS.forEach(([pattern, tag]) => {
+      pattern.lastIndex = 0;
+      let m;
+      while ((m = pattern.exec(text))) {
+        // A mark with a space just inside it (as in "3 * 4 * 5") is ordinary writing.
+        if (m[1] && m[1].trim() === m[1]) {
+          if (!best || m.index < best.at) best = { at: m.index, length: m[0].length, inner: m[1], tag };
+          break;
+        }
+        pattern.lastIndex = m.index + 1;
+      }
+    });
+    if (!best) {
+      plain(text, into, links);
+      return;
+    }
+    plain(text.slice(0, best.at), into, links);
+    const el = document.createElement(best.tag);
+    emphasis(best.inner, el, links);
+    into.appendChild(el);
+    emphasis(text.slice(best.at + best.length), into, links);
+  }
+
+  /** Text with no styles left in it: the links set aside earlier become real links. */
+  function plain(text, into, links) {
+    const pattern = /\u0002(\d+)\u0003/g;
     let pos = 0;
     let m;
     while ((m = pattern.exec(text))) {
-      const words = m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : m[3];
-      // A mark with a space just inside it (as in "3 * 4 * 5") is ordinary writing, not emphasis.
-      if (words.trim() !== words || words === '') continue;
       into.appendChild(document.createTextNode(text.slice(pos, m.index)));
       pos = m.index + m[0].length;
-      const el = document.createElement(m[1] !== undefined ? 'strong' : m[2] !== undefined ? 'em' : 'small');
-      el.textContent = words;
-      into.appendChild(el);
+      const link = links[Number(m[1])];
+      if (!link.href) {
+        const bad = document.createElement('span');
+        bad.className = 'format-preview__bad';
+        bad.title = 'This address can’t be used, so it will show as typed.';
+        bad.textContent = link.asTyped;
+        into.appendChild(bad);
+        continue;
+      }
+      const a = document.createElement('a');
+      a.href = link.href;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      emphasis(link.label, a, links);
+      into.appendChild(a);
     }
     into.appendChild(document.createTextNode(text.slice(pos)));
   }
 
   function inline(text, into) {
-    const pattern = /\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)/g;
-    let pos = 0;
-    let m;
-    while ((m = pattern.exec(text))) {
-      emphasis(text.slice(pos, m.index), into);
-      pos = m.index + m[0].length;
-      const href = linkHref(m[2]);
-      if (!href) {
-        const bad = document.createElement('span');
-        bad.className = 'format-preview__bad';
-        bad.title = 'This address can’t be used, so it will show as typed.';
-        bad.textContent = m[0];
-        into.appendChild(bad);
-        continue;
-      }
-      const a = document.createElement('a');
-      a.href = href;
-      a.target = '_blank';
-      a.rel = 'noopener';
-      emphasis(m[1], a);
-      into.appendChild(a);
-    }
-    emphasis(text.slice(pos), into);
+    // Links are set aside first so that styles can wrap them: *~[words](/page)~* works.
+    const links = [];
+    const tokenised = text.replace(/\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)/g, (whole, label, src) => {
+      links.push({ href: linkHref(src), label, asTyped: whole });
+      return '\u0002' + (links.length - 1) + '\u0003';
+    });
+    emphasis(tokenised, into, links);
   }
 })();

@@ -155,8 +155,9 @@ function render_text(string $text): string
     $html = '';
     $paragraph = [];
     $list = [];
+    $quote = [];
 
-    $flush = function () use (&$html, &$paragraph, &$list) {
+    $flush = function () use (&$html, &$paragraph, &$list, &$quote) {
         if ($paragraph) {
             $html .= '<p>' . implode('<br>', array_map('render_inline', $paragraph)) . '</p>';
             $paragraph = [];
@@ -164,6 +165,10 @@ function render_text(string $text): string
         if ($list) {
             $html .= '<ul>' . implode('', array_map(fn ($item) => '<li>' . render_inline($item) . '</li>', $list)) . '</ul>';
             $list = [];
+        }
+        if ($quote) {
+            $html .= '<blockquote class="prose-quote"><p>' . implode('<br>', array_map('render_inline', $quote)) . '</p></blockquote>';
+            $quote = [];
         }
     };
 
@@ -189,12 +194,17 @@ function render_text(string $text): string
             $flush();
             $html .= '<h2>' . render_inline(substr($trimmed, 3)) . '</h2>';
         } elseif (str_starts_with($trimmed, '- ')) {
-            if ($paragraph) {
+            if ($paragraph || $quote) {
                 $flush();
             }
             $list[] = substr($trimmed, 2);
+        } elseif (str_starts_with($trimmed, '> ')) {
+            if ($paragraph || $list) {
+                $flush();
+            }
+            $quote[] = substr($trimmed, 2);
         } else {
-            if ($list) {
+            if ($list || $quote) {
                 $flush();
             }
             $paragraph[] = $trimmed;
@@ -234,6 +244,7 @@ function is_block_line(string $line): bool
         || str_starts_with($line, '## ')
         || str_starts_with($line, '### ')
         || str_starts_with($line, '- ')
+        || str_starts_with($line, '> ')
         || (bool) preg_match('/^!\[/', $line);
 }
 
@@ -275,40 +286,57 @@ function post_image_path(string $src): ?string
  */
 function render_inline(string $text): string
 {
-    $html = '';
-    $pos = 0;
-    if (!preg_match_all('/\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)/u', $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
-        return render_emphasis(h($text));
-    }
-    foreach ($matches as $m) {
-        [$whole, $at] = $m[0];
-        $html .= render_emphasis(h(substr($text, $pos, $at - $pos)));
-        $pos = $at + strlen($whole);
-        $href = link_href($m[2][0]);
+    // Links are set aside first so that styles can wrap them: *~[words](/page)~* works.
+    $links = [];
+    $tokenised = preg_replace_callback('/\[([^\]\n]{1,300})\]\(([^()\s]{1,2000})\)/u', function ($m) use (&$links) {
+        $href = link_href($m[2]);
         if ($href === null) {
-            $html .= render_emphasis(h($whole));
-            continue;
+            return $m[0]; // not an address we allow: left exactly as typed
         }
+        $links[] = [$href, $m[1]];
+        return "\x02" . (count($links) - 1) . "\x03";
+    }, $text) ?? $text;
+
+    $html = render_emphasis(h($tokenised));
+
+    return preg_replace_callback('/\x02(\d+)\x03/', function ($m) use ($links) {
+        [$href, $label] = $links[(int) $m[1]];
         $external = preg_match('#^https?://#i', $href) && strcasecmp((string) parse_url($href, PHP_URL_HOST), (string) parse_url((string) config('site_url'), PHP_URL_HOST)) !== 0;
-        $html .= '<a href="' . h($href) . '"' . ($external ? ' target="_blank" rel="noopener"' : '') . '>' . render_emphasis(h($m[1][0])) . '</a>';
-    }
-    return $html . render_emphasis(h(substr($text, $pos)));
+        return '<a href="' . h($href) . '"' . ($external ? ' target="_blank" rel="noopener"' : '') . '>' . render_emphasis(h($label)) . '</a>';
+    }, $html) ?? $html;
 }
 
 /**
- * **bold**, *italic* and ~smaller~ inside text that has already been made safe. Marks with a
- * space just inside them (as in "3 * 4 * 5") are left alone, so ordinary writing isn't changed.
+ * **bold**, *italic* and ~smaller~ inside text that has already been made safe. Styles can be
+ * put together — *~words~* is italic and smaller — by taking the outermost mark first and then
+ * doing the same inside it. Marks with a space just inside them (as in "3 * 4 * 5") are ordinary
+ * writing and are left alone.
  */
 function render_emphasis(string $safe): string
 {
-    foreach ([['/\*\*([^*\n]{1,500}?)\*\*/u', 'strong'], ['/\*([^*\n]{1,500}?)\*/u', 'em'], ['/~([^~\n]{1,500}?)~/u', 'small']] as [$pattern, $tag]) {
-        $safe = preg_replace_callback(
-            $pattern,
-            fn ($m) => trim($m[1]) === $m[1] && $m[1] !== '' ? "<$tag>{$m[1]}</$tag>" : $m[0],
-            $safe
-        ) ?? $safe;
+    $marks = [
+        ['/\*\*([^*\n]{1,500}?)\*\*/u', 'strong'],
+        ['/\*([^*\n]{1,500}?)\*/u', 'em'],
+        ['/~([^~\n]{1,500}?)~/u', 'small'],
+    ];
+    $best = null;
+    foreach ($marks as [$pattern, $tag]) {
+        $offset = 0;
+        while (preg_match($pattern, $safe, $m, PREG_OFFSET_CAPTURE, $offset)) {
+            if ($m[1][0] !== '' && trim($m[1][0]) === $m[1][0]) {
+                if ($best === null || $m[0][1] < $best[0]) {
+                    $best = [$m[0][1], strlen($m[0][0]), $m[1][0], $tag];
+                }
+                break;
+            }
+            $offset = $m[0][1] + 1;
+        }
     }
-    return $safe;
+    if ($best === null) {
+        return $safe;
+    }
+    [$at, $length, $inner, $tag] = $best;
+    return substr($safe, 0, $at) . "<$tag>" . render_emphasis($inner) . "</$tag>" . render_emphasis(substr($safe, $at + $length));
 }
 
 /**

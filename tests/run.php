@@ -276,5 +276,26 @@ check('italic works beside a picture', str_contains(render_text("![](images/setu
 *Galaxy S27*"), '<em>Galaxy S27</em>'), render_text("![](images/setup.jpeg)
 *Galaxy S27*"));
 
+// ---- Styles put together, and quotations ---------------------------------------------------------
+same('italic and smaller together', render_inline('*~both~*'), '<em><small>both</small></em>');
+same('smaller and italic the other way round', render_inline('~*both*~'), '<small><em>both</em></small>');
+same('bold and smaller together', render_inline('**~bold small~**'), '<strong><small>bold small</small></strong>');
+same('styles can wrap a link', render_inline('*~[a link](/x.html)~*'), '<em><small><a href="/x.html">a link</a></small></em>');
+same('a link can hold styles', render_inline('[**bold** words](/x.html)'), '<a href="/x.html"><strong>bold</strong> words</a>');
+same('several styled words in one line', render_inline('*a* and ~b~ and **c**'), '<em>a</em> and <small>b</small> and <strong>c</strong>');
+same('a quotation', render_text('> We do not teach computers. We teach people.'), '<blockquote class="prose-quote"><p>We do not teach computers. We teach people.</p></blockquote>');
+same('a quotation over two lines', render_text("> First line.
+> Second line."), '<blockquote class="prose-quote"><p>First line.<br>Second line.</p></blockquote>');
+check('a quotation ends at a blank line', str_contains(render_text("> A quote.
+
+Back to normal."), '</blockquote><p>Back to normal.</p>'), render_text("> A quote.
+
+Back to normal."));
+same('styles work inside a quotation', render_text('> Be *brave*.'), '<blockquote class="prose-quote"><p>Be <em>brave</em>.</p></blockquote>');
+check('a quotation does not run beside a picture', !str_contains(render_text("![](images/setup.jpeg)
+> A quote."), 'prose-beside'), render_text("![](images/setup.jpeg)
+> A quote."));
+same('a greater-than sign in ordinary writing is kept', render_text('5 > 3 is true'), '<p>5 &gt; 3 is true</p>');
+
 echo PHP_EOL . ($failures ? "$failures FAILED, " : '') . "$passes passed" . PHP_EOL;
 exit($failures ? 1 : 0);
