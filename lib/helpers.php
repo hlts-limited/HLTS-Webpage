@@ -145,6 +145,10 @@ function log_event(string $event, string $details = ''): void
  * "- " bullet lists, and inside them [words](https://address) for a link and
  * **words** for bold. Everything is escaped first, so admin-entered text can
  * never inject markup.
+ *
+ * Pictures: ![Caption](images/…) on a line of its own, with a blank line after it, fills the
+ * width of the text. Written on the line directly above a paragraph (no blank line between),
+ * the picture is smaller and the paragraph runs beside it.
  */
 function render_text(string $text): string
 {
@@ -163,13 +167,21 @@ function render_text(string $text): string
         }
     };
 
-    foreach (preg_split('/\R/', trim($text)) ?: [] as $line) {
-        $trimmed = trim($line);
+    $lines = preg_split('/\R/', trim($text)) ?: [];
+    for ($i = 0; $i < count($lines); $i++) {
+        $trimmed = trim($lines[$i]);
         if ($trimmed === '') {
             $flush();
         } elseif (preg_match('/^!\[([^\]\n]{0,300})\]\(([^()\s]{1,300})\)$/u', $trimmed, $picture)) {
             $flush();
-            $html .= render_picture($picture[1], $picture[2]);
+            // Text on the very next line runs beside the picture; a blank line means full width.
+            $beside = [];
+            while (isset($lines[$i + 1]) && !is_block_line(trim($lines[$i + 1]))) {
+                $beside[] = trim($lines[++$i]);
+            }
+            $html .= $beside
+                ? render_picture_beside($picture[1], $picture[2], $beside)
+                : render_picture($picture[1], $picture[2]);
         } elseif (str_starts_with($trimmed, '### ')) {
             $flush();
             $html .= '<h3>' . render_inline(substr($trimmed, 4)) . '</h3>';
@@ -213,6 +225,37 @@ function render_picture(string $caption, string $src): string
         $html .= '<figcaption>' . h($caption) . '</figcaption>';
     }
     return $html . '</figure>';
+}
+
+/** A line that starts something of its own, so it never runs beside a picture. */
+function is_block_line(string $line): bool
+{
+    return $line === ''
+        || str_starts_with($line, '## ')
+        || str_starts_with($line, '### ')
+        || str_starts_with($line, '- ')
+        || (bool) preg_match('/^!\[/', $line);
+}
+
+/**
+ * A smaller picture with a paragraph running beside it, as a news site shows a thumbnail next to
+ * each item. Written as the picture line with the text on the line directly below it.
+ */
+function render_picture_beside(string $caption, string $src, array $lines): string
+{
+    $path = post_image_path($src);
+    $text = '<div class="prose-beside__text"><p>' . implode('<br>', array_map('render_inline', $lines)) . '</p></div>';
+    if ($path === null) {
+        return '<p>' . h('![' . $caption . '](' . $src . ')') . '</p>' . str_replace(['<div class="prose-beside__text">', '</div>'], '', $text);
+    }
+    $caption = trim($caption);
+    $size = @getimagesize(APP_ROOT . '/' . $path);
+    $dimensions = $size && $size[0] > 0 ? ' width="' . (int) $size[0] . '" height="' . (int) $size[1] . '"' : '';
+    $picture = '<figure class="prose-beside__picture"><img src="' . h(img($path)) . '"' . $dimensions . ' alt="' . h($caption) . '" loading="lazy" decoding="async">';
+    if ($caption !== '') {
+        $picture .= '<figcaption>' . h($caption) . '</figcaption>';
+    }
+    return '<div class="prose-beside">' . $picture . '</figure>' . $text . '</div>';
 }
 
 /** A picture stored on this website (images/…), or null. Nothing that could run as code. */

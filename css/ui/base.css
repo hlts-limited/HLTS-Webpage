@@ -335,3 +335,38 @@ video {
   font-size: var(--fs-sm);
   color: var(--muted);
 }
+
+/* A smaller picture with the paragraph running beside it */
+.prose-beside {
+  display: flex;
+  gap: clamp(14px, 3vw, 24px);
+  align-items: flex-start;
+  margin: 1.6em 0;
+}
+
+.prose-beside__picture {
+  flex: 0 0 clamp(84px, 22%, 150px);
+  margin: 0;
+}
+
+.prose-beside__picture img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.prose-beside__picture figcaption {
+  margin-top: 6px;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+.prose-beside__text > p {
+  margin: 0;
+}
+
+.prose-beside + .prose-beside {
+  padding-top: 1.6em;
+  border-top: 1px solid var(--line);
+}

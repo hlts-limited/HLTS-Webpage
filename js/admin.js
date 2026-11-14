@@ -161,7 +161,10 @@
     picker.type = 'file';
     picker.accept = 'image/jpeg,image/png,image/webp';
     picker.hidden = true;
-    const addPicture = button('Add picture', 'Put a picture from your device into the text', () => picker.click());
+    // Which shape the next upload takes: on its own across the width, or small with text beside it.
+    let beside = false;
+    const addPicture = button('Add picture', 'A picture across the width of the text', () => { beside = false; picker.click(); });
+    const addBeside = button('Picture beside text', 'A smaller picture with a paragraph running beside it', () => { beside = true; picker.click(); });
     bar.appendChild(picker);
 
     picker.addEventListener('change', async () => {
@@ -177,8 +180,10 @@
       const body = new FormData();
       body.append('csrf_token', token ? token.value : '');
       body.append('picture', file);
-      addPicture.disabled = true;
-      addPicture.textContent = 'Uploading…';
+      const pressed = beside ? addBeside : addPicture;
+      const pressedLabel = pressed.textContent;
+      pressed.disabled = true;
+      pressed.textContent = 'Uploading…';
       try {
         const response = await fetch('/admin/upload.php', { method: 'POST', body, headers: { Accept: 'application/json' }, credentials: 'same-origin' });
         const result = await response.json();
@@ -186,20 +191,24 @@
           window.alert(result.message || 'That picture could not be uploaded.');
           return;
         }
-        // On its own line, with the cursor between the brackets so a caption can be typed.
-        replaceSelection(box, '\n\n![](' + result.path + ')\n\n', 4, 4);
+        // Beside text: the words go on the very next line, ready to be typed over. On its own:
+        // the picture line alone, with the cursor between the brackets for a caption.
+        const words = 'Write the text that goes beside the picture here.';
+        const line = '\n\n![](' + result.path + ')\n';
+        if (beside) replaceSelection(box, line + words + '\n\n', line.length, line.length + words.length);
+        else replaceSelection(box, line + '\n', 4, 4);
         // Show it straight away, so there is no doubt the picture is in the post.
         details.open = true;
         renderPreview(box.value, previewBody);
         details.scrollIntoView({ block: 'nearest' });
         box.focus();
-        help.textContent = 'Picture added. Type a caption between the brackets, or leave it empty.';
+        help.textContent = beside ? 'Picture added. Type the words that go beside it, over the highlighted text.' : 'Picture added. Type a caption between the brackets, or leave it empty.';
         window.setTimeout(() => { help.textContent = HINT; }, 8000);
       } catch (e) {
         window.alert('That picture could not be uploaded. Check your connection and try again.');
       } finally {
-        addPicture.disabled = false;
-        addPicture.textContent = 'Add picture';
+        pressed.disabled = false;
+        pressed.textContent = pressedLabel;
         picker.value = '';
       }
     });
@@ -227,9 +236,8 @@
     box.addEventListener('input', draw);
   }
 
-  /** The preview, built from DOM nodes (never HTML strings), following render_text() in helpers.php. */
   /** A picture in the preview. Same rule as post_image_path() in lib/helpers.php: our images only. */
-  function pictureFigure(caption, src) {
+  function pictureFigure(caption, src, beside) {
     const path = src.trim().replace(/^\/+/, '');
     if (path.includes('..') || path.includes('\\') || !/^images\/[\w.\- ]+(\/[\w.\- ]+)*\.(jpe?g|png|webp|gif)$/i.test(path)) {
       const bad = document.createElement('p');
@@ -241,7 +249,7 @@
       return bad;
     }
     const figure = document.createElement('figure');
-    figure.className = 'prose-figure';
+    figure.className = beside ? 'prose-beside__picture' : 'prose-figure';
     const image = document.createElement('img');
     image.src = '/' + path.split('/').map(encodeURIComponent).join('/');
     image.alt = caption.trim();
@@ -287,14 +295,39 @@
         list = [];
       }
     };
-    text.trim().split(/\r?\n/).forEach((raw) => {
-      const line = raw.trim();
-      if (!line) return flush();
+    const lines = text.trim().split(/\r?\n/);
+    // A line that starts something of its own, so it never runs beside a picture (is_block_line).
+    const isBlock = (l) => !l || /^(#{2,3} |- |!\[)/.test(l);
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) {
+        flush();
+        continue;
+      }
       const picture = /^!\[([^\]\n]{0,300})\]\(([^()\s]{1,300})\)$/.exec(line);
       const heading = /^(#{2,3}) (.*)$/.exec(line);
       if (picture) {
         flush();
-        into.appendChild(pictureFigure(picture[1], picture[2]));
+        // Text on the very next line runs beside the picture; a blank line means full width.
+        const words = [];
+        while (i + 1 < lines.length && !isBlock(lines[i + 1].trim())) words.push(lines[++i].trim());
+        if (!words.length) {
+          into.appendChild(pictureFigure(picture[1], picture[2]));
+          continue;
+        }
+        const block = document.createElement('div');
+        block.className = 'prose-beside';
+        block.appendChild(pictureFigure(picture[1], picture[2], true));
+        const side = document.createElement('div');
+        side.className = 'prose-beside__text';
+        const p = document.createElement('p');
+        words.forEach((w, n) => {
+          if (n) p.appendChild(document.createElement('br'));
+          inline(w, p);
+        });
+        side.appendChild(p);
+        block.appendChild(side);
+        into.appendChild(block);
       } else if (heading) {
         flush();
         const h = document.createElement(heading[1] === '##' ? 'h2' : 'h3');
@@ -307,7 +340,7 @@
         if (list.length) flush();
         paragraph.push(line);
       }
-    });
+    }
     flush();
     if (!into.childNodes.length) {
       const empty = document.createElement('p');

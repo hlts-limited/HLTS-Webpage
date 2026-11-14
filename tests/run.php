@@ -221,5 +221,43 @@ same('spaces in a file name are kept safe', post_image_path('images/2025meeting/
 same('a backslash path is refused', post_image_path('images\evil.jpg'), null);
 same('an image line inside a paragraph stays text', render_text('See ![x](images/setup.jpeg) here'), '<p>See ![x](images/setup.jpeg) here</p>');
 
+// ---- A smaller picture with the text beside it --------------------------------------------------
+$beside = render_text("![](images/setup.jpeg)
+**Galaxy S27**
+Standard flagship model.");
+check('text on the next line runs beside the picture', str_starts_with($beside, '<div class="prose-beside">') && str_contains($beside, 'prose-beside__picture') && str_contains($beside, '<div class="prose-beside__text"><p><strong>Galaxy S27</strong><br>Standard flagship model.</p></div>'), $beside);
+check('a blank line after the picture keeps it full width', str_starts_with(render_text("![](images/setup.jpeg)
+
+A paragraph."), '<figure class="prose-figure">'), render_text("![](images/setup.jpeg)
+
+A paragraph."));
+check('two of them follow each other', substr_count(render_text("![](images/setup.jpeg)
+One.
+
+![](images/setup.jpeg)
+Two."), '<div class="prose-beside">') === 2, render_text("![](images/setup.jpeg)
+One.
+
+![](images/setup.jpeg)
+Two."));
+check('a heading under a picture stays a heading', str_contains(render_text("![](images/setup.jpeg)
+## A heading"), '<h2>A heading</h2>') && !str_contains(render_text("![](images/setup.jpeg)
+## A heading"), 'prose-beside'), render_text("![](images/setup.jpeg)
+## A heading"));
+check('a bullet under a picture stays a bullet', str_contains(render_text("![](images/setup.jpeg)
+- An item"), '<ul><li>An item</li></ul>'), render_text("![](images/setup.jpeg)
+- An item"));
+check('two pictures in a row do not merge', substr_count(render_text("![](images/setup.jpeg)
+![](images/setup.jpeg)"), '<figure class="prose-figure">') === 2, render_text("![](images/setup.jpeg)
+![](images/setup.jpeg)"));
+check('links and bold work in the text beside', str_contains(render_text("![](images/setup.jpeg)
+See [our pricing](/pricing.html)."), '<a href="/pricing.html">our pricing</a>'), render_text("![](images/setup.jpeg)
+See [our pricing](/pricing.html)."));
+check('a picture that is not ours keeps its text', str_contains(render_text("![](https://evil.example/x.jpg)
+Some words."), 'Some words.'), render_text("![](https://evil.example/x.jpg)
+Some words."));
+same('the picture beside text carries its real size', (bool) preg_match('/prose-beside__picture"><img [^>]*width="\d+" height="\d+"/', render_text("![](images/setup.jpeg)
+Words.")), true);
+
 echo PHP_EOL . ($failures ? "$failures FAILED, " : '') . "$passes passed" . PHP_EOL;
 exit($failures ? 1 : 0);

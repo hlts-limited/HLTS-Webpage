@@ -381,6 +381,18 @@ body.blog-dark .prose-figure figcaption {
   color: var(--blog-muted);
 }
 
+body.blog-dark .prose-beside__picture img {
+  border: 1px solid var(--blog-line);
+}
+
+body.blog-dark .prose-beside__picture figcaption {
+  color: var(--blog-muted);
+}
+
+body.blog-dark .prose-beside + .prose-beside {
+  border-top-color: var(--blog-line);
+}
+
 body.blog-dark .prose h2,
 body.blog-dark .prose h3 {
   color: #ffffff;
