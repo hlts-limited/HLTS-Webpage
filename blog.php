@@ -43,7 +43,7 @@ page_start([
     <?= blog_card($featured, true) ?>
 <?php if ($posts): ?>
     <h2 class="blog-section__title"><?= $category !== '' ? h($category) : 'Latest posts' ?></h2>
-    <div class="blog-grid" data-reveal-group>
+    <div class="blog-grid blog-grid--compact" data-reveal-group>
 <?php foreach ($posts as $post): ?>
       <?= blog_card($post) ?>
 <?php endforeach; ?>

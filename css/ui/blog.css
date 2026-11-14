@@ -186,6 +186,47 @@ body.blog-dark .site-main,
   .blog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+/* Blog page: smaller cards, up to six in a row (two on a phone) */
+.blog-grid.blog-grid--compact {
+  grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 5 * 16px) / 6)), 1fr));
+  gap: 16px;
+}
+
+.blog-grid--compact .blog-card__body {
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.blog-grid--compact .blog-card h3 {
+  font-size: var(--fs-base);
+  line-height: 1.3;
+}
+
+.blog-grid--compact .blog-card p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  font-size: var(--fs-sm);
+}
+
+.blog-grid--compact .blog-card__meta {
+  gap: 8px;
+  font-size: calc(0.68rem * var(--type-scale));
+}
+
+.blog-grid--compact .blog-card__more {
+  font-size: var(--fs-sm);
+}
+
+.blog-grid--compact .blog-card__play {
+  right: 8px;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+}
+
 .blog-card {
   display: flex;
   flex-direction: column;
