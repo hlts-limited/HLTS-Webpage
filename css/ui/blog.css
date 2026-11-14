@@ -669,3 +669,17 @@ body.blog-dark .empty-state {
     transition: none;
   }
 }
+
+/* Shown at the top of a post opened with "Save and view as published" */
+.draft-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding: 12px 16px;
+  border: 1px solid var(--violet-400);
+  border-radius: var(--radius-md);
+  background: rgba(165, 108, 255, 0.12);
+  color: #ffffff;
+  font-size: var(--fs-sm);
+}

@@ -194,6 +194,10 @@ if (is_post()) {
 
         if ($row) {
             db_update($table, (int) $row['id'], $values);
+            // "Save and view as published": open the post as visitors will see it (in its own tab).
+            if ($typeKey === 'posts' && ($_POST['then'] ?? '') === 'preview') {
+                redirect(page_url('post', ['p' => $row['slug'], 'preview' => 1]));
+            }
             admin_notice(ucfirst($type['single']) . ' saved.', "$base&id=" . $row['id']);
         }
         $values['created_at'] = now();
@@ -279,6 +283,11 @@ if ($action === 'list'):
       </div>
 <?php endforeach; ?>
       <button class="btn-hl btn-hl--primary btn-hl--block" type="submit"><?= icon('check-lg') ?> <span>Save</span></button>
+<?php if ($typeKey === 'posts' && $row): ?>
+      <button class="btn-hl btn-hl--ghost btn-hl--block" type="submit" name="then" value="preview" formtarget="_blank"><?= icon('eye') ?> <span>Save and view as published</span></button>
+<?php elseif ($typeKey === 'posts'): ?>
+      <p class="field-help mb-0">Save once, then you can view the post as visitors will see it before publishing.</p>
+<?php endif; ?>
 <?php if ($row && $type['public'] && ($row['status'] ?? '') === 'published'): ?>
       <a class="btn-hl btn-hl--ghost btn-hl--block" href="<?= h(($type['public'])($row)) ?>" target="_blank" rel="noopener"><?= icon('box-arrow-up-right') ?> <span>View on website</span></a>
 <?php endif; ?>

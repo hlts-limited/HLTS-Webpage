@@ -495,37 +495,314 @@
 
 /* ---- Post text: formatting buttons and preview --------------------------------- */
 
-.format-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
-}
+/* ---- Post editor: toolbar, Write / Preview, pictures, status ----------------- */
 
-.format-bar__hint {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.format-preview {
-  margin-top: 8px;
-  padding: 10px 14px;
-  border: 1px solid var(--line);
+.editor {
+  container-type: inline-size;
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-md);
   background: var(--white);
 }
 
-.format-preview summary {
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
+.editor__bar {
+  position: sticky;
+  top: var(--editor-top, 0px);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--white);
 }
 
-.format-preview .prose {
-  margin-top: 10px;
-  max-height: 420px;
+.editor__group {
+  display: flex;
+  gap: 2px;
+  padding-right: 6px;
+  margin-right: 2px;
+  border-right: 1px solid var(--line);
+}
+
+.editor__group:last-child,
+.editor__group--end {
+  border-right: 0;
+}
+
+.editor__group--end {
+  margin-left: auto;
+}
+
+.editor__btn {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background var(--dur-1, 0.12s) ease, color var(--dur-1, 0.12s) ease;
+}
+
+.editor__btn:hover,
+.editor__btn:focus-visible {
+  background: var(--violet-100);
+  color: var(--violet-600);
+}
+
+.editor__btn:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.editor__glyph {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.editor__glyph small {
+  font-size: 11px;
+}
+
+/* Write / Preview tabs: used when there isn't room for both side by side */
+.editor__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.editor__tab {
+  padding: 8px 14px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.editor__tab[aria-selected="true"] {
+  border-bottom-color: var(--violet-500);
+  color: var(--ink);
+}
+
+.editor__panes {
+  display: grid;
+}
+
+.editor[data-view="write"] .editor__preview,
+.editor[data-view="preview"] .editor__write {
+  display: none;
+}
+
+.editor__write textarea {
+  display: block;
+  width: 100%;
+  min-height: 460px;
+  padding: 16px 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 14px;
+  line-height: 1.7;
+  resize: vertical;
+  box-shadow: none;
+}
+
+.editor__write textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.editor.is-dropping .editor__write {
+  outline: 2px dashed var(--violet-500);
+  outline-offset: -6px;
+}
+
+.editor.is-uploading .editor__write textarea {
+  cursor: progress;
+}
+
+.editor__preview {
+  min-height: 460px;
+  padding: 16px 22px;
   overflow: auto;
+}
+
+.editor__label {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Both side by side when the editor is wide enough */
+@container (min-width: 880px) {
+  .editor__tabs {
+    display: none;
+  }
+
+  .editor__panes {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .editor[data-view] .editor__write,
+  .editor[data-view] .editor__preview {
+    display: block;
+  }
+
+  .editor__preview {
+    max-height: 70vh;
+    border-left: 1px solid var(--line);
+  }
+}
+
+.editor__pictures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+}
+
+.editor__pictures[hidden] {
+  display: none;
+}
+
+.editor__pictures .editor__label {
+  width: 100%;
+  margin: 0;
+}
+
+.editor__thumb {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--lavender-100, #f3ebff);
+  cursor: pointer;
+}
+
+.editor__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.editor__thumb:hover,
+.editor__thumb:focus-visible {
+  border-color: var(--violet-500);
+}
+
+.editor__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.editor__stats[data-kept]::after {
+  content: " · " attr(data-kept);
+}
+
+.editor__restore {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--violet-400);
+  border-radius: var(--radius-md);
+  background: var(--violet-100);
+  font-size: 14px;
+}
+
+.editor__counter {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.editor__counter.is-long {
+  color: var(--magenta-700);
+}
+
+/* Full screen: writing and preview side by side, nothing else on the page */
+.editor.is-full {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
+}
+
+.editor.is-full .editor__bar {
+  top: 0;
+  border-radius: 0;
+}
+
+.editor.is-full .editor__tabs {
+  display: none;
+}
+
+.editor.is-full .editor__panes {
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: 1fr 1fr;
+}
+
+.editor.is-full .editor__write,
+.editor.is-full .editor__preview {
+  display: block;
+  min-height: 0;
+  overflow: auto;
+}
+
+.editor.is-full .editor__write textarea {
+  height: 100%;
+  min-height: 0;
+  resize: none;
+}
+
+.editor.is-full .editor__preview {
+  max-height: none;
+  border-left: 1px solid var(--line);
+}
+
+body.editor-is-full {
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+  .editor.is-full .editor__panes {
+    grid-template-columns: 1fr;
+  }
+
+  .editor.is-full .editor__preview {
+    display: none;
+  }
 }
 
 .format-preview__bad {

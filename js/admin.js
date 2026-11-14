@@ -77,7 +77,7 @@
       });
     }
 
-    // Bold and Add link buttons for the post text, plus a live preview of how it will look.
+    // The post editor: toolbar, Write / Preview, pictures, and writing kept safe.
     document.querySelectorAll('textarea[data-format]').forEach(initFormatting);
 
     // Print buttons
@@ -113,21 +113,74 @@
     if (selectFrom != null) box.setSelectionRange(start + selectFrom, start + selectTo);
   }
 
-  const HINT = 'Select words, then press a button.';
+  const HINT = 'Select words, then press a button. Drag or paste a photo into the box to add it.';
+
+  /** A small element with a class and optional text. */
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
 
   function initFormatting(box) {
-    const bar = document.createElement('div');
-    bar.className = 'format-bar';
+    const form = box.form;
+
+    /* ---- Layout: toolbar, Write / Preview, picture strip, status line ------------------- */
+
+    const editor = el('div', 'editor');
+    editor.dataset.view = 'write';
+    const bar = el('div', 'editor__bar');
     bar.setAttribute('role', 'toolbar');
     bar.setAttribute('aria-label', 'Text formatting');
-    const button = (label, title, onClick) => {
-      const b = document.createElement('button');
+    const tabs = el('div', 'editor__tabs');
+    tabs.setAttribute('role', 'tablist');
+    const panes = el('div', 'editor__panes');
+    const writePane = el('div', 'editor__write');
+    const previewPane = el('div', 'editor__preview');
+    const previewBody = el('div', 'prose');
+    previewPane.append(el('p', 'editor__label', 'Preview'), previewBody);
+    const strip = el('div', 'editor__pictures');
+    strip.hidden = true;
+    const foot = el('div', 'editor__foot');
+    const status = el('span', 'editor__status', HINT);
+    status.setAttribute('aria-live', 'polite');
+    const stats = el('span', 'editor__stats');
+    foot.append(status, stats);
+
+    box.before(editor);
+    writePane.appendChild(box);
+    panes.append(writePane, previewPane);
+    editor.append(bar, tabs, panes, strip, foot);
+
+    let statusTimer = 0;
+    const say = (message, seconds = 8) => {
+      status.textContent = message;
+      window.clearTimeout(statusTimer);
+      statusTimer = window.setTimeout(() => { status.textContent = HINT; }, seconds * 1000);
+    };
+
+    /* ---- Toolbar ---------------------------------------------------------------------- */
+
+    let group = null;
+    const startGroup = () => {
+      group = el('div', 'editor__group');
+      bar.appendChild(group);
+    };
+    /** A toolbar button: an icon (or a short text) with its name as a tooltip. */
+    const button = (iconName, label, onClick, text) => {
+      const b = el('button', 'editor__btn');
       b.type = 'button';
-      b.className = 'btn-hl btn-hl--ghost btn-hl--sm';
-      b.textContent = label;
-      b.title = title;
+      b.title = label;
+      b.setAttribute('aria-label', label);
+      if (iconName) {
+        const i = el('i', 'bi bi-' + iconName);
+        i.setAttribute('aria-hidden', 'true');
+        b.appendChild(i);
+      }
+      if (text) b.appendChild(text);
       b.addEventListener('click', onClick);
-      bar.appendChild(b);
+      group.appendChild(b);
       return b;
     };
 
@@ -163,22 +216,10 @@
     /** True unless this is really the other asterisk mark (one * inside a **bold** pair). */
     const isOwnMark = (around, mark) => mark !== '*' || !around.includes('**');
 
-    button('Bold', 'Bold (Ctrl+B)', () => style('**', 'bold words'));
-    button('Italic', 'Italic (Ctrl+I)', () => style('*', 'italic words'));
-    button('Smaller', 'Smaller text', () => style('~', 'smaller words'));
-
-    box.addEventListener('keydown', (event) => {
-      if (!event.ctrlKey && !event.metaKey) return;
-      const key = event.key.toLowerCase();
-      if (key !== 'b' && key !== 'i') return;
-      event.preventDefault();
-      style(key === 'b' ? '**' : '*', key === 'b' ? 'bold words' : 'italic words');
-    });
-
     /** Put a mark at the start of every selected line, or take it off if every line has it. */
     const lineStyle = (mark, sample) => {
       const value = box.value;
-      let start = value.lastIndexOf('\n', box.selectionStart - 1) + 1;
+      const start = value.lastIndexOf('\n', box.selectionStart - 1) + 1;
       let end = value.indexOf('\n', box.selectionEnd);
       if (end === -1) end = value.length;
       const lines = value.slice(start, end).split('\n');
@@ -194,14 +235,10 @@
       replaceSelection(box, next, 0, next.length);
     };
 
-    button('Heading', 'A heading above a section', () => lineStyle('## ', 'Heading'));
-    button('Bullets', 'Turn the lines into a bullet list', () => lineStyle('- ', 'First point'));
-    button('Quote', 'Set the lines apart as a quotation', () => lineStyle('> ', 'A quotation'));
-
-    button('Add link', 'Turn the selected words into a link', () => {
+    const addLink = () => {
       const words = box.value.slice(box.selectionStart, box.selectionEnd).trim();
       if (words.includes('\n')) {
-        window.alert('Select words within one paragraph, then press Add link.');
+        say('Select words within one paragraph, then press Link.');
         return;
       }
       const address = window.prompt(words ? 'Web address for “' + words + '”:' : 'Web address for the link:', 'https://');
@@ -212,86 +249,284 @@
       }
       const label = (words || 'link words').replace(/[\[\]]/g, '');
       replaceSelection(box, '[' + label + '](' + address.trim() + ')', words ? null : 1, words ? null : 1 + label.length);
-    });
+    };
 
-    // A picture is uploaded as soon as it is chosen, then written into the text where the cursor is.
-    const picker = document.createElement('input');
+    const smallerMark = el('span', 'editor__glyph');
+    smallerMark.append('A', el('small', null, 'a'));
+
+    startGroup();
+    button('type-bold', 'Bold (Ctrl+B)', () => style('**', 'bold words'));
+    button('type-italic', 'Italic (Ctrl+I)', () => style('*', 'italic words'));
+    button(null, 'Smaller text', () => style('~', 'smaller words'), smallerMark);
+    startGroup();
+    button('type-h2', 'Heading', () => lineStyle('## ', 'Heading'));
+    button('list-ul', 'Bullet list', () => lineStyle('- ', 'First point'));
+    button('quote', 'Quotation', () => lineStyle('> ', 'A quotation'));
+    startGroup();
+    button('link-45deg', 'Link (Ctrl+K)', addLink);
+    let beside = false;
+    const picker = el('input');
     picker.type = 'file';
     picker.accept = 'image/jpeg,image/png,image/webp';
     picker.hidden = true;
-    // Which shape the next upload takes: on its own across the width, or small with text beside it.
-    let beside = false;
-    const addPicture = button('Add picture', 'A picture across the width of the text', () => { beside = false; picker.click(); });
-    const addBeside = button('Picture beside text', 'A smaller picture with a paragraph running beside it', () => { beside = true; picker.click(); });
-    bar.appendChild(picker);
+    const addPicture = button('image', 'Picture across the width', () => { beside = false; picker.click(); });
+    const addBeside = button('layout-text-sidebar-reverse', 'Picture beside text', () => { beside = true; picker.click(); });
+    group.appendChild(picker);
+    startGroup();
+    group.classList.add('editor__group--end');
+    const fullButton = button('arrows-fullscreen', 'Full screen (Esc to leave)', () => setFull(!editor.classList.contains('is-full')));
 
-    picker.addEventListener('change', async () => {
-      const file = picker.files && picker.files[0];
-      if (!file) return;
-      const max = Number(bar.dataset.maxBytes) || 10 * 1024 * 1024;
-      if (file.size > max) {
-        window.alert('That picture is too large. The limit is ' + Math.round(max / 1048576) + ' MB.');
-        picker.value = '';
+    box.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && editor.classList.contains('is-full')) {
+        setFull(false);
         return;
       }
-      const token = document.querySelector('input[name=csrf_token]');
+      if (!event.ctrlKey && !event.metaKey) return;
+      const key = event.key.toLowerCase();
+      if (key === 'b' || key === 'i') {
+        event.preventDefault();
+        style(key === 'b' ? '**' : '*', key === 'b' ? 'bold words' : 'italic words');
+      } else if (key === 'k') {
+        event.preventDefault();
+        addLink();
+      }
+    });
+
+    /* ---- Write / Preview -------------------------------------------------------------- */
+
+    const tabButtons = ['write', 'preview'].map((view) => {
+      const t = el('button', 'editor__tab', view === 'write' ? 'Write' : 'Preview');
+      t.type = 'button';
+      t.setAttribute('role', 'tab');
+      t.addEventListener('click', () => setView(view));
+      tabs.appendChild(t);
+      return t;
+    });
+    const setView = (view) => {
+      editor.dataset.view = view;
+      tabButtons.forEach((t, n) => t.setAttribute('aria-selected', String((n === 0) === (view === 'write'))));
+      if (view === 'write') box.focus();
+    };
+    setView('write');
+
+    // Full screen: writing and preview side by side, with nothing else on the page.
+    const setFull = (on) => {
+      editor.classList.toggle('is-full', on);
+      document.body.classList.toggle('editor-is-full', on);
+      fullButton.querySelector('i').className = 'bi bi-' + (on ? 'fullscreen-exit' : 'arrows-fullscreen');
+      fullButton.title = on ? 'Leave full screen (Esc)' : 'Full screen (Esc to leave)';
+      fullButton.setAttribute('aria-label', fullButton.title);
+      box.focus();
+    };
+
+    // The toolbar stays in view under the admin header while a long post is written.
+    const top = document.querySelector('.admin-top');
+    const setTop = () => editor.style.setProperty('--editor-top', (top ? top.getBoundingClientRect().height : 0) + 'px');
+    setTop();
+    window.addEventListener('resize', setTop);
+
+    /* ---- Preview, word count and the pictures in the post ----------------------------- */
+
+    let drawTimer = 0;
+    const draw = () => {
+      renderPreview(box.value, previewBody);
+      const words = (previewBody.textContent.trim().match(/\S+/g) || []).length;
+      stats.textContent = words.toLocaleString() + ' words · ' + Math.max(1, Math.round(words / 200)) + ' min read';
+      drawStrip();
+    };
+    box.addEventListener('input', () => {
+      window.clearTimeout(drawTimer);
+      drawTimer = window.setTimeout(draw, 120);
+    });
+
+    /** Thumbnails of every picture in the text; pressing one finds its line in the box. */
+    const drawStrip = () => {
+      strip.replaceChildren();
+      const found = [...box.value.matchAll(/^!\[([^\]\n]*)\]\(([^()\s]+)\)\s*$/gm)];
+      strip.hidden = !found.length;
+      if (!found.length) return;
+      strip.appendChild(el('span', 'editor__label', 'Pictures in this post'));
+      found.forEach((m) => {
+        const path = m[2].replace(/^\/+/, '');
+        const thumb = el('button', 'editor__thumb');
+        thumb.type = 'button';
+        thumb.title = (m[1] || 'Picture') + ' — show it in the text';
+        const img = el('img');
+        img.alt = '';
+        img.loading = 'lazy';
+        img.src = '/' + path.split('/').map(encodeURIComponent).join('/');
+        thumb.appendChild(img);
+        thumb.addEventListener('click', () => {
+          setView('write');
+          box.focus();
+          box.setSelectionRange(m.index, m.index + m[0].trimEnd().length);
+        });
+        strip.appendChild(thumb);
+      });
+    };
+
+    /* ---- Pictures: from the buttons, dragged in, or pasted ---------------------------- */
+
+    const maxBytes = Number((document.querySelector('[data-max-bytes]') || {}).dataset?.maxBytes) || 10 * 1024 * 1024;
+
+    const upload = async (file, nextToText) => {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+        say('Only JPG, PNG or WebP photos can be added.');
+        return;
+      }
+      if (file.size > maxBytes) {
+        window.alert('That picture is too large. The limit is ' + Math.round(maxBytes / 1048576) + ' MB.');
+        return;
+      }
+      const token = form.querySelector('input[name=csrf_token]');
       const body = new FormData();
       body.append('csrf_token', token ? token.value : '');
       body.append('picture', file);
-      const pressed = beside ? addBeside : addPicture;
-      const pressedLabel = pressed.textContent;
+      const pressed = nextToText ? addBeside : addPicture;
       pressed.disabled = true;
-      pressed.textContent = 'Uploading…';
+      editor.classList.add('is-uploading');
+      say('Uploading the picture…', 60);
       try {
         const response = await fetch('/admin/upload.php', { method: 'POST', body, headers: { Accept: 'application/json' }, credentials: 'same-origin' });
         const result = await response.json();
         if (!result.ok || !result.path) {
-          window.alert(result.message || 'That picture could not be uploaded.');
+          say(result.message || 'That picture could not be uploaded.');
           return;
         }
         // Beside text: the words go on the very next line, ready to be typed over. On its own:
         // the picture line alone, with the cursor between the brackets for a caption.
         const words = 'Write the text that goes beside the picture here.';
         const line = '\n\n![](' + result.path + ')\n';
-        if (beside) replaceSelection(box, line + words + '\n\n', line.length, line.length + words.length);
+        if (nextToText) replaceSelection(box, line + words + '\n\n', line.length, line.length + words.length);
         else replaceSelection(box, line + '\n', 4, 4);
-        // Show it straight away, so there is no doubt the picture is in the post.
-        details.open = true;
-        renderPreview(box.value, previewBody);
-        details.scrollIntoView({ block: 'nearest' });
-        box.focus();
-        help.textContent = beside ? 'Picture added. Type the words that go beside it, over the highlighted text.' : 'Picture added. Type a caption between the brackets, or leave it empty.';
-        window.setTimeout(() => { help.textContent = HINT; }, 8000);
+        draw();
+        say(nextToText ? 'Picture added. Type the words that go beside it, over the highlighted text.' : 'Picture added (see the strip below). Type a caption between the brackets, or leave it empty.');
       } catch (e) {
-        window.alert('That picture could not be uploaded. Check your connection and try again.');
+        say('That picture could not be uploaded. Check your connection and try again.');
       } finally {
         pressed.disabled = false;
-        pressed.textContent = pressedLabel;
-        picker.value = '';
+        editor.classList.remove('is-uploading');
       }
+    };
+
+    picker.addEventListener('change', () => {
+      const file = picker.files && picker.files[0];
+      picker.value = '';
+      if (file) upload(file, beside);
     });
 
-    const help = document.createElement('span');
-    help.className = 'format-bar__hint';
-    help.textContent = HINT;
-    bar.appendChild(help);
-    bar.dataset.maxBytes = String(document.querySelector('[data-max-bytes]') ? document.querySelector('[data-max-bytes]').dataset.maxBytes : 10 * 1024 * 1024);
-    box.before(bar);
+    const hasFiles = (event) => event.dataTransfer && [...event.dataTransfer.types].includes('Files');
+    box.addEventListener('dragover', (event) => {
+      if (!hasFiles(event)) return;
+      event.preventDefault();
+      editor.classList.add('is-dropping');
+    });
+    box.addEventListener('dragleave', () => editor.classList.remove('is-dropping'));
+    box.addEventListener('drop', (event) => {
+      editor.classList.remove('is-dropping');
+      if (!hasFiles(event)) return;
+      event.preventDefault();
+      const file = [...event.dataTransfer.files].find((f) => f.type.startsWith('image/'));
+      if (file) upload(file, false);
+    });
+    box.addEventListener('paste', (event) => {
+      const file = [...((event.clipboardData && event.clipboardData.files) || [])].find((f) => f.type.startsWith('image/'));
+      if (!file) return;
+      event.preventDefault();
+      upload(file, false);
+    });
 
-    const details = document.createElement('details');
-    details.className = 'format-preview';
-    const summary = document.createElement('summary');
-    summary.textContent = 'Preview';
-    const previewBody = document.createElement('div');
-    previewBody.className = 'prose';
-    details.append(summary, previewBody);
-    box.after(details);
+    /* ---- Never lose writing: kept in this browser, and a warning before leaving -------- */
 
-    const draw = () => {
-      if (details.open) renderPreview(box.value, previewBody);
+    const key = 'hlts-editor:' + location.pathname + location.search;
+    const fields = () => [...form.elements].filter((f) => f.name && !['csrf_token', 'action', 'then'].includes(f.name) && !['file', 'submit', 'button'].includes(f.type));
+    const snapshot = () => JSON.stringify(Object.fromEntries(fields().map((f) => [f.name, f.value])));
+    let original = snapshot();
+    let submitting = false;
+    let saveTimer = 0;
+
+    const keep = () => {
+      const now = snapshot();
+      try {
+        if (now === original) localStorage.removeItem(key);
+        else localStorage.setItem(key, JSON.stringify({ at: Date.now(), values: JSON.parse(now) }));
+        if (now !== original) stats.dataset.kept = 'Kept in this browser ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+        /* storage unavailable: the leave warning still protects the writing */
+      }
     };
-    details.addEventListener('toggle', draw);
-    box.addEventListener('input', draw);
+    form.addEventListener('input', () => {
+      window.clearTimeout(saveTimer);
+      saveTimer = window.setTimeout(keep, 1500);
+    });
+    form.addEventListener('submit', (event) => {
+      // "Save and view as published" opens in another tab and this one stays: what is in the
+      // form now is saved, so only later changes need protecting.
+      if (event.submitter && event.submitter.formTarget === '_blank') original = snapshot();
+      else submitting = true;
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        /* nothing kept */
+      }
+    });
+    window.addEventListener('beforeunload', (event) => {
+      if (submitting || snapshot() === original) return;
+      event.preventDefault();
+      event.returnValue = '';
+    });
+
+    // Writing left behind last time (tab closed, connection lost): offer it back.
+    let stored = null;
+    try {
+      stored = JSON.parse(localStorage.getItem(key) || 'null');
+    } catch (e) {
+      stored = null;
+    }
+    if (stored && stored.values && JSON.stringify(stored.values) !== original) {
+      const notice = el('div', 'editor__restore');
+      notice.setAttribute('role', 'status');
+      const when = new Date(stored.at).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      notice.appendChild(el('span', null, 'There is unsaved writing from ' + when + ' on this computer.'));
+      const restore = el('button', 'btn-hl btn-hl--primary btn-hl--sm', 'Bring it back');
+      restore.type = 'button';
+      const discard = el('button', 'btn-hl btn-hl--ghost btn-hl--sm', 'Discard it');
+      discard.type = 'button';
+      restore.addEventListener('click', () => {
+        fields().forEach((f) => {
+          if (f.name in stored.values) f.value = stored.values[f.name];
+        });
+        notice.remove();
+        draw();
+        say('Your unsaved writing is back. Press Save to keep it.');
+      });
+      discard.addEventListener('click', () => {
+        try {
+          localStorage.removeItem(key);
+        } catch (e) {
+          /* nothing kept */
+        }
+        notice.remove();
+      });
+      notice.append(restore, discard);
+      editor.before(notice);
+    }
+
+    // The short summary: how long it is against what fits in search results.
+    const summary = form.querySelector('textarea[name=excerpt]');
+    if (summary) {
+      const counter = el('p', 'editor__counter');
+      summary.after(counter);
+      const count = () => {
+        const n = summary.value.length;
+        counter.textContent = n + ' characters' + (n > 160 ? ' — search results show about the first 160' : '');
+        counter.classList.toggle('is-long', n > 160);
+      };
+      summary.addEventListener('input', count);
+      count();
+    }
+
+    draw();
   }
 
   /** A picture in the preview. Same rule as post_image_path() in lib/helpers.php: our images only. */

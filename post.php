@@ -2,7 +2,15 @@
 require __DIR__ . '/lib/app.php';
 
 $slug = is_string($_GET['p'] ?? null) ? $_GET['p'] : '';
-$post = db_one("SELECT * FROM posts WHERE slug = ? AND status = 'published'", [$slug]);
+// "Save and view as published" in the admin: a signed-in admin can see a draft as visitors will.
+$admin = isset($_GET['preview']) ? auth_user('admin') : null;
+$preview = $admin && !empty($admin['totp_secret']);
+$post = $preview
+    ? db_one('SELECT * FROM posts WHERE slug = ?', [$slug])
+    : db_one("SELECT * FROM posts WHERE slug = ? AND status = 'published'", [$slug]);
+if ($preview) {
+    header('Cache-Control: no-store');
+}
 
 if (!$post) {
     http_response_code(404);
@@ -20,6 +28,7 @@ page_start([
     'image' => $post['cover'] ?: 'images/logoh.png',
     'page' => 'post',
     'body_class' => 'blog-dark',
+    'noindex' => $preview,
 ]);
 
 echo page_hero([
@@ -27,12 +36,15 @@ echo page_hero([
     'eyebrow' => $post['category'] ?: 'Blog',
     'title' => h($post['title']),
     'lead' => $post['excerpt'],
-    'note' => icon('calendar3') . ' ' . h(format_date($post['published_at'])) . ' &nbsp;·&nbsp; ' . icon('clock') . ' ' . max(1, (int) round($words / 200)) . ' min read',
+    'note' => icon('calendar3') . ' ' . h(format_date($post['published_at'] ?: now())) . ' &nbsp;·&nbsp; ' . icon('clock') . ' ' . max(1, (int) round($words / 200)) . ' min read',
 ]);
 ?>
 
 <section class="section">
   <div class="container" style="max-width: 900px">
+<?php if ($preview): ?>
+    <p class="draft-banner" role="status"><?= icon('eye') ?> <span><strong><?= $post['status'] === 'published' ? 'Preview.' : 'Draft preview.' ?></strong> Only signed-in admins can see this page<?= $post['status'] === 'published' ? '' : '; visitors will see it once it is published' ?>.</span></p>
+<?php endif; ?>
 <?php if ($video = youtube_id((string) ($post['video_url'] ?? ''))): ?>
     <div class="post-video" data-reveal="zoom"><?= youtube_player($video, $post['title']) ?></div>
 <?php elseif ($post['cover']): ?>
