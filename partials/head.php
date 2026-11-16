@@ -64,21 +64,41 @@ $stylesheets = [
     <link rel="icon" href="/images/brand/logo-64.png" type="image/png">
     <link rel="apple-touch-icon" href="/images/brand/logo-192.png">
 
+    <!-- Tells search engines the company's full and short names, so a search for any of them finds this site. -->
     <script type="application/ld+json"><?= json_encode([
         '@context' => 'https://schema.org',
-        '@type' => 'EducationalOrganization',
-        'name' => 'HLTS Limited',
-        'url' => config('site_url'),
-        'logo' => absolute_url('images/logoh.png'),
-        'telephone' => config('phone'),
-        'email' => config('email_public'),
-        'address' => ['@type' => 'PostalAddress', 'streetAddress' => '8 Assembly Close, Folagoro', 'addressLocality' => 'Somolu, Lagos', 'addressCountry' => 'NG'],
-        'sameAs' => [
-            'https://web.facebook.com/profile.php?id=61551105837140',
-            'https://www.instagram.com/hltslimited/',
-            'https://www.linkedin.com/company/high-level-tech-services-limited',
+        '@graph' => [
+            [
+                '@type' => ['Organization', 'EducationalOrganization'],
+                '@id' => absolute_url('') . '#organization',
+                'name' => 'HLTS Limited',
+                'legalName' => 'High Level Tech Services Limited',
+                'alternateName' => ['HLTS', 'HLTS Ltd', 'HLTS Limited', 'High Level Tech Services', 'High Level Tech Services Ltd', 'HLTS Technology'],
+                'description' => 'High Level Tech Services Limited (HLTS) is an education technology (EdTech) and technology company in Lagos, Nigeria: school technology and operations, CBT, result management, tech courses, software and IT support.',
+                'url' => config('site_url'),
+                'logo' => absolute_url('images/logoh.png'),
+                'image' => absolute_url('images/logoh.png'),
+                'telephone' => config('phone'),
+                'email' => config('email_public'),
+                'address' => ['@type' => 'PostalAddress', 'streetAddress' => '8 Assembly Close, Folagoro', 'addressLocality' => 'Somolu', 'addressRegion' => 'Lagos', 'addressCountry' => 'NG'],
+                'areaServed' => ['@type' => 'Country', 'name' => 'Nigeria'],
+                'knowsAbout' => ['Education technology', 'EdTech', 'School management software', 'Computer-based testing (CBT)', 'Result management', 'Tech training', 'Software development', 'Web design', 'IT support'],
+                'sameAs' => [
+                    'https://web.facebook.com/profile.php?id=61551105837140',
+                    'https://www.instagram.com/hltslimited/',
+                    'https://www.linkedin.com/company/high-level-tech-services-limited',
+                ],
+            ],
+            [
+                '@type' => 'WebSite',
+                '@id' => absolute_url('') . '#website',
+                'name' => 'HLTS',
+                'alternateName' => ['HLTS Limited', 'High Level Tech Services Limited'],
+                'url' => config('site_url'),
+                'publisher' => ['@id' => absolute_url('') . '#organization'],
+            ],
         ],
-    ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) ?></script>
   </head>
 
   <body class="<?= h(trim('page-' . $meta['page'] . ' ' . $meta['body_class'])) ?>">

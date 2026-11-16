@@ -2,8 +2,8 @@
 require __DIR__ . '/lib/app.php';
 
 page_start([
-    'title' => 'About HLTS Limited – Our mission, values and team',
-    'description' => 'HLTS Limited is a Lagos EdTech company transforming lives through education, technology and sustainable development.',
+    'title' => 'About HLTS Limited (High Level Tech Services) – Tech & EdTech company in Nigeria',
+    'description' => 'High Level Tech Services Limited (HLTS) is a technology and education technology (EdTech) company in Lagos, Nigeria, transforming lives through education, technology and sustainable development.',
 ]);
 
 $gallery = [
@@ -19,7 +19,7 @@ echo page_hero([
     'crumbs' => [['Company'], ['About']],
     'eyebrow' => 'Our story',
     'title' => 'Transforming lives through <span class="grad-text">education and technology.</span>',
-    'lead' => 'HLTS Limited is a Lagos-based technology company making technology practical and accessible for schools, learners and communities across Africa.',
+    'lead' => 'HLTS Limited (High Level Tech Services Limited) is a Lagos-based technology and EdTech company making technology practical and accessible for schools, learners and communities across Africa.',
     'actions' => button('Meet the team', '#team', 'primary', 'arrow-down') . button('Work with us', page_url('careers'), 'ghost-light', 'briefcase'),
     'visual' => photo_frame('images/2027images/WhatsApp Image 2026-09-26 at 3.21.18 PM.jpeg', 'HLTS members at a recent event', 'Education and technology, built together', 'HLTS in action', true),
 ]);
@@ -30,7 +30,7 @@ echo page_hero([
     <div>
       <?= section_head('Who we are', 'A catalyst for a more digital Africa.', '', 'left') ?>
       <div class="prose" data-reveal>
-        <p>HLTS Limited is a forward-thinking technology company focused on using innovation, digital tools and modern IT to solve real problems and drive sustainable development across Africa.</p>
+        <p>High Level Tech Services Limited, known as HLTS or HLTS Ltd, is a forward-thinking Nigerian technology company focused on using innovation, digital tools and modern IT to solve real problems and drive sustainable development across Africa.</p>
         <p>We empower individuals, schools, businesses and institutions through education technology, school operations, digital skills training, software development and technology integration.</p>
         <p>We aim to bridge the digital divide by making technology more accessible and practical for everyday use.</p>
       </div>

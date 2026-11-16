@@ -14,7 +14,7 @@ function page_start(array $meta = []): void
 {
     $GLOBALS['page'] = array_merge([
         'title' => 'HLTS Limited – Education, technology and people',
-        'description' => 'HLTS Limited is a Lagos EdTech company supporting primary and secondary schools with technology, operations and staff, running the HLTS Online Institution and the TechMind Africa community, and building digital solutions.',
+        'description' => 'HLTS (High Level Tech Services Limited) is a Lagos, Nigeria EdTech company supporting primary and secondary schools with technology, operations and staff, running the HLTS Online Institution and the TechMind Africa community, and building digital solutions.',
         'page' => basename($_SERVER['SCRIPT_NAME'] ?? 'index.php', '.php'),
         'body_class' => '',
         'scripts' => [],

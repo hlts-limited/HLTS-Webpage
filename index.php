@@ -2,7 +2,8 @@
 require __DIR__ . '/lib/app.php';
 
 page_start([
-    'title' => 'HLTS Limited – One partner for the whole learning journey',
+    'title' => 'HLTS Ltd (High Level Tech Services) – Education Technology Company in Nigeria',
+    'description' => 'HLTS (High Level Tech Services Limited) is an EdTech and technology company in Lagos, Nigeria. School software, CBT, result management, tech courses, websites, apps and IT support.',
     'page' => 'index',
 ]);
 
@@ -93,7 +94,7 @@ try {
     <div class="home-hero__copy">
       <div data-reveal><?= eyebrow('Education · Technology · People') ?></div>
       <h1 class="home-hero__title" data-reveal data-reveal-delay="1">One partner for the whole <span class="grad-text">learning journey.</span></h1>
-      <p class="lead" data-reveal data-reveal-delay="2">HLTS helps primary and secondary schools run better, teaches practical tech skills, grows a community of African builders, and creates the digital tools that connect them.</p>
+      <p class="lead" data-reveal data-reveal-delay="2">HLTS (High Level Tech Services Limited) is an education technology company in Lagos, Nigeria. We help primary and secondary schools run better, teaches practical tech skills, grows a community of African builders, and creates the digital tools that connect them.</p>
       <div class="actions" data-reveal data-reveal-delay="3">
         <?= button('Find your path', '#paths', 'primary', 'arrow-down-right') ?>
         <?= button('Book a school demo', page_url('book-demo'), 'ghost-light', 'calendar-check') ?>

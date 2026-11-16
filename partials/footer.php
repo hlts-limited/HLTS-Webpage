@@ -63,7 +63,7 @@ $footerColumns = ['schools', 'learn', 'build', 'company'];
         </div>
 
         <div class="site-footer__bottom">
-          <span>&copy; <?= date('Y') ?> HLTS Limited. All rights reserved.</span>
+          <span>&copy; <?= date('Y') ?> High Level Tech Services Limited (HLTS Ltd), Lagos, Nigeria. All rights reserved.</span>
           <span><a href="<?= h(page_url('privacy')) ?>">Privacy Policy</a> · <a href="<?= h(page_url('terms')) ?>">Terms</a> · <a href="<?= h(page_url('faq')) ?>">Help</a> · <a href="/admin/">Staff sign-in</a></span>
         </div>
       </div>
