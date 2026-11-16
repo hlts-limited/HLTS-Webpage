@@ -36,6 +36,7 @@ echo page_hero([
     'eyebrow' => $post['category'] ?: 'Blog',
     'title' => h($post['title']),
     'lead' => $post['excerpt'],
+    'byline' => post_byline($post),
     'note' => icon('calendar3') . ' ' . h(format_date($post['published_at'] ?: now())) . ' &nbsp;·&nbsp; ' . icon('clock') . ' ' . max(1, (int) round($words / 200)) . ' min read',
 ]);
 ?>

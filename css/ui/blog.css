@@ -311,6 +311,75 @@ body.blog-dark .site-main,
   color: #5b93f5;
 }
 
+/* "By Name" with a round photo (or initials), on posts and cards */
+.byline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.byline__photo {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--violet-500, #6d28d9);
+}
+
+span.byline__photo {
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+
+.byline__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.byline__name strong {
+  color: var(--blog-text, inherit);
+  font-weight: 700;
+}
+
+.page-hero__byline {
+  display: flex;
+  margin: 26px 0 0;
+  font-size: var(--fs-base);
+}
+
+.page-hero__byline + .page-hero__note {
+  margin-top: 12px;
+}
+
+.blog-card .byline {
+  font-size: var(--fs-sm);
+  color: var(--blog-muted);
+  gap: 8px;
+}
+
+.blog-card .byline__photo {
+  width: 28px;
+  height: 28px;
+}
+
+.blog-card .byline span.byline__photo {
+  font-size: 0.68rem;
+}
+
+.blog-grid--compact .blog-card .byline__photo {
+  width: 24px;
+  height: 24px;
+}
+
 /* The newest post, wide, picture beside the text */
 @media (min-width: 900px) {
   .blog-card--featured {

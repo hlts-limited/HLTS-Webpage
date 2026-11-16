@@ -297,5 +297,13 @@ check('a quotation does not run beside a picture', !str_contains(render_text("![
 > A quote."));
 same('a greater-than sign in ordinary writing is kept', render_text('5 > 3 is true'), '<p>5 &gt; 3 is true</p>');
 
+// ---- Post authors -------------------------------------------------------------------------------
+same('no author, no byline', post_byline(['author_name' => '  ']), '');
+check('an author with a photo', str_contains(post_byline(['author_name' => 'Ada Obi', 'author_photo' => 'images/setup.jpeg']), '<img class="byline__photo" src="/images/setup.jpeg"') && str_contains(post_byline(['author_name' => 'Ada Obi', 'author_photo' => 'images/setup.jpeg']), 'By <strong>Ada Obi</strong>'), post_byline(['author_name' => 'Ada Obi', 'author_photo' => 'images/setup.jpeg']));
+check('initials when there is no photo', str_contains(post_byline(['author_name' => 'ada obi nwosu']), '>AO</span>'), post_byline(['author_name' => 'ada obi nwosu']));
+check('initials when the photo is missing from the server', str_contains(post_byline(['author_name' => 'Ada', 'author_photo' => 'images/gone.jpg']), '>A</span>'), post_byline(['author_name' => 'Ada', 'author_photo' => 'images/gone.jpg']));
+check('an author name cannot inject markup', !str_contains(post_byline(['author_name' => '<b>x</b>']), '<b>'), post_byline(['author_name' => '<b>x</b>']));
+check('the posts table has the author columns', array_key_exists('author_name', db_one('SELECT * FROM posts LIMIT 1') ?? ['author_name' => 1]) && array_key_exists('author_photo', db_one('SELECT * FROM posts LIMIT 1') ?? ['author_photo' => 1]));
+
 echo PHP_EOL . ($failures ? "$failures FAILED, " : '') . "$passes passed" . PHP_EOL;
 exit($failures ? 1 : 0);

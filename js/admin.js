@@ -42,6 +42,19 @@
       });
     });
 
+    // Picking an author who wrote before brings back their photo.
+    const authorName = document.querySelector('[data-author-name]');
+    const authorPhoto = document.querySelector('[data-author-photo]');
+    if (authorName && authorPhoto && authorName.list) {
+      authorName.addEventListener('change', () => {
+        const known = Array.from(authorName.list.options).find((o) => o.value === authorName.value.trim());
+        if (!known || !known.dataset.photo || authorPhoto.value === known.dataset.photo) return;
+        if (!Array.from(authorPhoto.options).some((o) => o.value === known.dataset.photo)) return;
+        authorPhoto.value = known.dataset.photo;
+        authorPhoto.dispatchEvent(new Event('change'));
+      });
+    }
+
     // Preview a cover photo picked from the device before it's uploaded.
     document.querySelectorAll('input[type=file][data-upload-preview]').forEach((input) => {
       const preview = document.querySelector(input.dataset.uploadPreview);

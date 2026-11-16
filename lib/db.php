@@ -96,7 +96,7 @@ function db_update(string $table, int $id, array $row): void
 
 function migrate(PDO $pdo): void
 {
-    $version = 6;
+    $version = 7;
     $marker = STORAGE_DIR . '/.schema-' . db_driver() . '-' . md5((string) config('db.name') . (string) config('db.sqlite_path'));
     if (is_file($marker) && (int) file_get_contents($marker) >= $version) {
         return;
@@ -201,6 +201,8 @@ function migrate(PDO $pdo): void
             body $text NOT NULL,
             cover VARCHAR(255) NOT NULL DEFAULT '',
             video_url VARCHAR(255) NOT NULL DEFAULT '',
+            author_name VARCHAR(120) NOT NULL DEFAULT '',
+            author_photo VARCHAR(255) NOT NULL DEFAULT '',
             status VARCHAR(20) NOT NULL DEFAULT 'draft',
             published_at VARCHAR(19) NULL,
             created_at VARCHAR(19) NOT NULL
@@ -315,6 +317,15 @@ function migrate(PDO $pdo): void
         $pdo->exec("ALTER TABLE app_sync ADD COLUMN ref VARCHAR(80) NOT NULL DEFAULT ''");
     } catch (PDOException $e) {
         // Already there.
+    }
+
+    // Version 7: the writer of a blog post, shown with their photo.
+    foreach (["author_name VARCHAR(120) NOT NULL DEFAULT ''", "author_photo VARCHAR(255) NOT NULL DEFAULT ''"] as $column) {
+        try {
+            $pdo->exec("ALTER TABLE posts ADD COLUMN $column");
+        } catch (PDOException $e) {
+            // Already there.
+        }
     }
 
     $indexes = [

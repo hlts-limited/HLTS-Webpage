@@ -126,6 +126,9 @@ function page_hero(array $o): string
     if (!empty($o['actions'])) {
         $html .= '<div class="page-hero__actions" data-reveal data-reveal-delay="3">' . $o['actions'] . '</div>';
     }
+    if (!empty($o['byline'])) {
+        $html .= '<p class="page-hero__byline" data-reveal data-reveal-delay="3">' . $o['byline'] . '</p>';
+    }
     if (!empty($o['note'])) {
         $html .= '<p class="page-hero__note" data-reveal data-reveal-delay="4">' . $o['note'] . '</p>';
     }
@@ -460,7 +463,28 @@ function blog_card(array $post, bool $featured = false): string
     if (!empty($post['excerpt'])) {
         $html .= '<p>' . h($post['excerpt']) . '</p>';
     }
+    $html .= post_byline($post);
     return $html . '<span class="blog-card__more">Read more <span aria-hidden="true">→</span></span></div></a>';
+}
+
+/** "By Name" with the author's round photo, or their initials when there is no photo; empty when no author is set. */
+function post_byline(array $post, string $class = ''): string
+{
+    $name = trim((string) ($post['author_name'] ?? ''));
+    if ($name === '') {
+        return '';
+    }
+    $photo = trim((string) ($post['author_photo'] ?? ''));
+    if ($photo !== '' && is_file(APP_ROOT . '/' . ltrim($photo, '/'))) {
+        $picture = '<img class="byline__photo" src="' . h(img($photo)) . '" alt="" width="40" height="40" loading="lazy">';
+    } else {
+        $initials = '';
+        foreach (array_slice(preg_split('/\s+/u', $name), 0, 2) as $word) {
+            $initials .= mb_strtoupper(mb_substr($word, 0, 1));
+        }
+        $picture = '<span class="byline__photo" aria-hidden="true">' . h($initials) . '</span>';
+    }
+    return '<span class="byline' . ($class !== '' ? ' ' . h($class) : '') . '">' . $picture . '<span class="byline__name">By <strong>' . h($name) . '</strong></span></span>';
 }
 
 /** A video from the YouTube channel: plays in place, with its title and date. */

@@ -24,6 +24,8 @@ function content_types(): array
                 'video_url' => ['type' => 'url', 'label' => 'YouTube video link (optional)', 'placeholder' => 'https://www.youtube.com/watch?v=…', 'help' => 'Paste the link of a video on our YouTube channel; it plays at the top of the post.'],
                 'body' => ['type' => 'textarea', 'label' => 'Post', 'rows' => 16, 'required' => true, 'format' => true, 'help' => 'Leave a blank line between paragraphs. Start a line with "## " for a heading and "- " for a bullet. To link words, select them and press Add link (written as [words](https://address)); press Bold, Italic or Smaller. Styles can be combined: *~words~* are italic and smaller. Heading, Bullets and Quote work on whole lines. Press Add picture for a photo across the width, or Picture beside text for a smaller photo with words running beside it.'],
                 'cover' => $cover,
+                'author_name' => ['type' => 'text', 'label' => 'Author name'],
+                'author_photo' => ['type' => 'image', 'label' => 'Author photo'],
                 'status' => $status,
             ],
         ],
@@ -128,15 +130,18 @@ if (is_post()) {
         admin_notice(ucfirst($type['single']) . ' deleted.', $base);
     }
 
-    // A cover uploaded from the device replaces whatever was picked from the list.
-    if (isset($type['fields']['cover'])) {
-        [$uploaded, $uploadError] = save_uploaded_image($_FILES['cover_upload'] ?? null);
+    // A picture uploaded from the device (cover or author photo) replaces whatever was picked from the list.
+    foreach (['cover', 'author_photo'] as $imageField) {
+        if (!isset($type['fields'][$imageField])) {
+            continue;
+        }
+        [$uploaded, $uploadError] = save_uploaded_image($_FILES[$imageField . '_upload'] ?? null);
         if ($uploaded) {
-            $_POST['cover'] = $uploaded;
+            $_POST[$imageField] = $uploaded;
             log_event('ADMIN_IMAGE_UPLOADED', $uploaded);
         }
         if ($uploadError) {
-            $errors['cover'] = $uploadError;
+            $errors[$imageField] = $uploadError;
         }
     }
 
@@ -169,6 +174,9 @@ if (is_post()) {
         }
         if ($field['type'] === 'image' && $value !== '' && !isset(image_choices()[$value]) && empty($errors[$name])) {
             $errors[$name] = 'Choose an image from the list.';
+        }
+        if ($name === 'author_name' && mb_strlen($value) > 120) {
+            $errors[$name] = 'Keep the author name under 120 characters.';
         }
         $values[$name] = $value;
     }
@@ -205,6 +213,18 @@ if (is_post()) {
         admin_notice(ucfirst($type['single']) . ' created.', "$base&id=$newId");
     }
     $action = $row ? 'edit' : 'new';
+}
+
+// Authors who have written before, so their name and photo can be picked again; a new post starts with the latest one.
+$authors = [];
+if ($typeKey === 'posts') {
+    foreach (db_all("SELECT author_name, author_photo FROM posts WHERE author_name <> '' ORDER BY id DESC") as $a) {
+        $authors[$a['author_name']] ??= $a['author_photo'];
+    }
+    if (!$row && !is_post() && $authors) {
+        $values['author_name'] = array_key_first($authors);
+        $values['author_photo'] = $authors[$values['author_name']];
+    }
 }
 
 $listColumns = ['track' => 'Track', 'fee_session' => 'Full session', 'fee_semester' => 'Semester plan total', 'fee_monthly' => 'Monthly plan total', 'title' => 'Title', 'category' => 'Category', 'status' => 'Status', 'published_at' => 'Published', 'starts_at' => 'Date', 'location' => 'Location', 'client' => 'Client', 'job_type' => 'Type', 'closes_on' => 'Closes', 'course_slug' => 'Course', 'kind' => 'Type'];
@@ -252,7 +272,7 @@ if ($action === 'list'):
 <?php if ($errors): ?>
     <div class="notice notice--error" role="alert"><?= icon('exclamation-circle') ?><p>Please fix the highlighted fields.</p></div>
 <?php endif; ?>
-<?php foreach ($type['fields'] as $name => $field): if (in_array($name, ['status', 'cover', 'sort_order'], true)) continue;
+<?php foreach ($type['fields'] as $name => $field): if (in_array($name, ['status', 'cover', 'sort_order', 'author_name', 'author_photo'], true)) continue;
       $value = (string) ($values[$name] ?? ''); $err = $errors[$name] ?? ''; $fid = 'f-' . $name; ?>
     <div class="field">
       <label class="field-label" for="<?= h($fid) ?>"><?= h($field['label']) ?><?= !empty($field['required']) ? ' <span class="req">*</span>' : '' ?></label>
@@ -304,6 +324,30 @@ if ($action === 'list'):
 <?php if (!empty($errors['cover'])): ?><p class="field-error"><?= icon('exclamation-circle') ?><span><?= h($errors['cover']) ?></span></p><?php endif; ?>
       </div>
       <img id="cover-preview" class="cover-preview" src="<?= $cover ? h(img($cover)) : '' ?>" alt=""<?= $cover ? '' : ' hidden' ?>>
+    </section>
+<?php endif; ?>
+
+<?php if (isset($type['fields']['author_name'])): $authorName = (string) ($values['author_name'] ?? ''); $authorPhoto = (string) ($values['author_photo'] ?? ''); ?>
+    <section class="panel admin-form">
+      <div class="field">
+        <label class="field-label" for="f-author_name">Author name</label>
+        <input id="f-author_name" type="text" name="author_name" value="<?= h($authorName) ?>" maxlength="120" placeholder="Who wrote this post" list="author-list" autocomplete="off" data-author-name<?= !empty($errors['author_name']) ? ' aria-invalid="true"' : '' ?>>
+        <datalist id="author-list"><?php foreach ($authors as $n => $p): ?><option value="<?= h($n) ?>" data-photo="<?= h($p) ?>"></option><?php endforeach; ?></datalist>
+        <p class="field-help">Shown as “By …” on the post. Leave empty to show no author. Picking someone who wrote before brings back their photo.</p>
+      </div>
+      <div class="author-photo-row">
+        <img id="author-preview" class="author-preview" src="<?= $authorPhoto ? h(img($authorPhoto)) : '' ?>" alt=""<?= $authorPhoto ? '' : ' hidden' ?>>
+        <div class="field">
+          <label class="field-label" for="f-author_photo-upload">Author photo</label>
+          <input class="form-control" id="f-author_photo-upload" name="author_photo_upload" type="file" accept="image/jpeg,image/png,image/webp" data-upload-preview="#author-preview" data-max-bytes="<?= image_upload_limit() ?>">
+        </div>
+      </div>
+      <div class="field">
+        <p class="field-help">A square head-and-shoulders photo looks best; it is shown in a small circle. It’s saved when you press Save.</p>
+        <label class="field-label mt-3" for="f-author_photo">Or choose one already on the website</label>
+        <div class="select-wrap"><select id="f-author_photo" name="author_photo" data-image-preview="#author-preview" data-author-photo><option value="">No photo</option><?php foreach (image_choices() as $path): ?><option value="<?= h($path) ?>"<?= $authorPhoto === $path ? ' selected' : '' ?>><?= h(substr($path, 7)) ?></option><?php endforeach; ?></select><?= icon('chevron-down') ?></div>
+<?php if (!empty($errors['author_photo'])): ?><p class="field-error"><?= icon('exclamation-circle') ?><span><?= h($errors['author_photo']) ?></span></p><?php endif; ?>
+      </div>
     </section>
 <?php endif; ?>
   </aside>
